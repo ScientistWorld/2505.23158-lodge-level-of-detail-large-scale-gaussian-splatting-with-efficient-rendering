@@ -10,18 +10,21 @@ The baseline full representation and the LODGE method both write `renders.npz` a
 
 Local smoke-test results before compute submission showed the method running end-to-end on the compact synthetic scene. With the current tuned settings, LODGE reduced loaded and visible Gaussians relative to the full representation, while retaining held-out view quality close to the full baseline.
 
-Latest local `bash scripts/reproduce.sh` result:
+Latest packaged-container `bash scripts/reproduce.sh` result from job `2c129847-7c6`:
 
 | Method | PSNR | SSIM | Loaded Gaussians | Visible Gaussians |
 | --- | ---: | ---: | ---: | ---: |
 | full_representation | 27.329 | 0.899 | 848.0 | 581.2 |
 | lodge | 26.805 | 0.864 | 593.6 | 561.2 |
+| lod_dynamic | 27.973 | 0.899 | 705.2 | 584.6 |
+| nearest_chunk | 26.283 | 0.850 | 507.4 | 491.0 |
+| opacity_blend | 26.805 | 0.864 | 593.6 | 561.2 |
 
-`python validate.py --compare` passes on these artifacts. Compute job `a94396ad-41f` reproduced the same numbers in the packaged container and exited successfully. This supports the `core_claim` milestone for the compact benchmark: the paper's LOD/chunking computation lowers memory/work proxies while maintaining rendering quality close to the full representation.
+`python validate.py --compare` passes on these artifacts. Compute job `2c129847-7c6` reproduced the core comparison and the added ablation in the packaged container. This supports `secondary_claims`: the paper's LOD/chunking computation lowers memory/work proxies while maintaining rendering quality close to the full representation, and opacity blending improves chunk-transition quality over nearest-chunk rendering at a moderate cost increase.
 
 ## Remaining
 
-The reusable core benchmark is complete. This continuation adds a second scored experiment for the paper's design-validation axis: dynamic LOD, nearest cached chunk rendering, and opacity-blended chunk rendering. The expanded suite is pending a packaged-environment job run before claiming `core_claim_plus` or `secondary_claims`.
+The reusable benchmark is complete through the main claim and one design-validation ablation. Higher milestones would require substantially larger scene coverage or more of the paper's full benchmark tables, which would need larger 3DGS assets and longer CUDA runs.
 
 ## Issues
 

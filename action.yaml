@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
-test: true
-milestone: method_runs
-notes: "CPU test job for expanded LODGE reproduction: rerun baseline, dynamic LOD, nearest-chunk, opacity-blend variants, evaluate both main and ablation experiments, and validate scores."
+test: false
+milestone: secondary_claims
+notes: "Packaged-container job 2c129847-7c6 succeeded. Core quality-efficiency claim and chunk/blending ablation are reproduced and validated; stopping at secondary_claims."
