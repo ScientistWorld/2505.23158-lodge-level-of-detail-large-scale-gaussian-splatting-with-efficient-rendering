@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: pending
+action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: ""
+notes: "Improvements: artifact-driven method discovery, expanded quality/cost triangulation metrics, required tile_cost metadata, and DESIGN_NOTES handoff. Notes: bash -n passed; no train/test score stubs present; evaluators were not run per design-only scope."

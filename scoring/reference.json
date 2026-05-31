@@ -5,9 +5,46 @@
       "weight": 0.65,
       "primary_metric": "psnr",
       "metrics": {
-        "psnr": {"higher_is_better": true, "coefficient": 1.0},
-        "visible_gaussians": {"higher_is_better": false, "coefficient": -0.4},
-        "loaded_gaussians": {"higher_is_better": false, "coefficient": -0.4}
+        "psnr": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Average held-out view reconstruction quality after uint8 quantization."
+        },
+        "worst_view_psnr": {
+          "higher_is_better": true,
+          "coefficient": 0.45,
+          "description": "Lowest per-view PSNR, catching methods that preserve only easy viewpoints."
+        },
+        "ssim": {
+          "higher_is_better": true,
+          "coefficient": 0.35,
+          "description": "Structural image fidelity, triangulating quality beyond mean squared error."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean rendered Gaussian count, a machine-independent rasterization-work proxy."
+        },
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean active Gaussian count loaded for rendering, a memory-footprint proxy."
+        },
+        "peak_visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.15,
+          "description": "Worst-case visible Gaussian count across the scored views."
+        },
+        "peak_loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.15,
+          "description": "Worst-case loaded Gaussian count across the scored views."
+        },
+        "tile_cost": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Mean per-tile Gaussian overlap count, a hardware-independent overdraw proxy."
+        }
       },
       "results": {
         "full_representation": {
@@ -29,9 +66,46 @@
       "weight": 0.35,
       "primary_metric": "psnr",
       "metrics": {
-        "psnr": {"higher_is_better": true, "coefficient": 1.0},
-        "visible_gaussians": {"higher_is_better": false, "coefficient": -0.35},
-        "loaded_gaussians": {"higher_is_better": false, "coefficient": -0.45}
+        "psnr": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Average held-out view reconstruction quality after uint8 quantization."
+        },
+        "worst_view_psnr": {
+          "higher_is_better": true,
+          "coefficient": 0.45,
+          "description": "Lowest per-view PSNR, catching methods that preserve only easy viewpoints."
+        },
+        "ssim": {
+          "higher_is_better": true,
+          "coefficient": 0.35,
+          "description": "Structural image fidelity, triangulating quality beyond mean squared error."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean rendered Gaussian count, a machine-independent rasterization-work proxy."
+        },
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean active Gaussian count loaded for rendering, a memory-footprint proxy."
+        },
+        "peak_visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.15,
+          "description": "Worst-case visible Gaussian count across the scored views."
+        },
+        "peak_loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.15,
+          "description": "Worst-case loaded Gaussian count across the scored views."
+        },
+        "tile_cost": {
+          "higher_is_better": false,
+          "coefficient": -0.2,
+          "description": "Mean per-tile Gaussian overlap count, a hardware-independent overdraw proxy."
+        }
       },
       "results": {
         "lod_dynamic": {

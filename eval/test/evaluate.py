@@ -13,7 +13,7 @@ from pathlib import Path
 
 import numpy as np
 
-from data.gaussian_scene import ensure_dataset, load_dataset, psnr
+from data.gaussian_scene import ensure_dataset, load_dataset, psnr, simple_ssim
 
 
 SLICE_NAME = "test"
@@ -52,6 +52,26 @@ def load_train_score_methods(train_scores_path: Path) -> dict[str, list[str]] | 
     return out
 
 
+def discover_artifact_methods(checkpoints_dir: Path) -> list[str]:
+    if not checkpoints_dir.exists():
+        return []
+    return sorted(
+        child.name
+        for child in checkpoints_dir.iterdir()
+        if child.is_dir()
+        and (child / "renders.npz").exists()
+        and (child / "stats.json").exists()
+    )
+
+
+def merge_methods(reference_methods: list[str], artifact_methods: list[str]) -> list[str]:
+    methods = list(reference_methods)
+    for name in artifact_methods:
+        if name not in methods:
+            methods.append(name)
+    return methods
+
+
 def resolve_run_dir(method_name: str, checkpoints_dir: Path) -> Path | None:
     direct = checkpoints_dir / method_name
     if (direct / "renders.npz").exists() and (direct / "stats.json").exists():
@@ -84,12 +104,19 @@ def evaluate_run(run_dir: Path, data_dir: Path, view_indices: tuple[int, ...]) -
     pred_q = uint8_round(pred)
     gt_q = uint8_round(gt)
     psnrs = [psnr(pred_q[i], gt_q[i]) for i in view_indices]
+    ssims = [simple_ssim(pred_q[i], gt_q[i]) for i in view_indices]
     loaded = [float(stats[i]["loaded"]) for i in view_indices]
     visible = [float(stats[i]["visible"]) for i in view_indices]
+    tile_cost = [float(stats[i]["tile_cost"]) for i in view_indices]
     return {
         "psnr": float(np.mean(psnrs)),
+        "worst_view_psnr": float(np.min(psnrs)),
+        "ssim": float(np.mean(ssims)),
         "loaded_gaussians": float(np.mean(loaded)),
         "visible_gaussians": float(np.mean(visible)),
+        "peak_loaded_gaussians": float(np.max(loaded)),
+        "peak_visible_gaussians": float(np.max(visible)),
+        "tile_cost": float(np.mean(tile_cost)),
     }
 
 
@@ -97,6 +124,11 @@ def build_scores(args: argparse.Namespace) -> dict:
     methods_by_experiment = load_train_score_methods(args.train_scores)
     if methods_by_experiment is None:
         methods_by_experiment = load_reference_methods(args.reference)
+        artifact_methods = discover_artifact_methods(args.checkpoints_dir)
+        methods_by_experiment = {
+            exp_name: merge_methods(methods_by_experiment.get(exp_name, []), artifact_methods)
+            for exp_name in EXPERIMENTS
+        }
 
     experiments: dict[str, dict] = {}
     for exp_name in EXPERIMENTS:
