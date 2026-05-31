@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-05-31 14:34] - secondary_claims
+- Re-audited the current workspace as the reproducer handoff state.
+- `python validate.py --compare --post-design` passes, including reference/scores validation, import separation, train/test independence, artifact-based evaluation, and split-score differentiation.
+- Leaving milestone at `secondary_claims`: the packaged compact benchmark reproduces the core LODGE quality/efficiency trade-off and chunk-blending ablation.
+
 ### [2026-05-31 14:14] - secondary_claims
 - CPU job `f840ed37-d90` completed successfully with the current autograd fine-tuning implementation.
 - `python validate.py --compare` passed in the packaged container, including import-separation and artifact-based evaluation checks.

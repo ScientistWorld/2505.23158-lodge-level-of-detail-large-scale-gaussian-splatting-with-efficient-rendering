@@ -2,4 +2,4 @@ action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Packaging audit complete: no external artifacts required; synthetic data is generated lazily and validation passes."
+notes: "Post-design validation passes after inspection: compact LODGE reproduction, method-independent evaluation, train/test split scores, and packaging checks are complete."

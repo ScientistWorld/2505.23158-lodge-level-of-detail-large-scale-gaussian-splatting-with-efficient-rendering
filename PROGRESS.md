@@ -10,6 +10,8 @@ The baseline full representation and the LODGE method both write `renders.npz` a
 
 Packaged-container job `f840ed37-d90` reran `scripts/run.sh` after clearing generated data, checkpoints, and stale scores. It completed with exit code 0 and `python validate.py --compare` passed, including structural checks that evaluation reads method artifacts and does not import from `method/`.
 
+Final local audit on 2026-05-31 14:34 UTC ran `python validate.py --compare --post-design`. It passed all checks, including split train/test score validation, import separation, no `shared/` references in committed code, and method-key consistency across train and test scores.
+
 Latest verified `bash scripts/reproduce.sh` results:
 
 | Method | PSNR | Loaded Gaussians | Visible Gaussians |
