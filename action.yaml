@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: pending
+action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: ""
+notes: "Deterministic held-out-view split over existing rendered artifacts; 3 train metrics and 3 test metrics per experiment; scripts written, scores produced later."
