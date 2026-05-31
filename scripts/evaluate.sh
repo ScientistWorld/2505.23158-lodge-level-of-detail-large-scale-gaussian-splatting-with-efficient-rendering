@@ -26,5 +26,8 @@ cd /home/user
 
 mkdir -p scoring
 
-# TODO: implement evaluation using code in eval/
-# Must write scoring/scores.json at the end
+python -m eval.evaluate_outputs \
+  --data-dir data/lodge_synthetic \
+  --full-dir checkpoints/full_representation \
+  --lodge-dir checkpoints/lodge \
+  --scores scoring/scores.json

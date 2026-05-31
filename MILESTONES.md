@@ -1,21 +1,16 @@
 # Reproduction Milestones
 
-**Current: none**
-
-<!-- Milestone levels (update "Current" above as you progress):
-  none             — just started, no meaningful progress yet
-  method_runs      — the paper's method executes end-to-end without errors
-  core_claim       — minimum experiment supports the paper's central claim
-  core_claim_plus  — core claim reproduced on additional settings
-  secondary_claims — secondary results or contributions reproduced
-  majority         — more than half of reported results reproduced
-  near_complete    — most results reproduced, only minor gaps remain
-  full             — all reported results reproduced
--->
+**Current: method_runs**
 
 ## Progress Log
 
-<!-- Write your progress here -->
+### [2026-05-31 13:45] - none
+- Read the paper and supplementary details from the markdown.
+- Identified the central claim: LOD Gaussian splatting should preserve visual quality while reducing visible and loaded Gaussians.
+
+### [2026-05-31 14:25] - method_runs
+- Implemented a compact LODGE reproduction with depth-aware smoothed LOD levels, importance pruning, greedy threshold selection, K-means chunks, visibility filtering, and two-chunk opacity interpolation.
+- Added a deterministic synthetic Gaussian-splatting scene and full-representation baseline.
+- Smoke-tested the method locally on the scaled scene; it runs end-to-end and writes evaluator artifacts.
 
 ## Stop Justification
-- Completed at milestone `none`.

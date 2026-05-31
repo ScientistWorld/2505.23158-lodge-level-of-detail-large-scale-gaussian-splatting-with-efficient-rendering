@@ -1,0 +1,22 @@
+{
+  "experiments": {
+    "synthetic_lod_quality_efficiency": {
+      "results": {
+        "full_representation": {
+          "psnr": 99.0,
+          "ssim": 1.0,
+          "loaded_gaussians": 560.0,
+          "visible_gaussians": 382.4,
+          "tile_cost": 32.9
+        },
+        "lodge": {
+          "psnr": 23.19208162639933,
+          "ssim": 0.6331494019666443,
+          "loaded_gaussians": 207.4,
+          "visible_gaussians": 98.4,
+          "tile_cost": 15.62
+        }
+      }
+    }
+  }
+}

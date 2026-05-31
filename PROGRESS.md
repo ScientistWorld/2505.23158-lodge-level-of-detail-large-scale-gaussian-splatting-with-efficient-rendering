@@ -2,36 +2,26 @@
 
 ## What Works
 
-<!-- What has been successfully reproduced so far. -->
+Implemented a compact CPU-scale reproduction of LODGE. The pipeline builds lower-detail Gaussian levels from a full Gaussian representation, selects thresholds greedily from a tile-cost proxy, clusters camera positions into chunks, filters chunk visibility by importance, and renders the two nearest chunks with opacity interpolation.
+
+The baseline full representation and the LODGE method both write `renders.npz` and `stats.json` artifacts. `scripts/evaluate.sh` reads those artifacts without importing `method/` and writes `scoring/scores.json`.
 
 ## Results
 
-<!-- Reproduced numbers compared to the paper's reported numbers. -->
+Local smoke-test results before compute submission showed the method running end-to-end on the compact synthetic scene. With the current tuned settings, LODGE reduced loaded Gaussians and tile/visible work substantially relative to the full representation, while retaining non-trivial held-out view quality. Final authoritative numbers should come from the submitted job.
 
 ## Remaining
 
-<!-- What still needs to be done to reach higher milestones. -->
+Run the packaged reproduction on a compute node and inspect `scoring/scores.json`. If the submitted job confirms the local smoke result, the milestone can be advanced to `core_claim`. Higher milestones would require adding more settings, such as a larger scene, a manual-threshold ablation, and a no-blending chunk-boundary ablation.
 
 ## Issues
 
-<!-- Blockers, bugs, or difficulties encountered. -->
+The full paper benchmarks require large 3DGS scene assets and long CUDA training/evaluation runs. This reproduction uses a compact deterministic synthetic scene to preserve the computational procedure without shipping multi-GB data.
 
 ## Deviations from Paper
 
-<!-- Do not edit this section unless you deviated from the paper's original setup.
-     For each deviation, document: what the paper used, what you substituted, and why.
+The paper evaluates on Hierarchical 3DGS and Zip-NeRF scenes with 1000-2000 images and trained 3DGS representations. This environment uses a deterministic synthetic Gaussian-splatting scene with small images and hundreds of primitives so the benchmark can run quickly and portably.
 
-     ACCEPTABLE deviations (data/resource/scale substitutions — milestones still valid):
-       - Replaced a proprietary dataset with a public one
-       - Used a smaller model of the same architecture
-       - Scaled down training (fewer epochs, smaller batch)
-       - Used a different library for the same algorithm
+The paper fine-tunes each LOD level with 1000 gradient steps after each pruning round. This compact reproduction keeps the same prune/fine-tune stages but uses deterministic visibility-statistic parameter updates instead of CUDA gradient optimization, preserving the stage and affected parameters while avoiding heavy login-node or test-node compute.
 
-     UNACCEPTABLE deviations (algorithm substitutions — milestones above 'none' are void):
-       - Replaced the paper's algorithm with a fundamentally different one
-       - Wrote a generic model trained to approximate the method's outputs
-         instead of implementing the method's computational steps
-
-     The test: could someone reading your code identify which algorithm from
-     the paper you implemented? If not, you replaced the method. -->
-
+The paper reports FPS; this benchmark scores loaded Gaussians, visible Gaussians, and tile cost instead because wall-clock speed is hardware dependent.

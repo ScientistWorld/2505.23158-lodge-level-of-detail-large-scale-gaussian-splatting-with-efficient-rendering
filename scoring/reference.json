@@ -1,0 +1,34 @@
+{
+  "experiments": {
+    "synthetic_lod_quality_efficiency": {
+      "description": "Compact reproduction of the SmallCity performance-analysis claim: preserve rendering quality while reducing visible and loaded Gaussians through level-of-detail chunked rendering.",
+      "weight": 1.0,
+      "primary_metric": "psnr",
+      "metrics": {
+        "psnr": {"higher_is_better": true, "coefficient": 1.0},
+        "ssim": {"higher_is_better": true, "coefficient": 0.3},
+        "visible_gaussians": {"higher_is_better": false, "coefficient": -0.4},
+        "loaded_gaussians": {"higher_is_better": false, "coefficient": -0.4},
+        "tile_cost": {"higher_is_better": false, "coefficient": -0.2}
+      },
+      "results": {
+        "full_representation": {
+          "type": "baseline",
+          "psnr": 26.62,
+          "ssim": 0.815,
+          "visible_gaussians": 925000,
+          "loaded_gaussians": 2639000,
+          "tile_cost": 15.17
+        },
+        "lodge": {
+          "type": "proposed",
+          "psnr": 26.57,
+          "ssim": 0.815,
+          "visible_gaussians": 268000,
+          "loaded_gaussians": 877000,
+          "tile_cost": 3.88
+        }
+      }
+    }
+  }
+}

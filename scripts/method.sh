@@ -10,5 +10,11 @@ set -e
 
 cd /home/user
 
-# TODO: run the paper's method
-# TODO: call scripts/evaluate.sh to score
+python -m method.lodge \
+  --data-dir data/lodge_synthetic \
+  --out-dir checkpoints/lodge \
+  --levels 2 \
+  --gamma 0.060 \
+  --visibility-threshold 0.030
+
+bash scripts/evaluate.sh

@@ -1,15 +1,15 @@
 # Evaluation
 
-How success is measured. Describe only the metrics, targets, and evaluation procedure — do NOT describe the paper's method or how they achieved these results. Think of this as a general evaluation protocal for other scientists trying to solve the same problem, where they should not see this paper's solution.
-
 ## Metrics
 
-<!-- What metrics are used? How are they computed? What does higher/lower mean? -->
+The compact benchmark reports PSNR and a simple SSIM implementation on held-out rendered RGB images after rounding predictions and references to uint8, matching the paper's metric protocol. Higher PSNR and SSIM are better.
+
+Efficiency is measured by the average number of loaded Gaussians, average number of visible Gaussians, and average 16x16 tile cost over test views. Lower values are better. These are machine-independent proxies for memory use and rasterization work, replacing wall-clock FPS in the reusable benchmark.
 
 ## Baselines and Targets
 
-<!-- What performance levels exist as reference points? Include the paper's reported numbers as targets, and any standard baselines. A scientist agent should know what "good" looks like. -->
+The baseline is the full Gaussian representation rendered without any memory- or detail-reduction scheme. The target is to preserve image quality while reducing loaded and visible Gaussians by a large factor. `scoring/reference.json` includes the paper's SmallCity Table 3 values for context and the compact experiment structure used by this environment.
 
 ## Evaluation Protocol
 
-<!-- How should evaluation be run? What data split, what conditions? Any important details about how to compare fairly (e.g., fixed seeds, specific test sets, averaging over runs). -->
+Run `bash scripts/reproduce.sh` to generate deterministic test renders for the full baseline and proposed method, then compute scores with `bash scripts/evaluate.sh`. The evaluator reads only output artifacts under `checkpoints/` and writes `scoring/scores.json`; it does not import or rerun `method/`.

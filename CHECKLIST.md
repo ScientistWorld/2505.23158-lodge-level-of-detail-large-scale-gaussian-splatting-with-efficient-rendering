@@ -1,5 +1,15 @@
 # Reproduction Checklist
 
+- [x] Read paper markdown and extracted method/evaluation details
+- [x] Filled briefing documents
+- [x] Implemented tracked synthetic Gaussian scene generator
+- [x] Implemented full-representation baseline
+- [x] Implemented compact LODGE method
+- [x] Implemented method-independent evaluator
+- [x] Added reference targets and benchmark constraints
+- [x] Added runnable shell scripts
+- [ ] Submitted compute job and inspected results
+
 Check off items as you complete them. Order doesn't matter — work however makes sense for this paper.
 
 ## Briefing

@@ -17,4 +17,8 @@ set -e
 
 cd /home/user
 
-# TODO: run baseline
+python -m baseline.full_representation \
+  --data-dir data/lodge_synthetic \
+  --out-dir checkpoints/full_representation
+
+bash scripts/evaluate.sh
