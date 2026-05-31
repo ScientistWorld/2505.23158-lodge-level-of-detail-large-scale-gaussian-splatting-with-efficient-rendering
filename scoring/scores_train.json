@@ -106,16 +106,6 @@
           "peak_loaded_gaussians": 848.0,
           "peak_visible_gaussians": 624.0,
           "tile_cost": 52.06666666666666
-        },
-        "lodge": {
-          "psnr": 27.653274338336967,
-          "worst_view_psnr": 27.14610713055583,
-          "ssim": 0.8915017268241741,
-          "loaded_gaussians": 600.3333333333334,
-          "visible_gaussians": 567.0,
-          "peak_loaded_gaussians": 631.0,
-          "peak_visible_gaussians": 616.0,
-          "tile_cost": 54.333333333333336
         }
       }
     }
