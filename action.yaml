@@ -1,5 +1,5 @@
-action: done
+action: submit
 gpus: 0
-test: false
-milestone: secondary_claims
-notes: "Final verification passed: scoring contract is complete, method-agnostic docs are cleaned, generated artifacts are removed from git, and validation passes."
+test: true
+milestone: method_runs
+notes: "Run clean CPU reproduction after patching LOD-stack fine-tuning, chunk radius, visibility augmentation, and Eq. (4) opacity blending; regenerate scores before reclaiming core_claim."
