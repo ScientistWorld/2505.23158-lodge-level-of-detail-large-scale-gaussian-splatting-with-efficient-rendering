@@ -1,8 +1,13 @@
 # Reproduction Milestones
 
-**Current: secondary_claims**
+**Current: method_runs**
 
 ## Progress Log
+
+### [2026-05-31 14:42] - method_runs
+- Audited the existing scaffold against the paper and found `secondary_claims` was overstated.
+- Patched the method toward the paper-specific computation: LOD-stack fine-tuning with randomized current threshold, nearest-center chunk radius, random-orientation visibility filtering, and Eq. (4)-style opacity blending.
+- Submitting a clean CPU reproduction job to regenerate scores before claiming `core_claim` again.
 
 ### [2026-05-31 14:36] - secondary_claims
 - Final verification completed.
@@ -31,4 +36,4 @@
 - Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
 
 ## Stop Justification
-- Completed at milestone `secondary_claims`.
+- Not stopped; current patched method is pending compute-job validation.

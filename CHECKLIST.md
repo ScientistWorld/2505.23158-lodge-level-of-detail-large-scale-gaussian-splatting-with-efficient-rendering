@@ -9,7 +9,7 @@
 - [x] Added reference targets and benchmark constraints
 - [x] Added runnable shell scripts
 - [x] Prepared compute job for submission
-- [x] Inspected compute job results
+- [ ] Inspected compute job results after paper-specific method patch
 
 Check off items as you complete them. Order doesn't matter — work however makes sense for this paper.
 
@@ -48,9 +48,9 @@ Check off items as you complete them. Order doesn't matter — work however make
 
 ## Milestones
 - [x] `method_runs` — executes end-to-end without errors
-- [x] `core_claim` — minimum experiment supports central claim
-- [x] `core_claim_plus` — additional settings
-- [x] `secondary_claims`
+- [ ] `core_claim` — minimum experiment supports central claim after latest method patch
+- [ ] `core_claim_plus` — additional settings
+- [ ] `secondary_claims`
 - [ ] `majority`
 - [ ] `near_complete`
 - [ ] `full`

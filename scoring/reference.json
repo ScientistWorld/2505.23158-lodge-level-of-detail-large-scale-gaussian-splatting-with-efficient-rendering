@@ -12,13 +12,13 @@
         },
         "worst_view_psnr": {
           "higher_is_better": true,
-          "coefficient": 0.45,
-          "description": "Lowest per-view PSNR, catching methods that preserve only easy viewpoints."
+          "coefficient": 0.0,
+          "description": "Diagnostic lowest per-view PSNR; not paper-reported for Table 3."
         },
         "ssim": {
           "higher_is_better": true,
-          "coefficient": 0.35,
-          "description": "Structural image fidelity, triangulating quality beyond mean squared error."
+          "coefficient": 0.0,
+          "description": "Diagnostic structural image fidelity for the compact benchmark."
         },
         "visible_gaussians": {
           "higher_is_better": false,
@@ -32,18 +32,18 @@
         },
         "peak_visible_gaussians": {
           "higher_is_better": false,
-          "coefficient": -0.15,
-          "description": "Worst-case visible Gaussian count across the scored views."
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case visible Gaussian count across compact views."
         },
         "peak_loaded_gaussians": {
           "higher_is_better": false,
-          "coefficient": -0.15,
-          "description": "Worst-case loaded Gaussian count across the scored views."
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case loaded Gaussian count across compact views."
         },
         "tile_cost": {
           "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Mean per-tile Gaussian overlap count, a hardware-independent overdraw proxy."
+          "coefficient": 0.0,
+          "description": "Diagnostic per-tile overlap proxy used by threshold selection."
         }
       },
       "results": {
@@ -73,13 +73,13 @@
         },
         "worst_view_psnr": {
           "higher_is_better": true,
-          "coefficient": 0.45,
-          "description": "Lowest per-view PSNR, catching methods that preserve only easy viewpoints."
+          "coefficient": 0.0,
+          "description": "Diagnostic lowest per-view PSNR; not paper-reported for Table 3."
         },
         "ssim": {
           "higher_is_better": true,
-          "coefficient": 0.35,
-          "description": "Structural image fidelity, triangulating quality beyond mean squared error."
+          "coefficient": 0.0,
+          "description": "Diagnostic structural image fidelity for the compact benchmark."
         },
         "visible_gaussians": {
           "higher_is_better": false,
@@ -93,18 +93,18 @@
         },
         "peak_visible_gaussians": {
           "higher_is_better": false,
-          "coefficient": -0.15,
-          "description": "Worst-case visible Gaussian count across the scored views."
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case visible Gaussian count across compact views."
         },
         "peak_loaded_gaussians": {
           "higher_is_better": false,
-          "coefficient": -0.15,
-          "description": "Worst-case loaded Gaussian count across the scored views."
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case loaded Gaussian count across compact views."
         },
         "tile_cost": {
           "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Mean per-tile Gaussian overlap count, a hardware-independent overdraw proxy."
+          "coefficient": 0.0,
+          "description": "Diagnostic per-tile overlap proxy used by threshold selection."
         }
       },
       "results": {

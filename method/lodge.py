@@ -114,6 +114,60 @@ def differentiable_render(
     return torch.clamp(img + trans[..., None] * bg, 0.0, 1.0)
 
 
+def differentiable_render_lod_stack(
+    frozen_levels: list[dict],
+    current_tensors: dict[str, torch.Tensor],
+    current_means_np: np.ndarray,
+    thresholds: list[float],
+    cam,
+) -> torch.Tensor:
+    """Render active LOD levels up to the current optimized level.
+
+    The paper fine-tunes level l with standard LOD rendering over levels
+    0..l, while gradients update only G_l.  Frozen finer levels enter the
+    compositing graph as constants; the active set itself follows Eq. (2).
+    """
+
+    d = [0.0] + list(thresholds) + [np.inf]
+    means_parts = []
+    sigma_parts = []
+    opacity_parts = []
+    color_parts = []
+    center = cam.eye
+
+    for lvl, scene in enumerate(frozen_levels):
+        dist = np.linalg.norm(scene["means"] - center[None, :], axis=1)
+        inds = np.where((dist >= d[lvl]) & (dist < d[lvl + 1]))[0]
+        if inds.size == 0:
+            continue
+        means_parts.append(torch.as_tensor(scene["means"][inds], dtype=torch.float32))
+        sigma_parts.append(torch.as_tensor(scene["sigma"][inds], dtype=torch.float32))
+        opacity_parts.append(torch.as_tensor(scene["opacity"][inds], dtype=torch.float32))
+        color_parts.append(torch.as_tensor(scene["colors"][inds], dtype=torch.float32))
+
+    current_lvl = len(frozen_levels)
+    dist = np.linalg.norm(current_means_np - center[None, :], axis=1)
+    inds_np = np.where((dist >= d[current_lvl]) & (dist < d[current_lvl + 1]))[0]
+    if inds_np.size:
+        inds = torch.as_tensor(inds_np, dtype=torch.long)
+        means_parts.append(current_tensors["means"][inds])
+        sigma_parts.append(current_tensors["sigma"][inds])
+        opacity_parts.append(current_tensors["opacity"][inds])
+        color_parts.append(current_tensors["colors"][inds])
+
+    if not means_parts:
+        empty = torch.empty((0, 3), dtype=torch.float32)
+        return differentiable_render(empty, torch.empty(0), torch.empty(0), empty, cam)
+
+    return differentiable_render(
+        torch.cat(means_parts, dim=0),
+        torch.cat(sigma_parts, dim=0),
+        torch.cat(opacity_parts, dim=0),
+        torch.cat(color_parts, dim=0),
+        cam,
+    )
+
+
 def dssim_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     c1 = 0.01**2
     c2 = 0.03**2
@@ -133,7 +187,16 @@ def dssim_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     return (1.0 - torch.stack(vals).mean()) * 0.5
 
 
-def gradient_finetune(scene: dict, cameras: list, train_gt: np.ndarray, steps: int, lr: float, seed: int) -> dict:
+def gradient_finetune_lod(
+    scene: dict,
+    frozen_levels: list[dict],
+    thresholds: list[float],
+    cameras: list,
+    train_gt: np.ndarray,
+    steps: int,
+    lr: float,
+    seed: int,
+) -> dict:
     """Fine-tune a pruned LOD level with the paper's DSSIM+L1 objective.
 
     The full paper uses 1000 CUDA optimization iterations after each pruning
@@ -145,23 +208,37 @@ def gradient_finetune(scene: dict, cameras: list, train_gt: np.ndarray, steps: i
         return scene
 
     torch.manual_seed(seed)
+    rng = np.random.default_rng(seed)
     means = torch.as_tensor(scene["means"], dtype=torch.float32)
-    sigma_raw = torch.nn.Parameter(torch.log(torch.expm1(torch.as_tensor(scene["sigma"], dtype=torch.float32)) + 1e-6))
+    sigma_floor = torch.as_tensor(scene["sigma"], dtype=torch.float32)
+    sigma_delta_raw = torch.nn.Parameter(torch.full_like(sigma_floor, -8.0))
     opacity_init = torch.clamp(torch.as_tensor(scene["opacity"], dtype=torch.float32) / 0.98, 1e-4, 1 - 1e-4)
     opacity_raw = torch.nn.Parameter(torch.logit(opacity_init))
     color_raw = torch.nn.Parameter(torch.logit(torch.clamp(torch.as_tensor(scene["colors"], dtype=torch.float32), 1e-4, 1 - 1e-4)))
-    opt = torch.optim.Adam([sigma_raw, opacity_raw, color_raw], lr=lr)
+    opt = torch.optim.Adam([sigma_delta_raw, opacity_raw, color_raw], lr=lr)
 
     targets = torch.as_tensor(train_gt, dtype=torch.float32)
+    level_idx = len(frozen_levels)
     for step in range(steps):
         cam_idx = (step + seed) % len(cameras)
-        pred = differentiable_render(
-            means,
-            torch.nn.functional.softplus(sigma_raw) + 1e-4,
-            torch.sigmoid(opacity_raw) * 0.98,
-            torch.sigmoid(color_raw),
+        active_thresholds = list(thresholds)
+        if active_thresholds:
+            active_thresholds[-1] = float(rng.uniform(0.7 * active_thresholds[-1], 1.3 * active_thresholds[-1]))
+        current_tensors = {
+            "means": means,
+            "sigma": sigma_floor + torch.nn.functional.softplus(sigma_delta_raw),
+            "opacity": torch.sigmoid(opacity_raw) * 0.98,
+            "colors": torch.sigmoid(color_raw),
+        }
+        pred = differentiable_render_lod_stack(
+            frozen_levels[:level_idx],
+            current_tensors,
+            scene["means"],
+            active_thresholds,
             cameras[cam_idx],
         )
+        if not pred.requires_grad:
+            continue
         target = targets[cam_idx]
         loss = torch.mean(torch.abs(pred - target)) + dssim_loss(pred, target)
         opt.zero_grad()
@@ -170,7 +247,7 @@ def gradient_finetune(scene: dict, cameras: list, train_gt: np.ndarray, steps: i
 
     return {
         "means": scene["means"],
-        "sigma": (torch.nn.functional.softplus(sigma_raw) + 1e-4).detach().numpy().astype(np.float32),
+        "sigma": (sigma_floor + torch.nn.functional.softplus(sigma_delta_raw)).detach().numpy().astype(np.float32),
         "opacity": (torch.sigmoid(opacity_raw) * 0.98).detach().numpy().astype(np.float32),
         "colors": torch.sigmoid(color_raw).detach().numpy().astype(np.float32),
     }
@@ -192,8 +269,10 @@ def build_lod_levels(
         lod = smooth_scene(scene, depth, focal, smooth_s)
         for round_idx, mult in enumerate([0.2, 0.6, 1.0]):
             lod = prune_by_importance(lod, cameras, gamma * mult)
-            lod = gradient_finetune(
+            lod = gradient_finetune_lod(
                 lod,
+                levels,
+                thresholds[:level_idx],
                 cameras,
                 train_gt,
                 steps=finetune_steps,
@@ -287,27 +366,55 @@ def kmeans(points: np.ndarray, k: int, seed: int = 3, iters: int = 30) -> tuple[
     return centers, labels
 
 
+def random_orientation_cameras(cameras: list, seed: int, per_camera: int = 2) -> list:
+    rng = np.random.default_rng(seed)
+    augmented = list(cameras)
+    for cam in cameras:
+        for _ in range(per_camera):
+            direction = rng.normal(size=3).astype(np.float32)
+            direction[2] *= 0.35
+            norm = np.linalg.norm(direction)
+            if norm < 1e-6:
+                direction = np.array([0.0, 1.0, 0.0], dtype=np.float32)
+            else:
+                direction = direction / norm
+            target = cam.eye + direction * 8.0
+            augmented.append(
+                cam.__class__(
+                    np.array(cam.eye, copy=True),
+                    target.astype(np.float32),
+                    np.array(cam.up, copy=True),
+                    cam.f,
+                    cam.width,
+                    cam.height,
+                )
+            )
+    return augmented
+
+
 def build_chunks(levels: list[dict], thresholds: list[float], train_cameras: list, vis_threshold: float) -> dict:
     cam_pos = np.stack([c.eye for c in train_cameras])
     d1 = max(thresholds[0], 1e-3)
     n_clusters = int(np.clip(round((4.0 / d1) * np.max(np.linalg.norm(cam_pos - cam_pos.mean(axis=0), axis=1))), 2, 8))
     centers, labels = kmeans(cam_pos, n_clusters)
+    center_dist = np.linalg.norm(centers[:, None, :] - centers[None, :, :], axis=2)
+    np.fill_diagonal(center_dist, np.inf)
     chunks = []
     for j, center in enumerate(centers):
         members = np.where(labels == j)[0]
         if len(members) == 0:
             member_cams = train_cameras
-            radius = 0.0
         else:
             member_cams = [train_cameras[int(i)] for i in members]
-            radius = float(np.max(np.linalg.norm(cam_pos[members] - center[None, :], axis=1)))
+        radius = float(np.min(center_dist[j])) if n_clusters > 1 else 0.0
         active = active_indices_for_center(levels, thresholds, center, radius_offset=radius)
+        visibility_cams = random_orientation_cameras(member_cams, seed=1000 + j)
         filtered = []
         for scene, inds in zip(levels, active):
             if inds.size == 0:
                 filtered.append(inds)
                 continue
-            scores = importance_scores(scene, member_cams, indices=inds)
+            scores = importance_scores(scene, visibility_cams, indices=inds)
             keep = scores >= vis_threshold
             if keep.sum() < max(4, int(0.10 * keep.size)):
                 keep = scores >= np.quantile(scores, 0.80)
@@ -326,24 +433,38 @@ def render_opacity_blend(levels: list[dict], chunks: dict, cam) -> tuple[np.ndar
     centers = chunks["centers"]
     dist = np.linalg.norm(centers - cam.eye[None, :], axis=1)
     nearest = np.argsort(dist)[:2]
-    d0, d1 = float(dist[nearest[0]]), float(dist[nearest[1]])
-    w0 = d1 / max(d0 + d1, 1e-6)
-    w1 = 1.0 - w0
     merged_parts = []
     opacity_parts = []
-    c0 = chunks["chunks"][int(nearest[0])]["indices"]
-    c1 = chunks["chunks"][int(nearest[1])]["indices"]
+    idx0 = int(nearest[0])
+    idx1 = int(nearest[1])
+    c0 = chunks["chunks"][idx0]["indices"]
+    c1 = chunks["chunks"][idx1]["indices"]
+    m0 = centers[idx0]
+    m1 = centers[idx1]
+    denom = float(np.sum((m0 - m1) ** 2))
+    if denom <= 1e-8:
+        t0 = t1 = 1.0
+    else:
+        # Eq. (4): project the camera onto the line between chunk centers.
+        t0 = float(np.clip(np.dot(cam.eye - m1, m0 - m1) / denom, 0.0, 1.0))
+        t1 = float(np.clip(np.dot(cam.eye - m0, m1 - m0) / denom, 0.0, 1.0))
     for scene, inds0, inds1 in zip(levels, c0, c1):
-        weight_by_idx: dict[int, float] = {}
-        for idx in inds0:
-            weight_by_idx[int(idx)] = weight_by_idx.get(int(idx), 0.0) + w0
-        for idx in inds1:
-            weight_by_idx[int(idx)] = weight_by_idx.get(int(idx), 0.0) + w1
-        if not weight_by_idx:
+        set0 = {int(i) for i in inds0}
+        set1 = {int(i) for i in inds1}
+        union = sorted(set0 | set1)
+        if not union:
             continue
-        inds = np.array(sorted(weight_by_idx.keys()), dtype=np.int64)
+        weights = []
+        for idx in union:
+            if idx in set0 and idx in set1:
+                weights.append(1.0)
+            elif idx in set0:
+                weights.append(t0)
+            else:
+                weights.append(t1)
+        inds = np.array(union, dtype=np.int64)
         merged_parts.append({k: v[inds] for k, v in scene.items()})
-        opacity_parts.append(np.array([min(1.0, weight_by_idx[int(i)]) for i in inds], dtype=np.float32))
+        opacity_parts.append(np.array(weights, dtype=np.float32))
     if not merged_parts:
         empty = {k: v[:0] for k, v in levels[0].items()}
         img, stats = render_scene(empty, cam, return_stats=True)

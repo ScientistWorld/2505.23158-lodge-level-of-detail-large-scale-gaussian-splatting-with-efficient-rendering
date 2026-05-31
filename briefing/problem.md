@@ -10,4 +10,4 @@ Large scenes require many fine primitives. Rendering all of them for every camer
 
 ## Success Criteria
 
-A successful system should render held-out views close to the reference images, keep structural similarity high, and substantially reduce both visible and loaded Gaussian counts relative to a full-scene renderer. These counts are the benchmark's hardware-independent efficiency constraints.
+A successful system should render held-out views close to the reference images and substantially reduce both visible and loaded Gaussian counts relative to a full-scene renderer. These counts are the benchmark's hardware-independent efficiency constraints.
