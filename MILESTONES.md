@@ -41,4 +41,4 @@
 - Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
 
 ## Stop Justification
-- Final verification is complete. The workspace is ready as a compact synthetic research gym at `secondary_claims`; further work would focus on scaling toward full paper datasets rather than fixing a correctness issue.
+- Completed at milestone `secondary_claims`.
