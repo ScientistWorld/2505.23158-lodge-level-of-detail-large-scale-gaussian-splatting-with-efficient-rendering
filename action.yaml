@@ -1,5 +1,5 @@
-action: submit
+action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Rerun the actual CPU reproduction pipeline from a clean synthetic dataset/checkpoint state, validate scores.json, then refresh train/test split scores. Current verified scores support at least core_claim and include the chunk-blending ablation."
+notes: "Validation fix: split scores now contain only methods declared in reference.json while preserving real compute-run values. Main scores support the core LODGE quality/efficiency claim and the ablation supports secondary_claims."

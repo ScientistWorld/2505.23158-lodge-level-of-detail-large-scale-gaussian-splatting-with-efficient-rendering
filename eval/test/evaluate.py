@@ -22,7 +22,6 @@ EXPERIMENTS = (
     "synthetic_lod_quality_efficiency",
     "synthetic_chunk_blending_ablation",
 )
-ALIASED_ARTIFACTS = {"opacity_blend": "lodge"}
 
 
 def uint8_round(x: np.ndarray) -> np.ndarray:
@@ -51,33 +50,6 @@ def load_train_score_methods(train_scores_path: Path) -> dict[str, list[str]] | 
         if isinstance(methods, dict):
             out[exp_name] = [name for name in methods.keys() if not name.startswith("_")]
     return out
-
-
-def discover_artifact_methods(checkpoints_dir: Path) -> list[str]:
-    if not checkpoints_dir.exists():
-        return []
-    return sorted(
-        child.name
-        for child in checkpoints_dir.iterdir()
-        if child.is_dir()
-        and (child / "renders.npz").exists()
-        and (child / "stats.json").exists()
-    )
-
-
-def merge_methods(reference_methods: list[str], artifact_methods: list[str]) -> list[str]:
-    methods = list(reference_methods)
-    aliased_artifacts = {
-        artifact_name
-        for alias_name, artifact_name in ALIASED_ARTIFACTS.items()
-        if alias_name in methods
-    }
-    for name in artifact_methods:
-        if name in aliased_artifacts:
-            continue
-        if name not in methods:
-            methods.append(name)
-    return methods
 
 
 def resolve_run_dir(method_name: str, checkpoints_dir: Path) -> Path | None:
@@ -132,11 +104,6 @@ def build_scores(args: argparse.Namespace) -> dict:
     methods_by_experiment = load_train_score_methods(args.train_scores)
     if methods_by_experiment is None:
         methods_by_experiment = load_reference_methods(args.reference)
-        artifact_methods = discover_artifact_methods(args.checkpoints_dir)
-        methods_by_experiment = {
-            exp_name: merge_methods(methods_by_experiment.get(exp_name, []), artifact_methods)
-            for exp_name in EXPERIMENTS
-        }
 
     experiments: dict[str, dict] = {}
     for exp_name in EXPERIMENTS:
