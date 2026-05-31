@@ -22,7 +22,7 @@ Latest packaged-container `bash scripts/reproduce.sh` result from job `2c129847-
 
 `python validate.py --compare` passes on these artifacts. Compute job `2c129847-7c6` reproduced the core comparison and the added ablation in the packaged container. This supports `secondary_claims`: the paper's LOD/chunking computation lowers memory/work proxies while maintaining rendering quality close to the full representation, and opacity blending improves chunk-transition quality over nearest-chunk rendering at a moderate cost increase.
 
-Current iteration: replaced the compact LOD fine-tuning approximation with actual gradient optimization and removed SSIM from the paper-reference scoring contract because the reproduced SmallCity Table 3 ablation reports PSNR and Gaussian counts, not SSIM. A new CPU compute job is being submitted to regenerate artifacts with the stricter method implementation.
+Current iteration: replaced the compact LOD fine-tuning approximation with actual gradient optimization and removed SSIM from the paper-reference scoring contract because the reproduced SmallCity Table 3 ablation reports PSNR and Gaussian counts, not SSIM. The available completed job logs predate this stricter implementation, so `scripts/run.sh` now clears generated checkpoints, synthetic data, and stale scores before rerunning the full reproduction in a CPU compute job.
 
 ## Remaining
 

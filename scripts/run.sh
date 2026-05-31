@@ -13,4 +13,11 @@ set -e
 
 cd /home/user
 
+# Force this verification run to use the current source code, not stale
+# generated artifacts from an earlier implementation.
+rm -rf checkpoints/full_representation checkpoints/lod_dynamic checkpoints/nearest_chunk checkpoints/lodge
+rm -rf data/lodge_synthetic
+rm -f scoring/scores.json
+
+bash scripts/download.sh
 bash scripts/reproduce.sh
