@@ -1,8 +1,6 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
-gpus: 0
-test: true
-milestone: method_runs
-notes: "CPU smoke job: run compact LODGE reproduction end-to-end, evaluate artifacts, and validate scoring."
+action: done
+milestone: core_claim
+notes: "Compute job a94396ad-41f passed. Reproduced the compact LODGE core claim with validated artifacts and packaged reusable evaluation."

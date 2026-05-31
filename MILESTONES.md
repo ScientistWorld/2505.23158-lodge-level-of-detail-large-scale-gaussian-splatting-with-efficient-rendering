@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -18,4 +18,10 @@
 - Retuned the compact LODGE settings and validated locally that the method runs end-to-end with lower loaded and visible Gaussian counts than the full baseline.
 - Submitted a CPU test job to verify the packaged reproduction in the compute environment before advancing to `core_claim`.
 
+### [2026-05-31 14:55] - core_claim
+- Compute job `a94396ad-41f` completed successfully inside the packaged container.
+- The job reproduced the compact LODGE result: PSNR 26.805 and SSIM 0.864 while reducing loaded Gaussians from 848.0 to 593.6 and visible Gaussians from 581.2 to 561.2 versus the full representation.
+- `python validate.py --compare` passed in the compute environment, confirming the evaluator consumes generated artifacts and matches the reference schema.
+
 ## Stop Justification
+- Reached `core_claim`: the implemented LODGE-style level construction, pruning, chunk filtering, threshold selection, and opacity blending run end-to-end and support the central quality-versus-Gaussian-count claim on the compact benchmark.

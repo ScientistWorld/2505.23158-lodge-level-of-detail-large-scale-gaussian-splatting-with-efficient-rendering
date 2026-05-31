@@ -17,11 +17,11 @@ Latest local `bash scripts/reproduce.sh` result:
 | full_representation | 27.329 | 0.899 | 848.0 | 581.2 |
 | lodge | 26.805 | 0.864 | 593.6 | 561.2 |
 
-`python validate.py --compare` passes on these artifacts. Final authoritative numbers should come from the submitted CPU test job.
+`python validate.py --compare` passes on these artifacts. Compute job `a94396ad-41f` reproduced the same numbers in the packaged container and exited successfully.
 
 ## Remaining
 
-Run the packaged reproduction on a compute node and inspect `scoring/scores.json`. If the submitted job confirms the local smoke result, the milestone can be advanced to `core_claim`. Higher milestones would require adding more settings, such as a larger scene, a manual-threshold ablation, and a no-blending chunk-boundary ablation.
+The reusable core benchmark is complete. Higher milestones would require adding more settings, such as a larger scene, a manual-threshold ablation, and a no-blending chunk-boundary ablation.
 
 ## Issues
 
