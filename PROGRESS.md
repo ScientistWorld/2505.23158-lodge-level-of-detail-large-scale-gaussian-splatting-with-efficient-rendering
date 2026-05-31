@@ -17,7 +17,7 @@ Latest local `bash scripts/reproduce.sh` result:
 | full_representation | 27.329 | 0.899 | 848.0 | 581.2 |
 | lodge | 26.805 | 0.864 | 593.6 | 561.2 |
 
-`python validate.py --compare` passes on these artifacts. Compute job `a94396ad-41f` reproduced the same numbers in the packaged container and exited successfully.
+`python validate.py --compare` passes on these artifacts. Compute job `a94396ad-41f` reproduced the same numbers in the packaged container and exited successfully. This supports the `core_claim` milestone for the compact benchmark: the paper's LOD/chunking computation lowers memory/work proxies while maintaining rendering quality close to the full representation.
 
 ## Remaining
 
