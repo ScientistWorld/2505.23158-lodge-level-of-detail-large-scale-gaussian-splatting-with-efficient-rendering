@@ -55,7 +55,7 @@ The central claim is that a chunked LOD Gaussian representation preserves visual
 
 ## Metrics
 
-The compact benchmark reports PSNR and a simple SSIM implementation on held-out rendered RGB images after rounding predictions and references to uint8, matching the paper's metric protocol. Higher PSNR and SSIM are better.
+The compact benchmark scores PSNR on held-out rendered RGB images after rounding predictions and references to uint8, matching the paper's metric protocol. Higher PSNR is better.
 
 Efficiency is measured by the average number of loaded Gaussians and average number of visible Gaussians over test views. Lower values are better. These are machine-independent proxies for memory use and rasterization work, replacing wall-clock FPS in the reusable benchmark.
 
@@ -147,12 +147,37 @@ Run `bash scripts/reproduce.sh` to generate deterministic test renders for the f
 
 </details>
 
+### Iteration 3: gpt-5.5
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 9m | **GPU**: 0.0h
+- **Jobs**: 3 total (3 completed, 0 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-05-31 14:14] - secondary_claims
+- CPU job `f840ed37-d90` completed successfully with the current autograd fine-tuning implementation.
+- `python validate.py --compare` passed in the packaged container, including import-separation and artifact-based evaluation checks.
+- Restored `secondary_claims`: the main quality/efficiency claim and the chunk-caching/blending ablation are both reproduced on the compact deterministic scene.
+
+### [2026-05-31 13:56] - core_claim_plus
+- Audited the available job logs and found they predate the stricter autograd fine-tuning implementation and current scoring contract.
+- Updated `scripts/run.sh` to clear generated checkpoints, synthetic data, and stale scores before rerunning the full reproduction.
+- Resubmitting a CPU reproduction job to verify the current implementation in the packaged environment.
+
+### [2026-05-31 13:52] - core_claim_plus
+- Replaced the compact LOD fine-tuning approximation with a real autograd optimization stage using the paper's L1+DSSIM loss family.
+- Removed non-Table-3 SSIM values from `reference.json` and the scoring contract so reference metrics are paper-reported.
+- Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
+
+</details>
+
 
 ---
 
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: secondary_claims**
 
 ## Stop Justification
-- Completed at milestone `core_claim_plus`.
+- Completed at milestone `secondary_claims`.

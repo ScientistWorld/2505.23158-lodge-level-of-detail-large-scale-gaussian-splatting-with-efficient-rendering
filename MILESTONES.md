@@ -20,4 +20,4 @@
 - Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
 
 ## Stop Justification
-- Stopping at `secondary_claims`: the core LODGE quality/efficiency result and the Table-3-style chunk design validation are verified in the packaged environment. Larger paper coverage would require large 3DGS scene assets and longer CUDA-scale experiments beyond this compact research gym.
+- Completed at milestone `secondary_claims`.
