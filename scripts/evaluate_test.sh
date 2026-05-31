@@ -8,7 +8,7 @@ cd /home/user
 
 mkdir -p scoring
 
-python eval/test/evaluate.py \
+python -m eval.test.evaluate \
   --data-dir data/lodge_synthetic \
   --checkpoints-dir checkpoints \
   --reference scoring/reference.json \
