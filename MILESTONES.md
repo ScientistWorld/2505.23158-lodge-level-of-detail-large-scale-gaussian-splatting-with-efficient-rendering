@@ -24,4 +24,4 @@
 - `python validate.py --compare` passed in the compute environment, confirming the evaluator consumes generated artifacts and matches the reference schema.
 
 ## Stop Justification
-- Reached `core_claim`: the implemented LODGE-style level construction, pruning, chunk filtering, threshold selection, and opacity blending run end-to-end and support the central quality-versus-Gaussian-count claim on the compact benchmark.
+- Completed at milestone `core_claim`.
