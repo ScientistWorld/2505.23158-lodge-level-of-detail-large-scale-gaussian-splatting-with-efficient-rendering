@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
+action: submit
 gpus: 0
-test: false
-milestone: core_claim
-notes: "Reproduced the core LODGE quality-efficiency claim on the packaged compact Gaussian-splatting benchmark; environment, scripts, evaluator, scores, and documentation are complete."
+test: true
+milestone: method_runs
+notes: "CPU test job for expanded LODGE reproduction: rerun baseline, dynamic LOD, nearest-chunk, opacity-blend variants, evaluate both main and ablation experiments, and validate scores."

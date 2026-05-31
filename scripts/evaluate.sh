@@ -29,5 +29,7 @@ mkdir -p scoring
 python -m eval.evaluate_outputs \
   --data-dir data/lodge_synthetic \
   --full-dir checkpoints/full_representation \
+  --lod-dynamic-dir checkpoints/lod_dynamic \
+  --nearest-chunk-dir checkpoints/nearest_chunk \
   --lodge-dir checkpoints/lodge \
   --scores scoring/scores.json

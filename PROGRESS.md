@@ -21,7 +21,7 @@ Latest local `bash scripts/reproduce.sh` result:
 
 ## Remaining
 
-The reusable core benchmark is complete. Higher milestones would require adding more settings, such as a larger scene, a manual-threshold ablation, and a no-blending chunk-boundary ablation.
+The reusable core benchmark is complete. This continuation adds a second scored experiment for the paper's design-validation axis: dynamic LOD, nearest cached chunk rendering, and opacity-blended chunk rendering. The expanded suite is pending a packaged-environment job run before claiming `core_claim_plus` or `secondary_claims`.
 
 ## Issues
 

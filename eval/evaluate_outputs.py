@@ -40,15 +40,29 @@ def main() -> None:
     parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_synthetic"))
     parser.add_argument("--full-dir", type=Path, default=Path("checkpoints/full_representation"))
     parser.add_argument("--lodge-dir", type=Path, default=Path("checkpoints/lodge"))
+    parser.add_argument("--lod-dynamic-dir", type=Path, default=Path("checkpoints/lod_dynamic"))
+    parser.add_argument("--nearest-chunk-dir", type=Path, default=Path("checkpoints/nearest_chunk"))
     parser.add_argument("--scores", type=Path, default=Path("scoring/scores.json"))
     args = parser.parse_args()
 
-    results = {}
+    main_results = {}
     if args.full_dir.exists():
-        results["full_representation"] = evaluate_run(args.full_dir, args.data_dir)
+        main_results["full_representation"] = evaluate_run(args.full_dir, args.data_dir)
     if args.lodge_dir.exists():
-        results["lodge"] = evaluate_run(args.lodge_dir, args.data_dir)
-    scores = {"experiments": {"synthetic_lod_quality_efficiency": {"results": results}}}
+        main_results["lodge"] = evaluate_run(args.lodge_dir, args.data_dir)
+
+    ablation_results = {}
+    if args.lod_dynamic_dir.exists():
+        ablation_results["lod_dynamic"] = evaluate_run(args.lod_dynamic_dir, args.data_dir)
+    if args.nearest_chunk_dir.exists():
+        ablation_results["nearest_chunk"] = evaluate_run(args.nearest_chunk_dir, args.data_dir)
+    if args.lodge_dir.exists():
+        ablation_results["opacity_blend"] = evaluate_run(args.lodge_dir, args.data_dir)
+
+    experiments = {"synthetic_lod_quality_efficiency": {"results": main_results}}
+    if ablation_results:
+        experiments["synthetic_chunk_blending_ablation"] = {"results": ablation_results}
+    scores = {"experiments": experiments}
     args.scores.parent.mkdir(parents=True, exist_ok=True)
     args.scores.write_text(json.dumps(scores, indent=2))
     print(json.dumps(scores, indent=2))

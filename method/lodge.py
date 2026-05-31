@@ -214,6 +214,23 @@ def render_opacity_blend(levels: list[dict], chunks: dict, cam) -> tuple[np.ndar
     return img, {"loaded": stats["loaded"], "visible": stats["visible"], "tile_cost": stats["tile_cost"]}
 
 
+def render_nearest_chunk(levels: list[dict], chunks: dict, cam) -> tuple[np.ndarray, dict]:
+    centers = chunks["centers"]
+    dist = np.linalg.norm(centers - cam.eye[None, :], axis=1)
+    nearest = int(np.argmin(dist))
+    return render_chunk(levels, chunks["chunks"][nearest], cam)
+
+
+def render_variant(levels: list[dict], thresholds: list[float], chunks: dict, cam, variant: str) -> tuple[np.ndarray, dict]:
+    if variant == "lod_dynamic":
+        return render_lod_at_camera(levels, thresholds, cam)
+    if variant == "nearest_chunk":
+        return render_nearest_chunk(levels, chunks, cam)
+    if variant == "opacity_blend":
+        return render_opacity_blend(levels, chunks, cam)
+    raise ValueError(f"Unknown LODGE variant: {variant}")
+
+
 def save_run(out_dir: Path, images: np.ndarray, stats: list[dict], config: dict) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(out_dir / "renders.npz", images=images)
@@ -230,6 +247,12 @@ def main() -> None:
     parser.add_argument("--visibility-threshold", type=float, default=0.220)
     parser.add_argument("--smooth-s", type=float, default=1.0)
     parser.add_argument("--thresholds", type=float, nargs="*", default=None)
+    parser.add_argument(
+        "--variant",
+        choices=["opacity_blend", "nearest_chunk", "lod_dynamic"],
+        default="opacity_blend",
+        help="Rendering mode: full LODGE, nearest precomputed chunk without blending, or per-camera dynamic LOD.",
+    )
     args = parser.parse_args()
 
     ensure_dataset(args.data_dir)
@@ -242,7 +265,7 @@ def main() -> None:
     outputs = []
     stats = []
     for cam in test:
-        img, st = render_opacity_blend(levels, chunks, cam)
+        img, st = render_variant(levels, thresholds, chunks, cam, args.variant)
         outputs.append(img)
         stats.append(st)
     save_run(
@@ -250,7 +273,7 @@ def main() -> None:
         stack_renders(outputs),
         stats,
         {
-            "method": "lodge",
+            "method": args.variant,
             "thresholds": thresholds,
             "levels": args.levels,
             "gamma": args.gamma,

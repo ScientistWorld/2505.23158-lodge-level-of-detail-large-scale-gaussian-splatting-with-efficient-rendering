@@ -11,3 +11,11 @@ Tests whether quality gains are not obtained by loading or processing the full d
 - **Metric**: loaded_gaussians (lower is better)
 - **Metric**: visible_gaussians (lower is better)
 - **How to run**: `bash scripts/reproduce.sh`
+
+## Secondary: synthetic_chunk_blending_ablation
+Tests the paper's design-validation axis: dynamic LOD, nearest cached chunks, and opacity-blended chunks should expose the quality/cost trade-offs of chunk caching and transition blending.
+- **Metric**: psnr (higher is better)
+- **Metric**: ssim (higher is better)
+- **Metric**: loaded_gaussians (lower is better)
+- **Metric**: visible_gaussians (lower is better)
+- **How to run**: `bash scripts/reproduce.sh`

@@ -2,7 +2,7 @@
   "experiments": {
     "synthetic_lod_quality_efficiency": {
       "description": "Compact reproduction of the SmallCity performance-analysis claim: preserve rendering quality while reducing visible and loaded Gaussians through level-of-detail chunked rendering.",
-      "weight": 1.0,
+      "weight": 0.65,
       "primary_metric": "psnr",
       "metrics": {
         "psnr": {"higher_is_better": true, "coefficient": 1.0},
@@ -19,6 +19,40 @@
           "loaded_gaussians": 2639000
         },
         "lodge": {
+          "type": "proposed",
+          "psnr": 26.57,
+          "ssim": 0.815,
+          "visible_gaussians": 268000,
+          "loaded_gaussians": 877000
+        }
+      }
+    },
+    "synthetic_chunk_blending_ablation": {
+      "description": "Compact reproduction of the paper's Table 3 design validation: dynamic LOD reduces work, chunk caching lowers loaded Gaussians, and opacity blending restores chunk-boundary quality at moderate extra cost.",
+      "weight": 0.35,
+      "primary_metric": "psnr",
+      "metrics": {
+        "psnr": {"higher_is_better": true, "coefficient": 1.0},
+        "ssim": {"higher_is_better": true, "coefficient": 0.3},
+        "visible_gaussians": {"higher_is_better": false, "coefficient": -0.35},
+        "loaded_gaussians": {"higher_is_better": false, "coefficient": -0.45}
+      },
+      "results": {
+        "lod_dynamic": {
+          "type": "proposed",
+          "psnr": 26.50,
+          "ssim": 0.815,
+          "visible_gaussians": 209000,
+          "loaded_gaussians": 3815000
+        },
+        "nearest_chunk": {
+          "type": "proposed",
+          "psnr": 26.55,
+          "ssim": 0.815,
+          "visible_gaussians": 185000,
+          "loaded_gaussians": 612000
+        },
+        "opacity_blend": {
           "type": "proposed",
           "psnr": 26.57,
           "ssim": 0.815,
