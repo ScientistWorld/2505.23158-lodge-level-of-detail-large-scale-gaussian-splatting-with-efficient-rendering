@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from data.gaussian_scene import ensure_dataset, load_dataset, psnr
+from data.gaussian_scene import ensure_dataset, load_dataset, psnr, simple_ssim
 
 
 def uint8_round(x: np.ndarray) -> np.ndarray:
@@ -24,12 +24,19 @@ def evaluate_run(run_dir: Path, data_dir: Path) -> dict:
     gt_q = uint8_round(gt)
     stats = meta["per_view"]
     psnrs = [psnr(p, g) for p, g in zip(pred_q, gt_q)]
+    ssims = [simple_ssim(p, g) for p, g in zip(pred_q, gt_q)]
     loaded = [float(s["loaded"]) for s in stats]
     visible = [float(s["visible"]) for s in stats]
+    tile_cost = [float(s["tile_cost"]) for s in stats]
     return {
         "psnr": float(np.mean(psnrs)),
+        "worst_view_psnr": float(np.min(psnrs)),
+        "ssim": float(np.mean(ssims)),
         "loaded_gaussians": float(np.mean(loaded)),
         "visible_gaussians": float(np.mean(visible)),
+        "peak_loaded_gaussians": float(np.max(loaded)),
+        "peak_visible_gaussians": float(np.max(visible)),
+        "tile_cost": float(np.mean(tile_cost)),
     }
 
 

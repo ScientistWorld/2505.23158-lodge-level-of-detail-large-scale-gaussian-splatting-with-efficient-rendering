@@ -4,6 +4,12 @@
 
 ## Progress Log
 
+### [2026-05-31 14:36] - secondary_claims
+- Final verification completed.
+- Expanded `scripts/evaluate.sh` metrics to match the full scoring contract and updated `scoring/scores.json`.
+- Cleaned method-agnostic experiment documentation and removed tracked generated job/trajectory artifacts.
+- `python validate.py --compare --post-design` passes.
+
 ### [2026-05-31 14:34] - secondary_claims
 - Re-audited the current workspace as the reproducer handoff state.
 - `python validate.py --compare --post-design` passes, including reference/scores validation, import separation, train/test independence, artifact-based evaluation, and split-score differentiation.

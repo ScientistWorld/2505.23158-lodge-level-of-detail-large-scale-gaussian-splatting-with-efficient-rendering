@@ -2,4 +2,4 @@ action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Post-design validation passes after inspection: compact LODGE reproduction, method-independent evaluation, train/test split scores, and packaging checks are complete."
+notes: "Final verification passed: scoring contract is complete, method-agnostic docs are cleaned, generated artifacts are removed from git, and validation passes."
