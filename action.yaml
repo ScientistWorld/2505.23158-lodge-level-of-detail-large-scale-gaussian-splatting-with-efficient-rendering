@@ -1,4 +1,5 @@
-action: done
+action: submit
 gpus: 0
 test: false
-notes: "Fixed held-out camera split; 64 finite train metric values and 64 finite test metric values. Train/test PSNR ranges are comparable (train 27.20-28.59, test 26.52-28.05); no nulls, no duplicate alias methods, and method sets match per experiment."
+milestone: secondary_claims
+notes: "Rerun the actual CPU reproduction pipeline from a clean synthetic dataset/checkpoint state, validate scores.json, then refresh train/test split scores. Current verified scores support at least core_claim and include the chunk-blending ablation."
