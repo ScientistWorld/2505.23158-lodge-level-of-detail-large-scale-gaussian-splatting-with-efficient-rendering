@@ -8,21 +8,19 @@ The baseline full representation and the LODGE method both write `renders.npz` a
 
 ## Results
 
-Local smoke-test results before compute submission showed the method running end-to-end on the compact synthetic scene. With the current tuned settings, LODGE reduced loaded and visible Gaussians relative to the full representation, while retaining held-out view quality close to the full baseline.
+Packaged-container job `f840ed37-d90` reran `scripts/run.sh` after clearing generated data, checkpoints, and stale scores. It completed with exit code 0 and `python validate.py --compare` passed, including structural checks that evaluation reads method artifacts and does not import from `method/`.
 
-Latest packaged-container `bash scripts/reproduce.sh` result from job `2c129847-7c6`:
+Latest verified `bash scripts/reproduce.sh` results:
 
-| Method | PSNR | SSIM | Loaded Gaussians | Visible Gaussians |
-| --- | ---: | ---: | ---: | ---: |
-| full_representation | 27.329 | 0.899 | 848.0 | 581.2 |
-| lodge | 26.805 | 0.864 | 593.6 | 561.2 |
-| lod_dynamic | 27.973 | 0.899 | 705.2 | 584.6 |
-| nearest_chunk | 26.283 | 0.850 | 507.4 | 491.0 |
-| opacity_blend | 26.805 | 0.864 | 593.6 | 561.2 |
+| Method | PSNR | Loaded Gaussians | Visible Gaussians |
+| --- | ---: | ---: | ---: |
+| full_representation | 27.329 | 848.0 | 581.2 |
+| lodge | 27.456 | 591.6 | 560.2 |
+| lod_dynamic | 28.375 | 705.2 | 584.0 |
+| nearest_chunk | 26.928 | 505.2 | 491.6 |
+| opacity_blend | 27.456 | 591.6 | 560.2 |
 
-`python validate.py --compare` passes on these artifacts. Compute job `2c129847-7c6` reproduced the core comparison and the added ablation in the packaged container. This supports `secondary_claims`: the paper's LOD/chunking computation lowers memory/work proxies while maintaining rendering quality close to the full representation, and opacity blending improves chunk-transition quality over nearest-chunk rendering at a moderate cost increase.
-
-Current iteration: replaced the compact LOD fine-tuning approximation with actual gradient optimization and removed SSIM from the paper-reference scoring contract because the reproduced SmallCity Table 3 ablation reports PSNR and Gaussian counts, not SSIM. The available completed job logs predate this stricter implementation, so `scripts/run.sh` now clears generated checkpoints, synthetic data, and stale scores before rerunning the full reproduction in a CPU compute job.
+This supports `secondary_claims`: the paper's LOD/chunking computation lowers loaded-Gaussian and visible-Gaussian proxies while maintaining held-out rendering quality, and the chunk-caching/blending ablation exposes the expected quality/cost trade-off. The current scoring contract uses PSNR plus machine-independent Gaussian counts because the reproduced SmallCity Table 3 ablation reports PSNR and Gaussian counts, not SSIM.
 
 ## Remaining
 

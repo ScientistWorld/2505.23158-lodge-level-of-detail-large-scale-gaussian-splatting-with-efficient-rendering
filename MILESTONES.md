@@ -1,8 +1,13 @@
 # Reproduction Milestones
 
-**Current: core_claim_plus**
+**Current: secondary_claims**
 
 ## Progress Log
+
+### [2026-05-31 14:14] - secondary_claims
+- CPU job `f840ed37-d90` completed successfully with the current autograd fine-tuning implementation.
+- `python validate.py --compare` passed in the packaged container, including import-separation and artifact-based evaluation checks.
+- Restored `secondary_claims`: the main quality/efficiency claim and the chunk-caching/blending ablation are both reproduced on the compact deterministic scene.
 
 ### [2026-05-31 13:56] - core_claim_plus
 - Audited the available job logs and found they predate the stricter autograd fine-tuning implementation and current scoring contract.
@@ -15,4 +20,4 @@
 - Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
 
 ## Stop Justification
-- Not stopped; continuing with stricter method validation.
+- Stopping at `secondary_claims`: the core LODGE quality/efficiency result and the Table-3-style chunk design validation are verified in the packaged environment. Larger paper coverage would require large 3DGS scene assets and longer CUDA-scale experiments beyond this compact research gym.
