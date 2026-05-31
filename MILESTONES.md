@@ -13,4 +13,9 @@
 - Added a deterministic synthetic Gaussian-splatting scene and full-representation baseline.
 - Smoke-tested the method locally on the scaled scene; it runs end-to-end and writes evaluator artifacts.
 
+### [2026-05-31 14:40] - method_runs
+- Audited the inherited reproduction and fixed an evaluation flaw that made the full baseline a perfect copy of the target images.
+- Retuned the compact LODGE settings and validated locally that the method runs end-to-end with lower loaded and visible Gaussian counts than the full baseline.
+- Submitted a CPU test job to verify the packaged reproduction in the compute environment before advancing to `core_claim`.
+
 ## Stop Justification

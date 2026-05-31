@@ -14,7 +14,8 @@ python -m method.lodge \
   --data-dir data/lodge_synthetic \
   --out-dir checkpoints/lodge \
   --levels 2 \
-  --gamma 0.060 \
-  --visibility-threshold 0.030
+  --gamma 0.055 \
+  --visibility-threshold 0.220 \
+  --smooth-s 1.0
 
 bash scripts/evaluate.sh

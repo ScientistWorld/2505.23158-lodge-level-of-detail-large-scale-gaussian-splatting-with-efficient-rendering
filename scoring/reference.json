@@ -8,8 +8,7 @@
         "psnr": {"higher_is_better": true, "coefficient": 1.0},
         "ssim": {"higher_is_better": true, "coefficient": 0.3},
         "visible_gaussians": {"higher_is_better": false, "coefficient": -0.4},
-        "loaded_gaussians": {"higher_is_better": false, "coefficient": -0.4},
-        "tile_cost": {"higher_is_better": false, "coefficient": -0.2}
+        "loaded_gaussians": {"higher_is_better": false, "coefficient": -0.4}
       },
       "results": {
         "full_representation": {
@@ -17,16 +16,14 @@
           "psnr": 26.62,
           "ssim": 0.815,
           "visible_gaussians": 925000,
-          "loaded_gaussians": 2639000,
-          "tile_cost": 15.17
+          "loaded_gaussians": 2639000
         },
         "lodge": {
           "type": "proposed",
           "psnr": 26.57,
           "ssim": 0.815,
           "visible_gaussians": 268000,
-          "loaded_gaussians": 877000,
-          "tile_cost": 3.88
+          "loaded_gaussians": 877000
         }
       }
     }

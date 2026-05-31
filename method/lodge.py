@@ -169,8 +169,8 @@ def build_chunks(levels: list[dict], thresholds: list[float], train_cameras: lis
                 continue
             scores = importance_scores(scene, member_cams, indices=inds)
             keep = scores >= vis_threshold
-            if keep.sum() < max(4, int(0.25 * keep.size)):
-                keep = scores >= np.quantile(scores, 0.55)
+            if keep.sum() < max(4, int(0.10 * keep.size)):
+                keep = scores >= np.quantile(scores, 0.80)
             filtered.append(inds[keep])
         chunks.append({"center": center, "radius": radius, "indices": filtered})
     return {"centers": centers, "chunks": chunks}
@@ -226,9 +226,9 @@ def main() -> None:
     parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_synthetic"))
     parser.add_argument("--out-dir", type=Path, default=Path("checkpoints/lodge"))
     parser.add_argument("--levels", type=int, default=2)
-    parser.add_argument("--gamma", type=float, default=0.060)
-    parser.add_argument("--visibility-threshold", type=float, default=0.030)
-    parser.add_argument("--smooth-s", type=float, default=2.8)
+    parser.add_argument("--gamma", type=float, default=0.055)
+    parser.add_argument("--visibility-threshold", type=float, default=0.220)
+    parser.add_argument("--smooth-s", type=float, default=1.0)
     parser.add_argument("--thresholds", type=float, nargs="*", default=None)
     args = parser.parse_args()
 

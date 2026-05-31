@@ -61,7 +61,7 @@ def camera_basis(cam: Camera) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     return right, up, forward
 
 
-def generate_scene(seed: int = 7, fine_grid: int = 16, coarse_grid: int = 8) -> dict:
+def generate_scene(seed: int = 7, fine_grid: int = 20, coarse_grid: int = 10) -> dict:
     rng = np.random.default_rng(seed)
     means = []
     sigma = []
@@ -229,12 +229,18 @@ def simple_ssim(pred: np.ndarray, gt: np.ndarray) -> float:
 def save_dataset(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
     scene = generate_scene()
+    reference_scene = generate_scene(fine_grid=24, coarse_grid=12)
     train, test = make_cameras()
     np.savez_compressed(path / "base_scene.npz", **scene)
     (path / "cameras.json").write_text(
         json.dumps({"train": [c.as_dict() for c in train], "test": [c.as_dict() for c in test]}, indent=2)
     )
-    gt = np.stack([render_scene(scene, c) for c in test])
+    # Test images approximate real captures rather than the exact base model:
+    # mostly the trained full representation, with deterministic residual detail
+    # from a denser scene.  This keeps the full baseline finite and realistic.
+    base_gt = np.stack([render_scene(scene, c) for c in test])
+    dense_gt = np.stack([render_scene(reference_scene, c) for c in test])
+    gt = np.clip(0.7 * base_gt + 0.3 * dense_gt, 0.0, 1.0)
     np.savez_compressed(path / "test_gt.npz", images=gt)
 
 

@@ -4,7 +4,7 @@
 
 The compact benchmark reports PSNR and a simple SSIM implementation on held-out rendered RGB images after rounding predictions and references to uint8, matching the paper's metric protocol. Higher PSNR and SSIM are better.
 
-Efficiency is measured by the average number of loaded Gaussians, average number of visible Gaussians, and average 16x16 tile cost over test views. Lower values are better. These are machine-independent proxies for memory use and rasterization work, replacing wall-clock FPS in the reusable benchmark.
+Efficiency is measured by the average number of loaded Gaussians and average number of visible Gaussians over test views. Lower values are better. These are machine-independent proxies for memory use and rasterization work, replacing wall-clock FPS in the reusable benchmark.
 
 ## Baselines and Targets
 

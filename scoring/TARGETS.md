@@ -10,5 +10,4 @@ Tests whether held-out rendered views remain close to the reference images while
 Tests whether quality gains are not obtained by loading or processing the full dense representation.
 - **Metric**: loaded_gaussians (lower is better)
 - **Metric**: visible_gaussians (lower is better)
-- **Metric**: tile_cost (lower is better)
 - **How to run**: `bash scripts/reproduce.sh`

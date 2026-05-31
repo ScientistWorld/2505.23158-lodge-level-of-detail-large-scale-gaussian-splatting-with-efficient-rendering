@@ -10,11 +10,11 @@ The starting full representation must be the provided Gaussian scene. Do not add
 Methods must write `renders.npz` and `stats.json` artifacts under a checkpoint directory and must be scored by `scripts/evaluate.sh`. Evaluation code must not import `method/`, and reported scores must come from generated artifacts.
 
 ## Metrics
-Do not replace the machine-independent cost metrics with wall-clock runtime. Hardware varies across jobs, while loaded Gaussian count, visible Gaussian count, and tile cost reflect the algorithmic constraint the paper claims to improve.
+Do not replace the machine-independent cost metrics with wall-clock runtime. Hardware varies across jobs, while loaded Gaussian count and visible Gaussian count reflect the algorithmic constraints the paper reports and claims to improve.
 
 ## Compliance Checklist
 - [ ] Uses the provided synthetic Gaussian scene and test cameras unchanged
 - [ ] Does not train or evaluate on external scenes or additional test views
 - [ ] Does not increase the base primitive count to improve quality
 - [ ] Writes output artifacts consumed by `scripts/evaluate.sh`
-- [ ] Reports loaded Gaussians, visible Gaussians, and tile cost alongside quality
+- [ ] Reports loaded Gaussians and visible Gaussians alongside quality

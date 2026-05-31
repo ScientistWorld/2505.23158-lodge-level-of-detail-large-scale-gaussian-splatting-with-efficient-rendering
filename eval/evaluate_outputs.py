@@ -27,13 +27,11 @@ def evaluate_run(run_dir: Path, data_dir: Path) -> dict:
     ssims = [simple_ssim(p, g) for p, g in zip(pred_q, gt_q)]
     loaded = [float(s["loaded"]) for s in stats]
     visible = [float(s["visible"]) for s in stats]
-    tile = [float(s.get("tile_cost", 0.0)) for s in stats]
     return {
         "psnr": float(np.mean(psnrs)),
         "ssim": float(np.mean(ssims)),
         "loaded_gaussians": float(np.mean(loaded)),
         "visible_gaussians": float(np.mean(visible)),
-        "tile_cost": float(np.mean(tile)),
     }
 
 
