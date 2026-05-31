@@ -15,6 +15,28 @@
           "visible_gaussians": 561.2
         }
       }
+    },
+    "synthetic_chunk_blending_ablation": {
+      "results": {
+        "lod_dynamic": {
+          "psnr": 27.972977467274767,
+          "ssim": 0.899075311324912,
+          "loaded_gaussians": 705.2,
+          "visible_gaussians": 584.6
+        },
+        "nearest_chunk": {
+          "psnr": 26.283142000322066,
+          "ssim": 0.8496846800474129,
+          "loaded_gaussians": 507.4,
+          "visible_gaussians": 491.0
+        },
+        "opacity_blend": {
+          "psnr": 26.80482385582682,
+          "ssim": 0.8642195762335018,
+          "loaded_gaussians": 593.6,
+          "visible_gaussians": 561.2
+        }
+      }
     }
   }
 }
