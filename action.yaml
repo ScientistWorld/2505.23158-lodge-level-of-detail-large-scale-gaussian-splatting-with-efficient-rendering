@@ -2,4 +2,4 @@ action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Validation fix: split scores now contain only methods declared in reference.json while preserving real compute-run values. Main scores support the core LODGE quality/efficiency claim and the ablation supports secondary_claims."
+notes: "Packaging audit complete: no external artifacts required; synthetic data is generated lazily and validation passes."
