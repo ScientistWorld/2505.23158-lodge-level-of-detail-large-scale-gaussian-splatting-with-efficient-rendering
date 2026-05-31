@@ -1,8 +1,9 @@
-# IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
-# Do NOT sleep, poll, or wait for jobs. The system reads this file
-# only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
+# This iteration writes files only — do NOT submit compute jobs.
+# Once you set action to 'done', STOP immediately.
+# Do NOT sleep, poll, or wait. The system reads this file
+# only after your turn ends.
+action: pending
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Verified job f840ed37-d90 completed successfully. Restored secondary_claims with the current autograd fine-tuned LODGE reproduction, main quality/efficiency scores, and chunk-blending ablation."
+notes: ""
