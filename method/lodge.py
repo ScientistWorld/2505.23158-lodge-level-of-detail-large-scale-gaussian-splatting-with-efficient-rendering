@@ -7,8 +7,9 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch
 
-from data.gaussian_scene import ensure_dataset, load_dataset, render_scene, stack_renders
+from data.gaussian_scene import ensure_dataset, load_dataset, load_train_targets, render_scene, stack_renders
 
 
 def copy_scene(scene: dict) -> dict:
@@ -49,34 +50,156 @@ def prune_by_importance(scene: dict, cameras: list, threshold: float) -> dict:
     return {k: v[keep] for k, v in scene.items()}
 
 
-def pseudo_finetune(scene: dict, cameras: list, steps: int, seed: int) -> dict:
-    """Lightweight deterministic stand-in for the paper's 1000-step LOD finetune.
+def _camera_basis_tensors(cam) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def norm(v: np.ndarray) -> np.ndarray:
+        n = np.linalg.norm(v)
+        return v if n < 1e-8 else v / n
 
-    The paper optimizes only the current LOD set after each pruning round.  For
-    this compact CPU benchmark we avoid expensive gradient descent but keep the
-    same procedural stage: update only surviving LOD parameters using visibility
-    statistics from training cameras.
+    forward = norm(cam.target - cam.eye)
+    right = norm(np.cross(forward, cam.up))
+    up = norm(np.cross(right, forward))
+    return (
+        torch.as_tensor(right, dtype=torch.float32),
+        torch.as_tensor(up, dtype=torch.float32),
+        torch.as_tensor(forward, dtype=torch.float32),
+    )
+
+
+def differentiable_render(
+    means: torch.Tensor,
+    sigma: torch.Tensor,
+    opacity: torch.Tensor,
+    colors: torch.Tensor,
+    cam,
+) -> torch.Tensor:
+    """Small autograd renderer for the LOD fine-tuning stage.
+
+    The production renderer in data/ keeps exact stats and tile accounting.
+    This renderer mirrors the same front-to-back Gaussian alpha compositing but
+    evaluates full image footprints, which is compact and differentiable for
+    the CPU-scale benchmark.
     """
 
-    rng = np.random.default_rng(seed)
-    out = copy_scene(scene)
-    scores = importance_scores(out, cameras)
-    if scores.max() > 0:
-        norm = scores / scores.max()
-        out["opacity"] = np.clip(out["opacity"] * (0.94 + 0.10 * norm), 0.02, 0.98).astype(np.float32)
-    jitter = rng.normal(0.0, 0.002 / max(1, steps), out["colors"].shape).astype(np.float32)
-    out["colors"] = np.clip(out["colors"] + jitter, 0.0, 1.0)
-    return out
+    right, up, forward = _camera_basis_tensors(cam)
+    eye = torch.as_tensor(cam.eye, dtype=torch.float32)
+    rel = means - eye[None, :]
+    x = rel @ right
+    y = rel @ up
+    z = rel @ forward
+    valid = z > 0.35
+    order = torch.argsort(z.detach())
+
+    yy, xx = torch.meshgrid(
+        torch.arange(cam.height, dtype=torch.float32),
+        torch.arange(cam.width, dtype=torch.float32),
+        indexing="ij",
+    )
+    img = torch.zeros((cam.height, cam.width, 3), dtype=torch.float32)
+    trans = torch.ones((cam.height, cam.width), dtype=torch.float32)
+    bg = torch.tensor([0.02, 0.025, 0.03], dtype=torch.float32)
+
+    for j_t in order:
+        j = int(j_t)
+        if not bool(valid[j]):
+            continue
+        zj = torch.clamp(z[j], min=1e-5)
+        u = cam.f * x[j] / zj + cam.width * 0.5
+        v = -cam.f * y[j] / zj + cam.height * 0.5
+        sig = torch.clamp(cam.f * sigma[j] / zj, min=0.45)
+        g = torch.exp(-0.5 * (((xx - u) ** 2 + (yy - v) ** 2) / (sig * sig)))
+        alpha = torch.clamp(opacity[j] * g, 0.0, 0.98)
+        contrib = trans * alpha
+        img = img + contrib[..., None] * colors[j]
+        trans = trans * (1.0 - alpha)
+    return torch.clamp(img + trans[..., None] * bg, 0.0, 1.0)
 
 
-def build_lod_levels(scene: dict, cameras: list, thresholds: list[float], gamma: float, smooth_s: float) -> list[dict]:
+def dssim_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+    c1 = 0.01**2
+    c2 = 0.03**2
+    x = pred.reshape(-1, 3)
+    y = target.reshape(-1, 3)
+    vals = []
+    for ch in range(3):
+        a = x[:, ch]
+        b = y[:, ch]
+        mux = a.mean()
+        muy = b.mean()
+        vx = a.var(unbiased=False)
+        vy = b.var(unbiased=False)
+        cov = ((a - mux) * (b - muy)).mean()
+        ssim = ((2 * mux * muy + c1) * (2 * cov + c2)) / ((mux * mux + muy * muy + c1) * (vx + vy + c2))
+        vals.append(ssim)
+    return (1.0 - torch.stack(vals).mean()) * 0.5
+
+
+def gradient_finetune(scene: dict, cameras: list, train_gt: np.ndarray, steps: int, lr: float, seed: int) -> dict:
+    """Fine-tune a pruned LOD level with the paper's DSSIM+L1 objective.
+
+    The full paper uses 1000 CUDA optimization iterations after each pruning
+    round.  This compact reproduction scales the iteration count down but keeps
+    the same optimization stage and loss family on surviving LOD Gaussians.
+    """
+
+    if steps <= 0 or scene["means"].shape[0] == 0:
+        return scene
+
+    torch.manual_seed(seed)
+    means = torch.as_tensor(scene["means"], dtype=torch.float32)
+    sigma_raw = torch.nn.Parameter(torch.log(torch.expm1(torch.as_tensor(scene["sigma"], dtype=torch.float32)) + 1e-6))
+    opacity_init = torch.clamp(torch.as_tensor(scene["opacity"], dtype=torch.float32) / 0.98, 1e-4, 1 - 1e-4)
+    opacity_raw = torch.nn.Parameter(torch.logit(opacity_init))
+    color_raw = torch.nn.Parameter(torch.logit(torch.clamp(torch.as_tensor(scene["colors"], dtype=torch.float32), 1e-4, 1 - 1e-4)))
+    opt = torch.optim.Adam([sigma_raw, opacity_raw, color_raw], lr=lr)
+
+    targets = torch.as_tensor(train_gt, dtype=torch.float32)
+    for step in range(steps):
+        cam_idx = (step + seed) % len(cameras)
+        pred = differentiable_render(
+            means,
+            torch.nn.functional.softplus(sigma_raw) + 1e-4,
+            torch.sigmoid(opacity_raw) * 0.98,
+            torch.sigmoid(color_raw),
+            cameras[cam_idx],
+        )
+        target = targets[cam_idx]
+        loss = torch.mean(torch.abs(pred - target)) + dssim_loss(pred, target)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+
+    return {
+        "means": scene["means"],
+        "sigma": (torch.nn.functional.softplus(sigma_raw) + 1e-4).detach().numpy().astype(np.float32),
+        "opacity": (torch.sigmoid(opacity_raw) * 0.98).detach().numpy().astype(np.float32),
+        "colors": torch.sigmoid(color_raw).detach().numpy().astype(np.float32),
+    }
+
+
+def build_lod_levels(
+    scene: dict,
+    cameras: list,
+    train_gt: np.ndarray,
+    thresholds: list[float],
+    gamma: float,
+    smooth_s: float,
+    finetune_steps: int,
+    finetune_lr: float,
+) -> list[dict]:
     levels = [copy_scene(scene)]
     focal = float(np.mean([c.f for c in cameras]))
     for level_idx, depth in enumerate(thresholds, start=1):
         lod = smooth_scene(scene, depth, focal, smooth_s)
         for round_idx, mult in enumerate([0.2, 0.6, 1.0]):
             lod = prune_by_importance(lod, cameras, gamma * mult)
-            lod = pseudo_finetune(lod, cameras, steps=1000, seed=level_idx * 100 + round_idx)
+            lod = gradient_finetune(
+                lod,
+                cameras,
+                train_gt,
+                steps=finetune_steps,
+                lr=finetune_lr,
+                seed=level_idx * 100 + round_idx,
+            )
         levels.append(lod)
     return levels
 
@@ -108,8 +231,17 @@ def render_lod_at_camera(levels: list[dict], thresholds: list[float], cam) -> tu
     return img, {"loaded": stats["loaded"], "visible": stats["visible"], "tile_cost": stats["tile_cost"]}
 
 
-def threshold_cost(scene: dict, cameras: list, thresholds: list[float], gamma: float, smooth_s: float) -> float:
-    levels = build_lod_levels(scene, cameras[:3], thresholds, gamma=gamma, smooth_s=smooth_s)
+def threshold_cost(scene: dict, cameras: list, train_gt: np.ndarray, thresholds: list[float], gamma: float, smooth_s: float) -> float:
+    levels = build_lod_levels(
+        scene,
+        cameras[:3],
+        train_gt[:3],
+        thresholds,
+        gamma=gamma,
+        smooth_s=smooth_s,
+        finetune_steps=0,
+        finetune_lr=0.0,
+    )
     costs = []
     for cam in cameras[:3]:
         _, stats = render_lod_at_camera(levels, thresholds, cam)
@@ -117,7 +249,15 @@ def threshold_cost(scene: dict, cameras: list, thresholds: list[float], gamma: f
     return float(np.mean(costs))
 
 
-def select_thresholds(scene: dict, cameras: list, n_levels: int, candidates: list[float], gamma: float, smooth_s: float) -> list[float]:
+def select_thresholds(
+    scene: dict,
+    cameras: list,
+    train_gt: np.ndarray,
+    n_levels: int,
+    candidates: list[float],
+    gamma: float,
+    smooth_s: float,
+) -> list[float]:
     selected: list[float] = []
     for _ in range(n_levels):
         best = None
@@ -125,7 +265,7 @@ def select_thresholds(scene: dict, cameras: list, n_levels: int, candidates: lis
             if selected and cand <= selected[-1] + 0.5:
                 continue
             trial = selected + [cand]
-            cost = threshold_cost(scene, cameras, trial, gamma=gamma, smooth_s=smooth_s)
+            cost = threshold_cost(scene, cameras, train_gt, trial, gamma=gamma, smooth_s=smooth_s)
             if best is None or cost < best[0]:
                 best = (cost, cand)
         if best is None:
@@ -246,6 +386,8 @@ def main() -> None:
     parser.add_argument("--gamma", type=float, default=0.055)
     parser.add_argument("--visibility-threshold", type=float, default=0.220)
     parser.add_argument("--smooth-s", type=float, default=1.0)
+    parser.add_argument("--finetune-steps", type=int, default=12)
+    parser.add_argument("--finetune-lr", type=float, default=0.035)
     parser.add_argument("--thresholds", type=float, nargs="*", default=None)
     parser.add_argument(
         "--variant",
@@ -257,9 +399,19 @@ def main() -> None:
 
     ensure_dataset(args.data_dir)
     scene, train, test, _ = load_dataset(args.data_dir)
+    train_gt = load_train_targets(args.data_dir)
     candidates = [3.0, 5.0, 7.0, 9.0]
-    thresholds = args.thresholds or select_thresholds(scene, train, args.levels, candidates, args.gamma, args.smooth_s)
-    levels = build_lod_levels(scene, train, thresholds, args.gamma, args.smooth_s)
+    thresholds = args.thresholds or select_thresholds(scene, train, train_gt, args.levels, candidates, args.gamma, args.smooth_s)
+    levels = build_lod_levels(
+        scene,
+        train,
+        train_gt,
+        thresholds,
+        args.gamma,
+        args.smooth_s,
+        args.finetune_steps,
+        args.finetune_lr,
+    )
     chunks = build_chunks(levels, thresholds, train, args.visibility_threshold)
 
     outputs = []
@@ -279,6 +431,8 @@ def main() -> None:
             "gamma": args.gamma,
             "visibility_threshold": args.visibility_threshold,
             "smooth_s": args.smooth_s,
+            "finetune_steps": args.finetune_steps,
+            "finetune_lr": args.finetune_lr,
             "num_chunks": len(chunks["chunks"]),
             "level_gaussians": [int(x["means"].shape[0]) for x in levels],
         },

@@ -12,18 +12,13 @@
 # Estimated total download size: 0 GB
 # Estimated disk usage after extraction: <1 MB
 #
-# This reproduction has no external downloads; the script only materializes
-# deterministic workspace-local data for portability.
+# This reproduction has no external downloads. The deterministic synthetic
+# scene is generated lazily by the baseline/method/eval scripts inside the
+# configured container, where NumPy is installed by environment/setup.sh.
 
 set -e
 
 cd /home/user
 
-# The compact reproduction uses a deterministic procedural Gaussian-splatting
-# scene, so no network downloads are required.
-python - <<'PY'
-from pathlib import Path
-from data.gaussian_scene import ensure_dataset
-ensure_dataset(Path("data/lodge_synthetic"))
-print("Prepared data/lodge_synthetic")
-PY
+mkdir -p data/downloads
+echo "No external downloads required."

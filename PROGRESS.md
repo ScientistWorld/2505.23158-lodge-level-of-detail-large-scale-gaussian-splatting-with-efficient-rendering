@@ -2,7 +2,7 @@
 
 ## What Works
 
-Implemented a compact CPU-scale reproduction of LODGE. The pipeline builds lower-detail Gaussian levels from a full Gaussian representation, selects thresholds greedily from a tile-cost proxy, clusters camera positions into chunks, filters chunk visibility by importance, and renders the two nearest chunks with opacity interpolation.
+Implemented a compact CPU-scale reproduction of LODGE. The pipeline builds lower-detail Gaussian levels from a full Gaussian representation, selects thresholds greedily from a tile-cost proxy, clusters camera positions into chunks, filters chunk visibility by importance, and renders the two nearest chunks with opacity interpolation. LOD construction now uses a small autograd fine-tuning stage with the paper's L1+DSSIM loss after each pruning round, replacing the earlier visibility-statistic substitute.
 
 The baseline full representation and the LODGE method both write `renders.npz` and `stats.json` artifacts. `scripts/evaluate.sh` reads those artifacts without importing `method/` and writes `scoring/scores.json`.
 
@@ -22,6 +22,8 @@ Latest packaged-container `bash scripts/reproduce.sh` result from job `2c129847-
 
 `python validate.py --compare` passes on these artifacts. Compute job `2c129847-7c6` reproduced the core comparison and the added ablation in the packaged container. This supports `secondary_claims`: the paper's LOD/chunking computation lowers memory/work proxies while maintaining rendering quality close to the full representation, and opacity blending improves chunk-transition quality over nearest-chunk rendering at a moderate cost increase.
 
+Current iteration: replaced the compact LOD fine-tuning approximation with actual gradient optimization and removed SSIM from the paper-reference scoring contract because the reproduced SmallCity Table 3 ablation reports PSNR and Gaussian counts, not SSIM. A new CPU compute job is being submitted to regenerate artifacts with the stricter method implementation.
+
 ## Remaining
 
 The reusable benchmark is complete through the main claim and one design-validation ablation. Higher milestones would require substantially larger scene coverage or more of the paper's full benchmark tables, which would need larger 3DGS assets and longer CUDA runs.
@@ -36,6 +38,6 @@ An audit found that an earlier synthetic target was generated directly from the 
 
 The paper evaluates on Hierarchical 3DGS and Zip-NeRF scenes with 1000-2000 images and trained 3DGS representations. This environment uses a deterministic synthetic Gaussian-splatting scene with small images and hundreds of primitives so the benchmark can run quickly and portably.
 
-The paper fine-tunes each LOD level with 1000 gradient steps after each pruning round. This compact reproduction keeps the same prune/fine-tune stages but uses deterministic visibility-statistic parameter updates instead of CUDA gradient optimization, preserving the stage and affected parameters while avoiding heavy login-node or test-node compute.
+The paper fine-tunes each LOD level with 1000 gradient steps after each pruning round. This compact reproduction scales the iteration count down for the small CPU benchmark, but keeps a real gradient-optimization stage on the surviving LOD Gaussian scale, opacity, and color parameters with the same L1+DSSIM loss family.
 
 The paper reports FPS; this benchmark scores loaded Gaussians and visible Gaussians instead because wall-clock speed is hardware dependent.

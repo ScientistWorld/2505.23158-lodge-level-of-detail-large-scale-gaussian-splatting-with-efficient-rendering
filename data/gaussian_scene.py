@@ -238,10 +238,15 @@ def save_dataset(path: Path) -> None:
     # Test images approximate real captures rather than the exact base model:
     # mostly the trained full representation, with deterministic residual detail
     # from a denser scene.  This keeps the full baseline finite and realistic.
-    base_gt = np.stack([render_scene(scene, c) for c in test])
-    dense_gt = np.stack([render_scene(reference_scene, c) for c in test])
-    gt = np.clip(0.7 * base_gt + 0.3 * dense_gt, 0.0, 1.0)
-    np.savez_compressed(path / "test_gt.npz", images=gt)
+    base_train = np.stack([render_scene(scene, c) for c in train])
+    dense_train = np.stack([render_scene(reference_scene, c) for c in train])
+    train_gt = np.clip(0.7 * base_train + 0.3 * dense_train, 0.0, 1.0)
+    np.savez_compressed(path / "train_gt.npz", images=train_gt)
+
+    base_test = np.stack([render_scene(scene, c) for c in test])
+    dense_test = np.stack([render_scene(reference_scene, c) for c in test])
+    test_gt = np.clip(0.7 * base_test + 0.3 * dense_test, 0.0, 1.0)
+    np.savez_compressed(path / "test_gt.npz", images=test_gt)
 
 
 def load_dataset(path: Path) -> tuple[dict, list[Camera], list[Camera], np.ndarray]:
@@ -254,8 +259,13 @@ def load_dataset(path: Path) -> tuple[dict, list[Camera], list[Camera], np.ndarr
     return scene, train, test, gt
 
 
+def load_train_targets(path: Path) -> np.ndarray:
+    return np.load(path / "train_gt.npz")["images"]
+
+
 def ensure_dataset(path: Path) -> None:
-    if not (path / "base_scene.npz").exists():
+    required = ["base_scene.npz", "cameras.json", "train_gt.npz", "test_gt.npz"]
+    if any(not (path / name).exists() for name in required):
         save_dataset(path)
 
 
