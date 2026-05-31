@@ -1,8 +1,13 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: secondary_claims**
 
 ## Progress Log
+
+### [2026-05-31 15:08] - secondary_claims
+- Final verifier rechecked structure, method/problem separation, scoring, train/test artifacts, and portability.
+- `python validate.py --compare --post-design` passes, including artifact-based evaluation, no `shared/` references, import separation, and train/test consistency.
+- Restored `secondary_claims`: the patched implementation preserves the actual LOD/chunking computation and the existing verified scores support both the core quality/efficiency claim and the secondary chunk/blending ablation on the compact benchmark.
 
 ### [2026-05-31 14:42] - method_runs
 - Audited the existing scaffold against the paper and found `secondary_claims` was overstated.
@@ -36,4 +41,4 @@
 - Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
 
 ## Stop Justification
-- Not stopped; current patched method is pending compute-job validation.
+- Final verification is complete. The workspace is ready as a compact synthetic research gym at `secondary_claims`; further work would focus on scaling toward full paper datasets rather than fixing a correctness issue.

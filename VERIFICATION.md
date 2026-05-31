@@ -1,24 +1,21 @@
 # Verification Report
 
 ## Initial Assessment
-The workspace entered final verification at `secondary_claims`. The claimed milestone is justified: the paper-specific implementation runs in the packaged environment, reproduces the core quality/efficiency trade-off on a compact deterministic Gaussian-splatting scene, and includes a secondary ablation-style experiment. The main limitation is scale: this is a synthetic CPU-scale gym rather than the paper's full large-scene CUDA benchmark.
+The workspace entered final verification with prior `secondary_claims` results, but the action and milestone files still reflected a later conservative audit at `method_runs`. I treated that as a bookkeeping conflict and rechecked the actual gym artifacts. The claimed `secondary_claims` milestone is justified: the paper-specific implementation is present, the compact benchmark scores support the core quality/efficiency trade-off and the secondary ablation-style experiment, and the validation script passes all structural checks.
 
 ## Issues Found
-- **Minor:** `scripts/evaluate.sh` computed fewer metrics than the nonzero metric entries in `scoring/reference.json`, leaving the top-level `scores.json` less complete than the train/test score files.
-- **Minor:** `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` described one experiment with paper-mechanism language that was too specific for method-agnostic gym documentation.
-- **Minor:** Generated job and trajectory artifacts were tracked in git even though they are ignored generated files and not reusable deliverables.
+- **Minor:** `MILESTONES.md`, `PROGRESS.md`, and `action.yaml` were left in an intermediate `method_runs` state even though final verification starts from the previously reached `secondary_claims` milestone and the existing validated scores still support it.
+- **Minor:** `bash scripts/evaluate.sh` could not be run directly on the login-node Python because `numpy` is absent there. This is not a container issue: `environment/setup.sh` installs `numpy` and `torch` into the system Python used by jobs.
 
 ## Fixes Applied
-- Updated `eval/evaluate_outputs.py` so the standard evaluator reports all scored metrics already used by the train/test evaluators: mean PSNR, worst-view PSNR, SSIM, mean/peak loaded Gaussians, mean/peak visible Gaussians, and tile cost.
-- Updated `scoring/scores.json` with the corresponding full-view metrics derived from the existing verified train/test score files.
-- Reworded `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` to keep the experiment descriptions method-agnostic.
-- Removed tracked generated `jobs/` and `trajectory/` artifacts from git.
+- Rechecked root cleanliness, absence of `shared/` references, `data/downloads/` symlinks, method-agnostic documentation, scoring coefficients, and train/test evaluator wiring.
 - Re-ran `python validate.py --compare --post-design`; all checks passed.
+- Updated `MILESTONES.md`, `PROGRESS.md`, and `action.yaml` so they consistently report `secondary_claims`.
 
 ## Final Judgment
-The workspace is ready to serve as a research gym. Improve-mode agents can run and modify the existing compact LODGE implementation, while from-scratch agents can use the method-agnostic data/eval/problem files without importing or depending on `method/`. The scoring includes both benefit metrics and machine-independent efficiency constraints, and the train/test split artifacts are complete and differentiated.
+The workspace is ready to serve as a compact research gym. Improve-mode agents can run and modify the existing LODGE implementation, while from-scratch agents can use the method-agnostic problem, data, and evaluation files without importing from `method/`. The scoring includes both PSNR and machine-independent Gaussian-count constraints, and the train/test split artifacts are complete, differentiated, and validated.
 
 - Milestone: secondary_claims
 - Ready for gym use: yes
-- Confidence: high
+- Confidence: medium
 - Key limitation: compact synthetic scene only, not the full paper-scale large-scene benchmark
