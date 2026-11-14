@@ -1,0 +1,527 @@
+[
+  {
+    "case": "reference_cached",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 1.6282226999755949
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.6174826650531031
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.9914610079722479,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "reference_seed0",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 53.40251598600298
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.220357556012459
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.9804936000145972,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "reference_seed1",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 46.50447796302615
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.8358454210101627
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.7802396990009584,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "reference_seed2",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 49.3463080880465
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.618802702985704
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8702054279856384,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "better_training_48",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 41.876990571036
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.830832534993533
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8294864170020446,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "better_training_120",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 280.5329580139951
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.833915158000309
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.6821292400127277,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "weaker_no_finetune",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 10.802677921019495
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.5720909860101528
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.6296537929447368,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "weaker_no_lod",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 1.05329846998211
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.6847077849670313
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.6923176900018007,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "brute_force_thresholds",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 197.5688177580014
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.9907939630211331
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.0409070950117894,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_visible_answers",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.6927546059596352
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.309286722971592
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.254286310984753,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_rebuild_answers",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.7902364929905161
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.8846858829492703
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8351384740089998,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_zero_cost",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 1.0978948089759797
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.8382679729838856
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.77370034402702,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_impossible_cost",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 1.6884192689904012
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.0924407559796236
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.0885595419676974,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_constant_black",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.7886278140358627
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.0561910970136523
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.9534165870281868,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_replace_targets",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.6818497609929182
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.83294280100381
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8836452870164067,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_baseline_only",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.8796727430308238
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.9404053490143269
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8315845929901116,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_missing_artifacts",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.8381932030315511
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.6763172670034692
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8416909039951861,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": []
+  },
+  {
+    "case": "shortcut_empty_train_registry",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.771884172980208
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.8676708299899474
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.9885671189986169,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_unregistered_method",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.6274363219854422
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.8290271779987961
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.1905451170168817,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk",
+      "shortcut_unregistered_method"
+    ]
+  },
+  {
+    "case": "shortcut_direct_scores",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.7297365390113555
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.9808985129930079
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.0063735569710843,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_null_cost",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.8917738940217532
+    },
+    "train": {
+      "returncode": 1,
+      "seconds": 0.9259152459562756
+    },
+    "test": {
+      "returncode": 1,
+      "seconds": 1.1242838219623081,
+      "scores_file_changed": false,
+      "fresh_scores": false
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_empty_predictions",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.688455039053224
+    },
+    "train": {
+      "returncode": 1,
+      "seconds": 0.886174621002283
+    },
+    "test": {
+      "returncode": 1,
+      "seconds": 0.824867365998216,
+      "scores_file_changed": false,
+      "fresh_scores": false
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "shortcut_nonfinite_pixels",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.7760671969735995
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.6830372859840281
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.7432081549777649,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  }
+]

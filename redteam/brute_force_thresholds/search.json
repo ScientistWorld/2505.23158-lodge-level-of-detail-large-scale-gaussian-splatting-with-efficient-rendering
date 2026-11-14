@@ -1,0 +1,68 @@
+[
+  {
+    "thresholds": [
+      3.0,
+      5.0
+    ],
+    "objective": 23.7267444503659,
+    "psnr": 27.737829356026275,
+    "loaded": 617.8,
+    "visible": 516.0,
+    "build_seconds": 34.39671348000411
+  },
+  {
+    "thresholds": [
+      3.0,
+      7.0
+    ],
+    "objective": 22.90661721297068,
+    "psnr": 26.24977759032917,
+    "loaded": 520.6,
+    "visible": 424.4,
+    "build_seconds": 27.5945071640308
+  },
+  {
+    "thresholds": [
+      3.0,
+      9.0
+    ],
+    "objective": 20.9500067360827,
+    "psnr": 22.581610509667605,
+    "loaded": 265.8,
+    "visible": 195.4,
+    "build_seconds": 27.886591618007515
+  },
+  {
+    "thresholds": [
+      5.0,
+      7.0
+    ],
+    "objective": 23.06676535204163,
+    "psnr": 26.837637993551066,
+    "loaded": 587.7,
+    "visible": 478.2,
+    "build_seconds": 31.00683712004684
+  },
+  {
+    "thresholds": [
+      5.0,
+      9.0
+    ],
+    "objective": 21.361697192457708,
+    "psnr": 23.41924436226903,
+    "loaded": 323.2,
+    "visible": 258.4,
+    "build_seconds": 33.669361806008965
+  },
+  {
+    "thresholds": [
+      7.0,
+      9.0
+    ],
+    "objective": 21.18885228300536,
+    "psnr": 23.344040962250645,
+    "loaded": 336.2,
+    "visible": 273.0,
+    "build_seconds": 32.901185460039414
+  }
+]

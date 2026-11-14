@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "slice": "train",
+    "data_pool": "lodge_synthetic/test_gt",
+    "split_rule": "fixed held-out camera subset"
+  },
+  "experiments": {
+    "synthetic_lod_quality_efficiency": {
+      "_meta": {
+        "slice": "train",
+        "view_indices": [
+          0,
+          2,
+          4
+        ]
+      },
+      "results": {}
+    },
+    "synthetic_chunk_blending_ablation": {
+      "_meta": {
+        "slice": "train",
+        "view_indices": [
+          0,
+          2,
+          4
+        ]
+      },
+      "results": {}
+    }
+  }
+}

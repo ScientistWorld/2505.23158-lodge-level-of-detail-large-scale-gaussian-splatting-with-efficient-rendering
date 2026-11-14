@@ -1,0 +1,132 @@
+{
+  "experiments": {
+    "synthetic_lod_quality_efficiency": {
+      "description": "Compact reproduction of the SmallCity performance-analysis claim: preserve rendering quality while reducing visible and loaded Gaussians through level-of-detail chunked rendering.",
+      "weight": 0.65,
+      "primary_metric": "psnr",
+      "metrics": {
+        "psnr": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Average held-out view reconstruction quality after uint8 quantization."
+        },
+        "worst_view_psnr": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic lowest per-view PSNR; not paper-reported for Table 3."
+        },
+        "ssim": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic structural image fidelity for the compact benchmark."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean rendered Gaussian count, a machine-independent rasterization-work proxy."
+        },
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean active Gaussian count loaded for rendering, a memory-footprint proxy."
+        },
+        "peak_visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case visible Gaussian count across compact views."
+        },
+        "peak_loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case loaded Gaussian count across compact views."
+        },
+        "tile_cost": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic per-tile overlap proxy used by threshold selection."
+        }
+      },
+      "results": {
+        "full_representation": {
+          "type": "baseline",
+          "psnr": 26.62,
+          "visible_gaussians": 925000,
+          "loaded_gaussians": 2639000
+        },
+        "lodge": {
+          "type": "proposed",
+          "psnr": 26.57,
+          "visible_gaussians": 268000,
+          "loaded_gaussians": 877000
+        }
+      }
+    },
+    "synthetic_chunk_blending_ablation": {
+      "description": "Compact reproduction of the paper's Table 3 design validation: dynamic LOD reduces work, chunk caching lowers loaded Gaussians, and opacity blending restores chunk-boundary quality at moderate extra cost.",
+      "weight": 0.35,
+      "primary_metric": "psnr",
+      "metrics": {
+        "psnr": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Average held-out view reconstruction quality after uint8 quantization."
+        },
+        "worst_view_psnr": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic lowest per-view PSNR; not paper-reported for Table 3."
+        },
+        "ssim": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic structural image fidelity for the compact benchmark."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean rendered Gaussian count, a machine-independent rasterization-work proxy."
+        },
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": -0.35,
+          "description": "Mean active Gaussian count loaded for rendering, a memory-footprint proxy."
+        },
+        "peak_visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case visible Gaussian count across compact views."
+        },
+        "peak_loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic worst-case loaded Gaussian count across compact views."
+        },
+        "tile_cost": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic per-tile overlap proxy used by threshold selection."
+        }
+      },
+      "results": {
+        "lod_dynamic": {
+          "type": "proposed",
+          "psnr": 26.50,
+          "visible_gaussians": 209000,
+          "loaded_gaussians": 3815000
+        },
+        "nearest_chunk": {
+          "type": "proposed",
+          "psnr": 26.55,
+          "visible_gaussians": 185000,
+          "loaded_gaussians": 612000
+        },
+        "opacity_blend": {
+          "type": "proposed",
+          "psnr": 26.57,
+          "visible_gaussians": 268000,
+          "loaded_gaussians": 877000
+        }
+      }
+    }
+  }
+}

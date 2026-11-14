@@ -1,0 +1,18 @@
+{
+  "case": "shortcut_missing_artifacts",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.8381932030315511
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.6763172670034692
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.8416909039951861,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": []
+}

@@ -1,0 +1,23 @@
+{
+  "case": "reference_cached",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 1.6282226999755949
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.6174826650531031
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.9914610079722479,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

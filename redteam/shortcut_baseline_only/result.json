@@ -1,0 +1,23 @@
+{
+  "case": "shortcut_baseline_only",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.8796727430308238
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.9404053490143269
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.8315845929901116,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

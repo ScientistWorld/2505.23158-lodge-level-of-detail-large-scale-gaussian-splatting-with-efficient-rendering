@@ -1,0 +1,23 @@
+{
+  "case": "brute_force_thresholds",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 197.5688177580014
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.9907939630211331
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 1.0409070950117894,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

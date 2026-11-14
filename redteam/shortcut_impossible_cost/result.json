@@ -1,0 +1,23 @@
+{
+  "case": "shortcut_impossible_cost",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 1.6884192689904012
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 1.0924407559796236
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 1.0885595419676974,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "case": "weaker_no_lod",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 1.05329846998211
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.6847077849670313
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.6923176900018007,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

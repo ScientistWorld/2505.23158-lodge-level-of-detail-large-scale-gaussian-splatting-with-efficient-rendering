@@ -1,0 +1,23 @@
+{
+  "case": "reference_seed0",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 53.40251598600298
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 1.220357556012459
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.9804936000145972,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

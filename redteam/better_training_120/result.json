@@ -1,0 +1,23 @@
+{
+  "case": "better_training_120",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 280.5329580139951
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.833915158000309
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.6821292400127277,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

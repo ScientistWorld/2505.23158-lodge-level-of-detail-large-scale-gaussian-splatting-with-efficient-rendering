@@ -1,0 +1,24 @@
+{
+  "case": "shortcut_unregistered_method",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.6274363219854422
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.8290271779987961
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 1.1905451170168817,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk",
+    "shortcut_unregistered_method"
+  ]
+}
