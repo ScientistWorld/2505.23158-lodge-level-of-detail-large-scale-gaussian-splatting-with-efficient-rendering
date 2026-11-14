@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
 test: false
-notes: "Rerun scoring audit after correcting stale candidate bytecode; verify three real seeds, 48/120/1000-step variants, ablations, exhaustive thresholds and all shortcuts."
+notes: "Resume audit with completed-round checkpoints for the 1000-step variant, then run ablations, exhaustive search and shortcut probes; retain completed independent seeds."

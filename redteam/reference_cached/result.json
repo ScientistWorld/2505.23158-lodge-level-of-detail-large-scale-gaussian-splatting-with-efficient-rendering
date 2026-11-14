@@ -1,0 +1,89 @@
+{
+  "case": "reference_cached",
+  "candidate_source_sha256": "950b51b1da141784f88abb43acc657b1e2a756ecd8744dc29fb623edfa1384c5",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 1.426864564011339
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.49326282599940896
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.5489266570075415,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "artifact_configs": {
+    "nearest_chunk": {
+      "method": "nearest_chunk",
+      "thresholds": [
+        3.0,
+        5.0
+      ],
+      "levels": 2,
+      "gamma": 0.055,
+      "visibility_threshold": 0.22,
+      "smooth_s": 1.0,
+      "finetune_steps": 12,
+      "finetune_lr": 0.035,
+      "num_chunks": 8,
+      "level_gaussians": [
+        848,
+        699,
+        697
+      ]
+    },
+    "lodge": {
+      "method": "opacity_blend",
+      "thresholds": [
+        3.0,
+        5.0
+      ],
+      "levels": 2,
+      "gamma": 0.055,
+      "visibility_threshold": 0.22,
+      "smooth_s": 1.0,
+      "finetune_steps": 12,
+      "finetune_lr": 0.035,
+      "num_chunks": 8,
+      "level_gaussians": [
+        848,
+        699,
+        697
+      ]
+    },
+    "full_representation": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lod_dynamic": {
+      "method": "lod_dynamic",
+      "thresholds": [
+        3.0,
+        5.0
+      ],
+      "levels": 2,
+      "gamma": 0.055,
+      "visibility_threshold": 0.22,
+      "smooth_s": 1.0,
+      "finetune_steps": 12,
+      "finetune_lr": 0.035,
+      "num_chunks": 8,
+      "level_gaussians": [
+        848,
+        699,
+        697
+      ]
+    }
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

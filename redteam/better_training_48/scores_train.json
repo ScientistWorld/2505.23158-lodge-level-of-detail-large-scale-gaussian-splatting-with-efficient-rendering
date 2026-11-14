@@ -26,14 +26,14 @@
           "tile_cost": 52.06666666666666
         },
         "lodge": {
-          "psnr": 27.581726494261773,
-          "worst_view_psnr": 27.35851209086377,
-          "ssim": 0.8827400897934661,
+          "psnr": 27.771637886941246,
+          "worst_view_psnr": 27.351544434789563,
+          "ssim": 0.8867558411099948,
           "loaded_gaussians": 624.0,
-          "visible_gaussians": 538.0,
-          "peak_loaded_gaussians": 636.0,
-          "peak_visible_gaussians": 555.0,
-          "tile_cost": 51.1
+          "visible_gaussians": 543.3333333333334,
+          "peak_loaded_gaussians": 634.0,
+          "peak_visible_gaussians": 554.0,
+          "tile_cost": 51.5
         }
       }
     },
@@ -48,34 +48,34 @@
       },
       "results": {
         "lod_dynamic": {
-          "psnr": 28.46316643442368,
-          "worst_view_psnr": 28.29379576392698,
-          "ssim": 0.9129950348906885,
-          "loaded_gaussians": 707.0,
+          "psnr": 28.511503579522568,
+          "worst_view_psnr": 28.294585672596227,
+          "ssim": 0.9140253904222533,
+          "loaded_gaussians": 708.0,
           "visible_gaussians": 589.0,
-          "peak_loaded_gaussians": 713.0,
+          "peak_loaded_gaussians": 714.0,
           "peak_visible_gaussians": 626.0,
-          "tile_cost": 54.6
+          "tile_cost": 54.65
         },
         "nearest_chunk": {
-          "psnr": 27.34462984220998,
-          "worst_view_psnr": 26.977783376505435,
-          "ssim": 0.8774652500042754,
-          "loaded_gaussians": 526.0,
-          "visible_gaussians": 487.0,
-          "peak_loaded_gaussians": 542.0,
-          "peak_visible_gaussians": 520.0,
-          "tile_cost": 46.083333333333336
+          "psnr": 27.537943803627115,
+          "worst_view_psnr": 27.043934487466128,
+          "ssim": 0.8815826491670191,
+          "loaded_gaussians": 534.6666666666666,
+          "visible_gaussians": 496.0,
+          "peak_loaded_gaussians": 549.0,
+          "peak_visible_gaussians": 537.0,
+          "tile_cost": 46.71666666666667
         },
         "opacity_blend": {
-          "psnr": 27.581726494261773,
-          "worst_view_psnr": 27.35851209086377,
-          "ssim": 0.8827400897934661,
+          "psnr": 27.771637886941246,
+          "worst_view_psnr": 27.351544434789563,
+          "ssim": 0.8867558411099948,
           "loaded_gaussians": 624.0,
-          "visible_gaussians": 538.0,
-          "peak_loaded_gaussians": 636.0,
-          "peak_visible_gaussians": 555.0,
-          "tile_cost": 51.1
+          "visible_gaussians": 543.3333333333334,
+          "peak_loaded_gaussians": 634.0,
+          "peak_visible_gaussians": 554.0,
+          "tile_cost": 51.5
         }
       }
     }

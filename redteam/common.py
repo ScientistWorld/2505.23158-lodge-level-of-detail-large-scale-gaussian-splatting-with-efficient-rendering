@@ -1,6 +1,8 @@
 """Candidate-side utilities. No hidden evaluator, hidden split, or paper access."""
 from pathlib import Path
+import hashlib
 import itertools
+import pickle
 import json
 import shutil
 import time
@@ -37,7 +39,7 @@ def reference_stats(name='lodge'):
     return json.loads((CKPT / name / 'stats.json').read_text())['per_view']
 
 
-def run_lodge(steps=12, seed=0, thresholds=None, output=None, lr=.035):
+def run_lodge(steps=12, seed=0, thresholds=None, output=None, lr=.035, checkpoint_rounds=False):
     """Run original computational steps; offset every explicit random seed."""
     import torch
     from method import lodge as m
@@ -46,7 +48,27 @@ def run_lodge(steps=12, seed=0, thresholds=None, output=None, lr=.035):
     original_ft, original_km, original_ro = m.gradient_finetune_lod, m.kmeans, m.random_orientation_cameras
     def ft(*args, **kwargs):
         kwargs['seed'] += seed
-        return original_ft(*args, **kwargs)
+        if not checkpoint_rounds:
+            return original_ft(*args, **kwargs)
+        # Reuse only completed deterministic rounds after scheduler preemption.
+        # Inputs and implementation bytes identify the exact computation.
+        digest = hashlib.sha256()
+        digest.update(Path(m.__file__).read_bytes())
+        digest.update(pickle.dumps((args, kwargs), protocol=5))
+        cache = Path('redteam/_cache/finetune_rounds')
+        cache.mkdir(parents=True, exist_ok=True)
+        target = cache / (digest.hexdigest() + '.npz')
+        if target.exists():
+            print(f'Resume completed fine-tuning round seed={kwargs["seed"]}', flush=True)
+            with np.load(target) as arrays:
+                return {key: arrays[key] for key in arrays.files}
+        print(f'Start fine-tuning round seed={kwargs["seed"]}, steps={kwargs["steps"]}', flush=True)
+        result = original_ft(*args, **kwargs)
+        temporary = target.with_suffix('.partial.npz')
+        np.savez_compressed(temporary, **result)
+        temporary.replace(target)
+        print(f'Saved fine-tuning round seed={kwargs["seed"]}', flush=True)
+        return result
     def km(points, k, seed_arg=3, iters=30):
         return original_km(points, k, seed=seed_arg + seed, iters=iters)
     def ro(cameras, seed_arg=None, per_camera=2, **kwargs):

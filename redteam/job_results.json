@@ -1,0 +1,461 @@
+[
+  {
+    "case": "reference_cached",
+    "candidate_source_sha256": "950b51b1da141784f88abb43acc657b1e2a756ecd8744dc29fb623edfa1384c5",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 1.426864564011339
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.49326282599940896
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.5489266570075415,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "method": "nearest_chunk",
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "levels": 2,
+        "gamma": 0.055,
+        "visibility_threshold": 0.22,
+        "smooth_s": 1.0,
+        "finetune_steps": 12,
+        "finetune_lr": 0.035,
+        "num_chunks": 8,
+        "level_gaussians": [
+          848,
+          699,
+          697
+        ]
+      },
+      "lodge": {
+        "method": "opacity_blend",
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "levels": 2,
+        "gamma": 0.055,
+        "visibility_threshold": 0.22,
+        "smooth_s": 1.0,
+        "finetune_steps": 12,
+        "finetune_lr": 0.035,
+        "num_chunks": 8,
+        "level_gaussians": [
+          848,
+          699,
+          697
+        ]
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "method": "lod_dynamic",
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "levels": 2,
+        "gamma": 0.055,
+        "visibility_threshold": 0.22,
+        "smooth_s": 1.0,
+        "finetune_steps": 12,
+        "finetune_lr": 0.035,
+        "num_chunks": 8,
+        "level_gaussians": [
+          848,
+          699,
+          697
+        ]
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "reference_seed0",
+    "candidate_source_sha256": "59ec8cd1c9f8d6ad00f6fbf51bcea7a5090036534f047e7318ef9005e8b933d0",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 60.224425538035575
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.0902493449975736
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.7845900709507987,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 12,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 43.70190550101688
+      },
+      "lodge": {
+        "steps": 12,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 43.70190550101688
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 12,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 43.70190550101688
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "reference_seed1",
+    "candidate_source_sha256": "3e0d5fd1e8caa2caefd32ebd4e34f1d08b569f259837ae0c9805804473033a15",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 46.36803392198635
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.9290659179678187
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.8289314500289038,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 12,
+        "seed_offset": 1,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 38.3365308669745
+      },
+      "lodge": {
+        "steps": 12,
+        "seed_offset": 1,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 38.3365308669745
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 12,
+        "seed_offset": 1,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 38.3365308669745
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "reference_seed2",
+    "candidate_source_sha256": "4155c2698cbc81c2475d379dfd39aa58fa9cef4b87b29896ffaada67b90b0984",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 53.87049924698658
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.0403415930340998
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.2921363880159333,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 12,
+        "seed_offset": 2,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 43.29467489995295
+      },
+      "lodge": {
+        "steps": 12,
+        "seed_offset": 2,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 43.29467489995295
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 12,
+        "seed_offset": 2,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 43.29467489995295
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "better_training_48",
+    "candidate_source_sha256": "36bda434e772439e58fc3440eef12a22e363c68939824ecaf5f0095603af8f7d",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 129.383176644973
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.1207008279743604
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 1.7074821600108407,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 48,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          700
+        ],
+        "build_seconds": 119.40335995296482
+      },
+      "lodge": {
+        "steps": 48,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          700
+        ],
+        "build_seconds": 119.40335995296482
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 48,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          700
+        ],
+        "build_seconds": 119.40335995296482
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "better_training_120",
+    "candidate_source_sha256": "28c87542777e3ccb4db549375ea578ab00f4c7c3c5ece59fb83c93c956b2a22f",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 270.33144257601816
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 1.122845897974912
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.5794572950107977,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 120,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          699
+        ],
+        "build_seconds": 260.2543138390174
+      },
+      "lodge": {
+        "steps": 120,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          699
+        ],
+        "build_seconds": 260.2543138390174
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 120,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          699
+        ],
+        "build_seconds": 260.2543138390174
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  }
+]
