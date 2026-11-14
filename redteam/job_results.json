@@ -457,5 +457,203 @@
       "lodge",
       "nearest_chunk"
     ]
+  },
+  {
+    "case": "better_training_1000",
+    "candidate_source_sha256": "87e525d1f7ddd803545c4d85c1fe1fde86bf254dc91b2abf8d6c7cd7daa16e57",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 1557.8677205109852
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.817016113025602
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.4652240439900197,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 1000,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          698,
+          691
+        ],
+        "build_seconds": 1547.970194841968
+      },
+      "lodge": {
+        "steps": 1000,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          698,
+          691
+        ],
+        "build_seconds": 1547.970194841968
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 1000,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          698,
+          691
+        ],
+        "build_seconds": 1547.970194841968
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "weaker_no_finetune",
+    "candidate_source_sha256": "590d72207d2e63c4a462b1f4b83eaee68fdbadb5843db4d4ce7c05f28d0964c4",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 9.330454570008442
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.5227747730095871
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.5181354060187005,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "steps": 0,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 3.4186677469988354
+      },
+      "lodge": {
+        "steps": 0,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 3.4186677469988354
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "steps": 0,
+        "seed_offset": 0,
+        "thresholds": [
+          3.0,
+          5.0
+        ],
+        "level_gaussians": [
+          848,
+          697,
+          698
+        ],
+        "build_seconds": 3.4186677469988354
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
+  },
+  {
+    "case": "weaker_no_lod",
+    "candidate_source_sha256": "c0ccb5e2c3337664d5f21fa855b92be553add24a3f4c9a559d02d1e4c55995d6",
+    "candidate": {
+      "returncode": 0,
+      "seconds": 0.6340153469936922
+    },
+    "train": {
+      "returncode": 0,
+      "seconds": 0.516981198976282
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 0.46600214997306466,
+      "scores_file_changed": true,
+      "fresh_scores": true
+    },
+    "artifact_configs": {
+      "nearest_chunk": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lodge": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "full_representation": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      },
+      "lod_dynamic": {
+        "method": "full_representation",
+        "level_gaussians": [
+          848
+        ]
+      }
+    },
+    "disk_methods": [
+      "full_representation",
+      "lod_dynamic",
+      "lodge",
+      "nearest_chunk"
+    ]
   }
 ]

@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
-test: false
-notes: "Resume audit with completed-round checkpoints for the 1000-step variant, then run ablations, exhaustive search and shortcut probes; retain completed independent seeds."
+test: true
+notes: "Finish remaining short scoring-audit checks on a one-hour test node, preserving all completed training and seed results."

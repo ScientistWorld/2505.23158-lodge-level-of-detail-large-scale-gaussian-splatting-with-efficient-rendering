@@ -112,9 +112,18 @@ def brute_force():
     """Enumerate the entire visible two-threshold grid, selecting on train only."""
     root = Path('redteam/brute_force_thresholds')
     records = []
+    source_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     for pair in itertools.combinations([3., 5., 7., 9.], 2):
         trial = root / 'trials' / ('_'.join(str(int(v)) for v in pair))
-        metrics = run_lodge(steps=12, thresholds=list(pair), output=trial)
+        progress = trial / 'metrics.json'
+        if progress.exists() and json.loads(progress.read_text()).get('source_hash') == source_hash:
+            metrics = json.loads(progress.read_text())['metrics']
+            print(f'Resume threshold pair {pair}', flush=True)
+        else:
+            print(f'Start threshold pair {pair}', flush=True)
+            metrics = run_lodge(steps=12, thresholds=list(pair), output=trial)
+            progress.write_text(json.dumps(dict(source_hash=source_hash, metrics=metrics), indent=2))
+            print(f'Completed threshold pair {pair}', flush=True)
         # A simple public training-only quality/cost scalar, with normalized costs.
         objective = metrics['psnr'] - 3. * (metrics['loaded'] + metrics['visible']) / 848.
         records.append(dict(thresholds=list(pair), objective=objective, **metrics))

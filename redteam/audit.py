@@ -61,6 +61,7 @@ def command(argv, logfile, timeout=12000):
 def run_case(name):
     initialize()
     reset()
+    print(f'Start audit case: {name}', flush=True)
     folder = AUDIT/name
     folder.mkdir(exist_ok=True)
     shutil.copy2(folder/'method.py', ROOT/'method/audit_candidate.py')
@@ -85,6 +86,8 @@ def run_case(name):
         for file, digest in json.loads((CACHE/'hidden_hashes.json').read_text()).items():
             assert hashlib.sha256((ROOT/file).read_bytes()).hexdigest() == digest, file
         result['test'] = command(['bash', 'scripts/evaluate_test.sh'], folder/'test.log', timeout=1200)
+        if result['test']['returncode']:
+            result['test']['error_tail'] = (folder/'test.log').read_text()[-2000:]
         shutil.copy2(before, folder/'scores_test.json')
         result['test']['scores_file_changed'] = hashlib.sha256(before.read_bytes()).hexdigest() != before_hash
         result['test']['fresh_scores'] = result['test']['returncode'] == 0

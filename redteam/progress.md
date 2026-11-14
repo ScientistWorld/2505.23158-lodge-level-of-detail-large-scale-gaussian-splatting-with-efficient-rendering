@@ -15,3 +15,11 @@ Earlier first-job results in first_job_cache_bug/ are invalid comparisons:
 timestamp-based bytecode reused same-length candidate wrappers. The harness
 now removes only its own candidate bytecode before installation, records source
 hashes and artifact configuration, and checks seed/step identities.
+
+Job 01fee188-6ff completed the 1000-step variant and both weaker variants.
+The worker then died and remained inactive; the job was cancelled. The
+1000-step chunked renderer loses quality (25.8267 dB versus 27.8194 rebuilt
+seed 0), while dynamic LOD reaches 28.1590 dB. This is retained as evidence,
+not discarded. The next job skips these completed cases and resumes the
+remaining short checks. Exhaustive search now saves completed pairs and
+prints progress. Failed-test error tails are retained with score provenance.

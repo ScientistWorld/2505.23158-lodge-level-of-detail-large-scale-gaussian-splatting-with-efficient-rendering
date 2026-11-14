@@ -1,0 +1,50 @@
+{
+  "case": "weaker_no_lod",
+  "candidate_source_sha256": "c0ccb5e2c3337664d5f21fa855b92be553add24a3f4c9a559d02d1e4c55995d6",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.6340153469936922
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.516981198976282
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.46600214997306466,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "artifact_configs": {
+    "nearest_chunk": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lodge": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "full_representation": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lod_dynamic": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    }
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}
