@@ -41,6 +41,10 @@ def reset():
     for path in RESTORE_FILES:
         shutil.copy2(CACHE/path, ROOT/path)
     (ROOT/'method/audit_candidate.py').unlink(missing_ok=True)
+    # copy2 preserves source mtimes. Same-sized wrappers written in one second
+    # must never reuse a prior candidate module's timestamp-based bytecode.
+    for cached in (ROOT/'method/__pycache__').glob('audit_candidate.*.pyc'):
+        cached.unlink()
 
 
 def command(argv, logfile, timeout=12000):
@@ -60,7 +64,8 @@ def run_case(name):
     folder = AUDIT/name
     folder.mkdir(exist_ok=True)
     shutil.copy2(folder/'method.py', ROOT/'method/audit_candidate.py')
-    result = {'case': name}
+    result = {'case': name, 'candidate_source_sha256':
+              hashlib.sha256((folder/'method.py').read_bytes()).hexdigest()}
     try:
         result['candidate'] = command([sys.executable, '-m', 'method.audit_candidate'], folder/'candidate.log')
         if result['candidate']['returncode']:
@@ -83,6 +88,13 @@ def run_case(name):
         shutil.copy2(before, folder/'scores_test.json')
         result['test']['scores_file_changed'] = hashlib.sha256(before.read_bytes()).hexdigest() != before_hash
         result['test']['fresh_scores'] = result['test']['returncode'] == 0
+        result['artifact_configs'] = {
+            p.parent.name: json.loads(p.read_text()).get('config', {})
+            for p in (ROOT/'checkpoints').glob('*/stats.json')}
+        if name.startswith('reference_seed'):
+            assert result['artifact_configs']['lodge']['seed_offset'] == int(name[-1])
+        if name.startswith('better_training_'):
+            assert result['artifact_configs']['lodge']['steps'] == int(name.split('_')[-1])
         result['disk_methods'] = sorted(p.name for p in (ROOT/'checkpoints').iterdir() if p.is_dir())
         # Archive submitted outputs for reproduction; binary files stay ignored.
         shutil.copytree(ROOT/'checkpoints', folder/'checkpoints', dirs_exist_ok=True)

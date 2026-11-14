@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "slice": "test",
+    "data_pool": "lodge_synthetic/test_gt",
+    "split_rule": "fixed held-out camera subset"
+  },
+  "experiments": {
+    "synthetic_lod_quality_efficiency": {
+      "_meta": {
+        "slice": "test",
+        "view_indices": [
+          1,
+          3
+        ]
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 15.8369323268299,
+          "worst_view_psnr": 15.583096541324164,
+          "ssim": 0.0005140217129499851,
+          "loaded_gaussians": 848.0,
+          "visible_gaussians": 574.5,
+          "peak_loaded_gaussians": 848.0,
+          "peak_visible_gaussians": 590.0,
+          "tile_cost": 49.1
+        },
+        "lodge": {
+          "psnr": 99.0,
+          "worst_view_psnr": 99.0,
+          "ssim": 1.0,
+          "loaded_gaussians": 0.0,
+          "visible_gaussians": 0.0,
+          "peak_loaded_gaussians": 0.0,
+          "peak_visible_gaussians": 0.0,
+          "tile_cost": 0.0
+        }
+      }
+    },
+    "synthetic_chunk_blending_ablation": {
+      "_meta": {
+        "slice": "test",
+        "view_indices": [
+          1,
+          3
+        ]
+      },
+      "results": {
+        "lod_dynamic": {
+          "psnr": 99.0,
+          "worst_view_psnr": 99.0,
+          "ssim": 1.0,
+          "loaded_gaussians": 0.0,
+          "visible_gaussians": 0.0,
+          "peak_loaded_gaussians": 0.0,
+          "peak_visible_gaussians": 0.0,
+          "tile_cost": 0.0
+        },
+        "nearest_chunk": {
+          "psnr": 99.0,
+          "worst_view_psnr": 99.0,
+          "ssim": 1.0,
+          "loaded_gaussians": 0.0,
+          "visible_gaussians": 0.0,
+          "peak_loaded_gaussians": 0.0,
+          "peak_visible_gaussians": 0.0,
+          "tile_cost": 0.0
+        },
+        "opacity_blend": {
+          "psnr": 99.0,
+          "worst_view_psnr": 99.0,
+          "ssim": 1.0,
+          "loaded_gaussians": 0.0,
+          "visible_gaussians": 0.0,
+          "peak_loaded_gaussians": 0.0,
+          "peak_visible_gaussians": 0.0,
+          "tile_cost": 0.0
+        }
+      }
+    }
+  }
+}

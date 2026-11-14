@@ -1,4 +1,4 @@
 action: submit
 gpus: 0
 test: false
-notes: "Scoring audit: three LODGE seeds, longer-training and ablation variants, exhaustive threshold search, and fourteen artifact/data/registry shortcuts; all through unmodified hidden test."
+notes: "Rerun scoring audit after correcting stale candidate bytecode; verify three real seeds, 48/120/1000-step variants, ablations, exhaustive thresholds and all shortcuts."

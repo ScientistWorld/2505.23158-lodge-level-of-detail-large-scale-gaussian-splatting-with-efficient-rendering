@@ -36,3 +36,10 @@ The ranking normalizers depend on future attempts and are not available at
 audit time. Report raw scored metrics and dominance first. Any normalized
 aggregate computed from an audit comparison panel is explicitly labeled as
 panel-dependent, not the unavailable final leaderboard rank.
+
+The initial job exposed stale candidate-module bytecode from timestamp-based
+caching. Its named results are superseded and archived in
+`first_job_cache_bug/`. The harness now deletes only that candidate module's
+bytecode on reset, records source hashes and checks seed/step metadata. The
+second batch also includes the paper's 1000 fine-tuning steps per round and
+a failed black-output candidate with impossible self-reported cost.
