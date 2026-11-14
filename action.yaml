@@ -1,4 +1,2 @@
-action: submit
-gpus: 0
-test: true
-notes: "Finish remaining short scoring-audit checks on a one-hour test node, preserving all completed training and seed results."
+action: done
+notes: "Audit complete: genuine training gains exceed seed noise, but public answers, trusted costs, mutable comparisons and missing results produce paying shortcuts; see REDTEAM.md."

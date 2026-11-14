@@ -23,3 +23,10 @@ seed 0), while dynamic LOD reaches 28.1590 dB. This is retained as evidence,
 not discarded. The next job skips these completed cases and resumes the
 remaining short checks. Exhaustive search now saves completed pairs and
 prints progress. Failed-test error tails are retained with score provenance.
+
+Job cf425942-c1a completed every remaining case. All 25 case result records
+are present: 23 successful hidden-test writes and two expected failures.
+REDTEAM.md reports honest quality/rank sensitivity, three-seed spreads,
+paper departures, enumeration, and every shortcut. analyze.py reproduces
+explicit H/B/A normalization panels from the saved small JSON evidence.
+Audit finished; no reproduction milestone is changed by this scoring audit.

@@ -1,0 +1,50 @@
+{
+  "starting_commit": "d45ea4240a98a3fde9b1b6254e0e1c40af43f2b2",
+  "regulated_tracked_paths_unchanged": [
+    "baseline",
+    "briefing",
+    "data",
+    "environment",
+    "eval",
+    "method",
+    "paper",
+    "scoring",
+    "scripts"
+  ],
+  "temporary_candidate_removed": true,
+  "hidden_hashes_match": true,
+  "restored_generated_artifacts": [
+    {
+      "directory": "checkpoints",
+      "files": 9,
+      "sha256": {
+        ".gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "nearest_chunk/renders.npz": "c2ae25ef0468924856f20b35e6cc53e5ab4f14d5b5824fc0507f124af78be095",
+        "nearest_chunk/stats.json": "6a958d4891d5c218a625c97245a93c6f5401f4df215687191645cb8e22cba5cf",
+        "lodge/renders.npz": "9bd9293b02c887f2d984714de24aca5702cf22f7771836ff2120bb38f2655226",
+        "lodge/stats.json": "cf474e8abdc02f3c2bab5c5dbbce1d9d8e793e2a1d7e16289c8c19507e99a7df",
+        "full_representation/renders.npz": "51ddcfd6cbaf4e97336dd673feb3027261847f8e4f84d100bfc0bb80ba7e5d76",
+        "full_representation/stats.json": "ef3bca05575ddfd4220af74f6ff49c9ed3d4f171e22488d994d2653a41e9cd66",
+        "lod_dynamic/renders.npz": "9f09142ba76175dba1781048a6d83c8ba0a06bcb4dcac538cafce160759a9e83",
+        "lod_dynamic/stats.json": "b6e2f3b4a66f30dd12f1d305592b3367efe7d25b42360674b2f0615d2c88642c"
+      }
+    },
+    {
+      "directory": "data/lodge_synthetic",
+      "files": 4,
+      "sha256": {
+        "base_scene.npz": "1813dc85c507b5aa837395274d32b0961c0c45538e26a8bae0fd1ec3ac37570b",
+        "test_gt.npz": "048f402efdd5ff0c7b172faa746404ec834e8f311335fd6cb738b5fea4299571",
+        "train_gt.npz": "69271d909624ae2dedc2157c22466589a576c750d82df6332f8521f89da5cc4d",
+        "cameras.json": "733f9547ebc5be093c60d3a39c1725fdd0f0b2e2129ee4cab8458bfc24162909"
+      }
+    }
+  ],
+  "preexisting_system_changes": " M README.md\n M manifest.json\n D trajectory/session.json\n D trajectory/turn_0001_raw.jsonl\n D trajectory/turn_0002_raw.jsonl\n D trajectory/turn_0003_raw.jsonl\n D trajectory/turn_0004_raw.jsonl\n D trajectory/turn_0005_raw.jsonl\n D trajectory/turn_0006_raw.jsonl\n?? redteam/\n",
+  "notes": [
+    "README.md and manifest.json are preexisting system-mounted character devices; untouched.",
+    "Tracked trajectory deletions were already present at audit start; untouched.",
+    "Scheduler-written jobs are ignored and removed from the audit commit index.",
+    "action.yaml is the required end-of-turn protocol exception."
+  ]
+}

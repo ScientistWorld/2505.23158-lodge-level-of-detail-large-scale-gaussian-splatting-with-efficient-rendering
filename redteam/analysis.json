@@ -1,0 +1,3482 @@
+{
+  "reference_file": "reference_test_at_start.json",
+  "normalization": "population standard deviation per experiment/method/metric; zero spread uses 1",
+  "panels": {
+    "H_honest": {
+      "cases": [
+        "reference_cached",
+        "reference_seed0",
+        "reference_seed1",
+        "reference_seed2",
+        "better_training_48",
+        "better_training_120",
+        "better_training_1000",
+        "weaker_no_finetune",
+        "weaker_no_lod",
+        "brute_force_thresholds"
+      ],
+      "normalizers": {
+        "synthetic_lod_quality_efficiency/full_representation/psnr": 1.0,
+        "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": 1.0,
+        "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": 1.0,
+        "synthetic_lod_quality_efficiency/lodge/psnr": 0.6712455847915275,
+        "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 22.013859270922943,
+        "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 76.32727232123521,
+        "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.28773758154583307,
+        "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 1.205197079319395,
+        "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 43.75971320746972,
+        "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.644107736637084,
+        "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 35.49380227589037,
+        "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 101.35409463854926,
+        "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.6712455847915275,
+        "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 22.013859270922943,
+        "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 76.32727232123521
+      },
+      "scores": {
+        "reference_cached": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "reference_seed0": {
+          "total": 0.671624574613268,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.637507885114008,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.06200639257301709,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.13114578440418198,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.2764785084151496,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.37340350412179013,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.04486698797783427,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.06405759947985985,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.34327347659985047,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.033388057539316895,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.07061696083302106
+          }
+        },
+        "reference_seed1": {
+          "total": 0.26861854039757793,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.5564588970995158,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.18085197833796654,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.19820896961086593,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.28447018355554077,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.4813454627223358,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.10871616317705997,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.09246049736243922,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.29963171382281617,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.09738183448967429,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.10672790671354318
+          }
+        },
+        "reference_seed2": {
+          "total": 0.629744613345815,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.5497507170461357,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.11884558576494944,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.1222040263766241,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.1626981565163043,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.41833133305606246,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.03796437444278285,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.06284896552740966,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.29601961687099604,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.06399377695035738,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.06580216804895143
+          }
+        },
+        "better_training_48": {
+          "total": 1.1217434191598472,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.8173144313922422,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.07750799071627136,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.13412637041336792,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.200752172683021,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0013996892463533034,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.5167098513789095,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.05694656166417427,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.06768350133721042,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.4400923861342842,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.04173507192414612,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.07222189176104427
+          }
+        },
+        "better_training_120": {
+          "total": 1.1460102766038742,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.8145796901855581,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0723407913351866,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.12816519839499602,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.16015775636654725,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.050821563585757616,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.0013996892463533034,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.5342825664274133,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.05694656166417427,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.06647486738476022,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.4386198331768389,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.038952733795869714,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.06901202990499784
+          }
+        },
+        "better_training_1000": {
+          "total": -1.2330877197698846,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -1.292084422386128,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.6252311251112557,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.1028302173169154,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.1326036474141498,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.15246469075727284,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.008398135478119819,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.602498678906197,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.21052971281906852,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.03807196950218086,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.6957377659002227,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.33666291352144534,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.0553701170168006
+          }
+        },
+        "weaker_no_finetune": {
+          "total": -1.535455644620067,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.4824352396681585,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.015501598143254273,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.10432051032150838,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.4637228375686431,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.17379048346846124,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.018982187221391424,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.03807196950218086,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.2597728213597776,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.008347014384829224,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.05617258248081221
+          }
+        },
+        "weaker_no_lod": {
+          "total": -3.57212239161091,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.1214626286041975,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.25319276967315313,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.8032679294756145,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -1.2338049265349909,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.3557509451003033,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.40730957068881124,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.27926797496403355,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.31752022261236557,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.43631685683451715,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.06540295386379864,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.136334568285544,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.43252888510225396
+          }
+        },
+        "brute_force_thresholds": {
+          "total": 0.671624574613268,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.637507885114008,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.06200639257301709,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.13114578440418198,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.2764785084151496,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.37340350412179013,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.04486698797783427,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.06405759947985985,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.34327347659985047,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.033388057539316895,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.07061696083302106
+          }
+        },
+        "shortcut_visible_answers": {
+          "total": 232.7097947177439,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 69.56516791750894,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 86.3026605924499,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 39.38379886758795,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 37.45816734019712,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_rebuild_answers": {
+          "total": 232.7097947177439,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 69.56516791750894,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 86.3026605924499,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 39.38379886758795,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 37.45816734019712,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_zero_cost": {
+          "total": 74.36736395490935,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 5.683919319193233,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 1.7242690063140742,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 58.7497275051358,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 1.9665633911263913,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 1.6652555153311568,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.5886047348432405,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 3.0605719411040484,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.9284525418614247
+          }
+        },
+        "shortcut_impossible_cost": {
+          "total": 129587038414.49658,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 10334398767.853436,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 2980586010.910223,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 101643127230.26495,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2799378494.67317,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 3451306769.1909685,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 1208633953.0387907,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 5564676259.613388,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 1604930928.9516585
+          }
+        },
+        "shortcut_constant_black": {
+          "total": 37.3986501323204,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -10.797844167663175,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 5.683919319193233,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 1.7242690063140742,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -14.644881012972201,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 58.7497275051358,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 1.9665633911263913,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -5.71176485936573,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 1.6652555153311568,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.5886047348432405,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -5.814223782587863,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 3.0605719411040484,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.9284525418614247
+          }
+        },
+        "shortcut_black_impossible_cost": {
+          "total": 129587038377.52788,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -10.797844167663175,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 10334398767.853436,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 2980586010.910223,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -14.644881012972201,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 101643127230.26495,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2799378494.67317,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -5.71176485936573,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 3451306769.1909685,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 1208633953.0387907,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -5.814223782587863,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 5564676259.613388,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 1604930928.9516585
+          }
+        },
+        "shortcut_replace_targets": {
+          "total": 299.79800775816955,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": -7.279150914483719,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 69.56516791750894,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 5.683919319193233,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 1.7242690063140742,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 86.3026605924499,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 58.7497275051358,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 1.9665633911263913,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 39.38379886758795,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 1.6652555153311568,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.5886047348432405,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 37.45816734019712,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 3.0605719411040484,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.9284525418614247
+          }
+        },
+        "shortcut_baseline_only": {
+          "total": 370.39559307307684,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 46.77684307307684,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": 130.69875,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": 192.92,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_missing_artifacts": {
+          "total": 0.0,
+          "terms": {}
+        },
+        "shortcut_empty_train_registry": {
+          "total": 0.0,
+          "terms": {}
+        },
+        "shortcut_unregistered_method": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_direct_scores": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_nonfinite_pixels": {
+          "total": 37.3986501323204,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -10.797844167663175,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 5.683919319193233,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 1.7242690063140742,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -14.644881012972201,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 58.7497275051358,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 1.9665633911263913,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -5.71176485936573,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 1.6652555153311568,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.5886047348432405,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -5.814223782587863,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 3.0605719411040484,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.9284525418614247
+          }
+        }
+      },
+      "seed_score_range": [
+        0.26861854039757793,
+        0.671624574613268
+      ],
+      "seed_score_spread": 0.40300603421569003
+    },
+    "B_without_negative_counts": {
+      "cases": [
+        "reference_cached",
+        "reference_seed0",
+        "reference_seed1",
+        "reference_seed2",
+        "better_training_48",
+        "better_training_120",
+        "better_training_1000",
+        "weaker_no_finetune",
+        "weaker_no_lod",
+        "brute_force_thresholds",
+        "shortcut_visible_answers",
+        "shortcut_rebuild_answers",
+        "shortcut_zero_cost",
+        "shortcut_constant_black",
+        "shortcut_replace_targets",
+        "shortcut_baseline_only",
+        "shortcut_missing_artifacts",
+        "shortcut_empty_train_registry",
+        "shortcut_unregistered_method",
+        "shortcut_direct_scores",
+        "shortcut_nonfinite_pixels"
+      ],
+      "normalizers": {
+        "synthetic_lod_quality_efficiency/full_representation/psnr": 16.399520924662003,
+        "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": 128.28405656579102,
+        "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": 189.3557527724818,
+        "synthetic_lod_quality_efficiency/lodge/psnr": 26.87847510113202,
+        "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 225.282632581689,
+        "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 257.9697581537101,
+        "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 26.719834090724632,
+        "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 235.601322957876,
+        "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 292.06179856808643,
+        "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 27.019576038741263,
+        "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 201.87812757540576,
+        "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 231.72062651706818,
+        "synthetic_chunk_blending_ablation/opacity_blend/psnr": 26.87847510113202,
+        "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 225.282632581689,
+        "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 257.9697581537101
+      },
+      "scores": {
+        "reference_cached": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "reference_seed0": {
+          "total": -0.0745081333689187,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.015920707984454805,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0060590556154169655,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.038802997962402976,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.002977311052555901,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.00890140117474052,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.007888422679198703,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.028018653745189023,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.008572688914706432,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.003262568408301443,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.020893921979755446
+          }
+        },
+        "reference_seed1": {
+          "total": -0.14717743613597722,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.013896643183462502,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.01767224554496615,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.058645440102268125,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0030633709161609055,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.011474581839850995,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.019114254953443013,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.04044201908503698,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.00748280786801827,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.009515824524212542,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.031578313901221296
+          }
+        },
+        "reference_seed2": {
+          "total": -0.07831585137858142,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.01372911745047818,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.011613189929549185,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.036157339010420946,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0017520458367747758,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.009972415840750816,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.00667481919009121,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.027489999900940174,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.007392601704103633,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.006253256115911099,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.019469336390226664
+          }
+        },
+        "better_training_48": {
+          "total": -0.07097481650894251,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.02041107992154416,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0075738195192712075,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.03968488427973031,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.002161837699356665,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.00020971588992567676,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.012317617877962012,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.010012228785136815,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.02960461527793557,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.010990581496216083,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.004078210510376804,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.021368783842931706
+          }
+        },
+        "better_training_120": {
+          "total": -0.06604541899535674,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.020342784270335253,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.00706889821798646,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.03792111164507563,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0017246890578079667,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.00025997307328767035,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.00020971588992567676,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.012736526068831893,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.010012228785136815,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.02907596143368672,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.010953806914795904,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.003806329809685017,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.020419060116579183
+          }
+        },
+        "better_training_1000": {
+          "total": 0.1323694200662955,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.032267677405109635,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.061095477455454406,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.030425077947793238,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0014279674297958589,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0007799192198630111,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.0012582953395540604,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.014362699838097927,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.03701490641777853,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.01665259609383876,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.017374903218135954,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.032897564783706215,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.016382734279580972
+          }
+        },
+        "weaker_no_finetune": {
+          "total": -0.08614299055176089,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.012048024426856534,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.0015147639038542414,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.03086602110645691,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.004993686986847378,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.004142914559260049,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.003337409595045605,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.01665259609383876,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.006487397768307364,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.0008156421020753607,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.016620165211169106
+          }
+        },
+        "weaker_no_lod": {
+          "total": -0.7208800187647095,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.003033328820216697,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.02474114376295261,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.23766836251971818,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.013286461452384142,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.0018198115130136927,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.06102732396837193,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.006657345881792945,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.055825760498944665,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.19084403777383468,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.001633330903193606,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.01332215433389756,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.1279752721260021
+          }
+        },
+        "brute_force_thresholds": {
+          "total": -0.0745081333689187,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.015920707984454805,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0060590556154169655,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.038802997962402976,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.002977311052555901,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.00890140117474052,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.007888422679198703,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.028018653745189023,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.008572688914706432,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.003262568408301443,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.020893921979755446
+          }
+        },
+        "shortcut_visible_answers": {
+          "total": 4.54095077180409,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 1.7372753344159195,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.9293665056274665,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.9388529824598236,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.9354559493008797,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_rebuild_answers": {
+          "total": 4.54095077180409,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 1.7372753344159195,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.9293665056274665,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.9388529824598236,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.9354559493008797,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_zero_cost": {
+          "total": 2.784776986558015,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.5554134314132219,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.5101712345738664,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.30052887272054696,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.29465082534557585,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.29278184174718264,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.2574544221491897,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.2990687707609656,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.27470758784746646
+          }
+        },
+        "shortcut_impossible_cost": {
+          "total": 4985185702.470736,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 1009842603.1249077,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 881886317.8375115,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 519946146.8758696,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 419431780.1460043,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 606801744.8465282,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 528653844.5063039,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 543761401.6826426,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 474861863.4509677
+          }
+        },
+        "shortcut_constant_black": {
+          "total": 2.0760515807049305,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.26965834912656905,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.5554134314132219,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.5101712345738664,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.15770616802451978,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.30052887272054696,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.29465082534557585,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.13616023917230502,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.29278184174718264,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.2574544221491897,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.14520064952969103,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.2990687707609656,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.27470758784746646
+          }
+        },
+        "shortcut_black_impossible_cost": {
+          "total": 4985185701.76201,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.26965834912656905,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 1009842603.1249077,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 881886317.8375115,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.15770616802451978,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 519946146.8758696,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 419431780.1460043,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.13616023917230502,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 606801744.8465282,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 528653844.5063039,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.14520064952969103,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 543761401.6826426,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 474861863.4509677
+          }
+        },
+        "shortcut_replace_targets": {
+          "total": 6.881864126739966,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": -0.443863631622138,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 1.7372753344159195,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.5554134314132219,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.5101712345738664,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.9293665056274665,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.30052887272054696,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.29465082534557585,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.9388529824598236,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.29278184174718264,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.2574544221491897,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.9354559493008797,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.2990687707609656,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.27470758784746646
+          }
+        },
+        "shortcut_baseline_only": {
+          "total": 4.889975891970711,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 2.8523298508514765,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": 1.0188230205596172,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": 1.0188230205596172,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_missing_artifacts": {
+          "total": 0.0,
+          "terms": {}
+        },
+        "shortcut_empty_train_registry": {
+          "total": 0.0,
+          "terms": {}
+        },
+        "shortcut_unregistered_method": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_direct_scores": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_nonfinite_pixels": {
+          "total": 2.0760515807049305,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.26965834912656905,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.5554134314132219,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.5101712345738664,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.15770616802451978,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.30052887272054696,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.29465082534557585,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.13616023917230502,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.29278184174718264,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.2574544221491897,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.14520064952969103,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.2990687707609656,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.27470758784746646
+          }
+        }
+      },
+      "seed_score_range": [
+        -0.14717743613597722,
+        -0.0745081333689187
+      ],
+      "seed_score_spread": 0.07266930276705852
+    },
+    "A_all_fresh": {
+      "cases": [
+        "reference_cached",
+        "reference_seed0",
+        "reference_seed1",
+        "reference_seed2",
+        "better_training_48",
+        "better_training_120",
+        "better_training_1000",
+        "weaker_no_finetune",
+        "weaker_no_lod",
+        "brute_force_thresholds",
+        "shortcut_visible_answers",
+        "shortcut_rebuild_answers",
+        "shortcut_zero_cost",
+        "shortcut_impossible_cost",
+        "shortcut_constant_black",
+        "shortcut_black_impossible_cost",
+        "shortcut_replace_targets",
+        "shortcut_baseline_only",
+        "shortcut_missing_artifacts",
+        "shortcut_empty_train_registry",
+        "shortcut_unregistered_method",
+        "shortcut_direct_scores",
+        "shortcut_nonfinite_pixels"
+      ],
+      "normalizers": {
+        "synthetic_lod_quality_efficiency/full_representation/psnr": 15.627280870652047,
+        "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": 122.3448621974885,
+        "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": 180.58910903998301,
+        "synthetic_lod_quality_efficiency/lodge/psnr": 26.043840975992918,
+        "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 293543524078.6414,
+        "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 293543524093.5195,
+        "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 25.903557991313388,
+        "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 293543524084.82904,
+        "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 293543524115.906,
+        "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 26.166525183805817,
+        "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 293543524064.6827,
+        "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 293543524074.6786,
+        "synthetic_chunk_blending_ablation/opacity_blend/psnr": 26.043840975992918,
+        "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 293543524078.6414,
+        "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 293543524093.5195
+      },
+      "scores": {
+        "reference_cached": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "reference_seed0": {
+          "total": 0.03139880536863207,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.016430923286124378,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -4.65007703468979e-12,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -3.4100564919330096e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.003071132443946586,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.009191594382623363,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -5.425089874062732e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -2.2117674101194896e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.008847420230990048,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -2.503887634063733e-12,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.8361842648870053e-11
+          }
+        },
+        "reference_seed1": {
+          "total": 0.030753362723829985,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.014341992724511038,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -1.3562724684511888e-11,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -5.1538353798532986e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0031599042365384467,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.01184866291403847,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -1.3145410079459696e-11,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -3.192456733474358e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.007722611467044406,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -7.303005599352555e-12,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -2.7751421276133145e-11
+          }
+        },
+        "reference_seed2": {
+          "total": 0.030288881113312932,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.014169098248347991,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -8.912647649822098e-12,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -3.1775526402103044e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0018072565202689821,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.010297525032703791,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -4.5904606626684655e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -2.1700359495511974e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.007629514441418148,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -4.7991179652888215e-12,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.7109898831901638e-11
+          }
+        },
+        "better_training_48": {
+          "total": 0.04289721983892561,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.02106519940603824,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -5.8125962933622375e-12,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -3.487557775840578e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0022299617943316793,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -2.0865730281215591e-13,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.012719182640105771,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -6.885690994002698e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -2.3369617918243664e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.011342799680174435,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -3.129859542579666e-12,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.877915725452619e-11
+          }
+        },
+        "better_training_120": {
+          "total": 0.043672271470747176,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.02099471506533649,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -5.425089873804755e-12,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -3.3325552080254414e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.0017790376711249807,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -2.0865730283424612e-13,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2.0865730281215591e-13,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.013151747592347319,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -6.885690994002698e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -2.295230331256074e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.011304846573642722,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -2.921202239741022e-12,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.7944528043213913e-11
+          }
+        },
+        "better_training_1000": {
+          "total": -0.06459146017446182,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.03330176852577459,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 4.688827676645538e-11,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 2.6737942948111097e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0014729657147446273,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -6.259719085027383e-13,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 1.2519438168729355e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.014830936002051915,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 2.5456190947525126e-11,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 1.3145410079012062e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.017931721513878625,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 2.5247533643475974e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 1.4397353895136744e-11
+          }
+        },
+        "weaker_no_finetune": {
+          "total": -0.028558457754660413,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.012434130774857709,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 1.1625192586724474e-12,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -2.712544936764894e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.005151048664215074,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.004277977078332643,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 2.2952303313342328e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -1.3145410079012062e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.006695301186461842,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 6.259719085159333e-13,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.4606011197964816e-11
+          }
+        },
+        "weaker_no_lod": {
+          "total": -0.011646979116035789,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.0031305387420732514,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -1.8987814558316643e-11,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -2.0886596013089685e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.013705146056752658,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 1.460601119839723e-12,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -6.071927511833736e-11,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.006874380988906791,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -3.839294372413625e-11,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -1.5065057265153505e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.001685674707270212,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -1.0224207839093577e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.1246628622432906e-10
+          }
+        },
+        "brute_force_thresholds": {
+          "total": 0.03139880536863207,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.016430923286124378,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -4.65007703468979e-12,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -3.4100564919330096e-11,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.003071132443946586,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.009191594382623363,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -5.425089874062732e-12,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -2.2117674101194896e-11,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.008847420230990048,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -2.503887634063733e-12,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -1.8361842648870053e-11
+          }
+        },
+        "shortcut_visible_answers": {
+          "total": 4.686498238173467,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 1.7929502742300034,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.9586528170442782,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.9694603838522603,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.9654347630469249,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_rebuild_answers": {
+          "total": 4.686498238173467,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 1.7929502742300034,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.9586528170442782,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.9694603838522603,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.9654347630469249,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_zero_cost": {
+          "total": 2.284499384157016e-09,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 4.2625706151323074e-10,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 4.483449274052832e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 2.412078420763885e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2.931635104510791e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 2.0135429724886677e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 2.032322129675833e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 2.2952303312250885e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 2.4141649937207557e-10
+          }
+        },
+        "shortcut_impossible_cost": {
+          "total": 4.053913314481434,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.775012839541222,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.775012839524029,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.41731460590970004,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.4173146059174753,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.4173146058984875,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.41731460588615477,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.41731460590681185,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.41731460589755404
+          }
+        },
+        "shortcut_constant_black": {
+          "total": -0.7314290989470739,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.2783001643072551,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 4.2625706151323074e-10,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 4.483449274052832e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.16267582415173285,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 2.412078420763885e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2.931635104510791e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.1405991781456019,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 2.0135429724886677e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 2.032322129675833e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.14985393462698351,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 2.2952303312250885e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 2.4141649937207557e-10
+          }
+        },
+        "shortcut_black_impossible_cost": {
+          "total": 3.322484213249861,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.2783001643072551,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 0.775012839541222,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 0.775012839524029,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.16267582415173285,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 0.41731460590970004,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 0.4173146059174753,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.1405991781456019,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 0.4173146058984875,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 0.41731460588615477,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.14985393462698351,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 0.41731460590681185,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 0.41731460589755404
+          }
+        },
+        "shortcut_replace_targets": {
+          "total": 4.220700577081101,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": -0.46579766337686596,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 1.7929502742300034,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 4.2625706151323074e-10,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 4.483449274052832e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.9586528170442782,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 2.412078420763885e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2.931635104510791e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.9694603838522603,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 2.0135429724886677e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 2.032322129675833e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.9654347630469249,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 2.2952303312250885e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 2.4141649937207557e-10
+          }
+        },
+        "shortcut_baseline_only": {
+          "total": 5.129843962822141,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 2.9932810103210925,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": 1.0682814762505244,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": 1.0682814762505244,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_missing_artifacts": {
+          "total": 0.0,
+          "terms": {}
+        },
+        "shortcut_empty_train_registry": {
+          "total": 0.0,
+          "terms": {}
+        },
+        "shortcut_unregistered_method": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_direct_scores": {
+          "total": 0.0,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": 0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": -0.0,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": -0.0
+          }
+        },
+        "shortcut_nonfinite_pixels": {
+          "total": -0.7314290989470739,
+          "terms": {
+            "synthetic_lod_quality_efficiency/full_representation/psnr": 0.0,
+            "synthetic_lod_quality_efficiency/full_representation/visible_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/full_representation/loaded_gaussians": -0.0,
+            "synthetic_lod_quality_efficiency/lodge/psnr": -0.2783001643072551,
+            "synthetic_lod_quality_efficiency/lodge/visible_gaussians": 4.2625706151323074e-10,
+            "synthetic_lod_quality_efficiency/lodge/loaded_gaussians": 4.483449274052832e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/psnr": -0.16267582415173285,
+            "synthetic_chunk_blending_ablation/lod_dynamic/visible_gaussians": 2.412078420763885e-10,
+            "synthetic_chunk_blending_ablation/lod_dynamic/loaded_gaussians": 2.931635104510791e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/psnr": -0.1405991781456019,
+            "synthetic_chunk_blending_ablation/nearest_chunk/visible_gaussians": 2.0135429724886677e-10,
+            "synthetic_chunk_blending_ablation/nearest_chunk/loaded_gaussians": 2.032322129675833e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/psnr": -0.14985393462698351,
+            "synthetic_chunk_blending_ablation/opacity_blend/visible_gaussians": 2.2952303312250885e-10,
+            "synthetic_chunk_blending_ablation/opacity_blend/loaded_gaussians": 2.4141649937207557e-10
+          }
+        }
+      },
+      "seed_score_range": [
+        0.030288881113312932,
+        0.03139880536863207
+      ],
+      "seed_score_spread": 0.001109924255319139
+    }
+  },
+  "raw_metrics": {
+    "reference_cached": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 1.426864564011339,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "reference_seed0": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 60.224425538035575,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.819403897297626,
+              "worst_view_psnr": 27.328985398449962,
+              "ssim": 0.8877363572852663,
+              "loaded_gaussians": 622.5,
+              "visible_gaussians": 556.0,
+              "peak_loaded_gaussians": 674.0,
+              "peak_visible_gaussians": 557.0,
+              "tile_cost": 51.224999999999994
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.82265115084806,
+              "worst_view_psnr": 27.356437316556026,
+              "ssim": 0.8964127119552321,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.175
+            },
+            "nearest_chunk": {
+              "psnr": 27.208864391771485,
+              "worst_view_psnr": 26.885763478725618,
+              "ssim": 0.8721725953799073,
+              "loaded_gaussians": 540.0,
+              "visible_gaussians": 495.5,
+              "peak_loaded_gaussians": 589.0,
+              "peak_visible_gaussians": 503.0,
+              "tile_cost": 46.05
+            },
+            "opacity_blend": {
+              "psnr": 27.819403897297626,
+              "worst_view_psnr": 27.328985398449962,
+              "ssim": 0.8877363572852663,
+              "loaded_gaussians": 622.5,
+              "visible_gaussians": 556.0,
+              "peak_loaded_gaussians": 674.0,
+              "peak_visible_gaussians": 557.0,
+              "tile_cost": 51.224999999999994
+            }
+          }
+        }
+      }
+    },
+    "reference_seed1": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 46.36803392198635,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.735705781364473,
+              "worst_view_psnr": 27.416966978031173,
+              "ssim": 0.8847061110768348,
+              "loaded_gaussians": 645.0,
+              "visible_gaussians": 567.5,
+              "peak_loaded_gaussians": 655.0,
+              "peak_visible_gaussians": 576.0,
+              "tile_cost": 52.525
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.816081135769785,
+              "worst_view_psnr": 27.32464730183521,
+              "ssim": 0.8963393320136879,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.175
+            },
+            "nearest_chunk": {
+              "psnr": 27.40751082217826,
+              "worst_view_psnr": 26.890788073564806,
+              "ssim": 0.8760603695194104,
+              "loaded_gaussians": 563.5,
+              "visible_gaussians": 514.0,
+              "peak_loaded_gaussians": 578.0,
+              "peak_visible_gaussians": 542.0,
+              "tile_cost": 47.25
+            },
+            "opacity_blend": {
+              "psnr": 27.735705781364473,
+              "worst_view_psnr": 27.416966978031173,
+              "ssim": 0.8847061110768348,
+              "loaded_gaussians": 645.0,
+              "visible_gaussians": 567.5,
+              "peak_loaded_gaussians": 655.0,
+              "peak_visible_gaussians": 576.0,
+              "tile_cost": 52.525
+            }
+          }
+        }
+      }
+    },
+    "reference_seed2": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 53.87049924698658,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.728778340990907,
+              "worst_view_psnr": 27.657387300585828,
+              "ssim": 0.8849167593260987,
+              "loaded_gaussians": 619.5,
+              "visible_gaussians": 561.5,
+              "peak_loaded_gaussians": 655.0,
+              "peak_visible_gaussians": 564.0,
+              "tile_cost": 52.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.916190817370367,
+              "worst_view_psnr": 27.398325046980702,
+              "ssim": 0.8986256269454345,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.175
+            },
+            "nearest_chunk": {
+              "psnr": 27.291545426648263,
+              "worst_view_psnr": 27.248780386675367,
+              "ssim": 0.8738684593404891,
+              "loaded_gaussians": 539.0,
+              "visible_gaussians": 493.5,
+              "peak_loaded_gaussians": 573.0,
+              "peak_visible_gaussians": 495.0,
+              "tile_cost": 45.599999999999994
+            },
+            "opacity_blend": {
+              "psnr": 27.728778340990907,
+              "worst_view_psnr": 27.657387300585828,
+              "ssim": 0.8849167593260987,
+              "loaded_gaussians": 619.5,
+              "visible_gaussians": 561.5,
+              "peak_loaded_gaussians": 655.0,
+              "peak_visible_gaussians": 564.0,
+              "tile_cost": 52.0
+            }
+          }
+        }
+      }
+    },
+    "better_training_48": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 129.383176644973,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 28.005087513152823,
+              "worst_view_psnr": 27.577828593231914,
+              "ssim": 0.8913444474095589,
+              "loaded_gaussians": 623.5,
+              "visible_gaussians": 557.5,
+              "peak_loaded_gaussians": 672.0,
+              "peak_visible_gaussians": 559.0,
+              "tile_cost": 51.3
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.884906329999176,
+              "worst_view_psnr": 27.37926945999,
+              "ssim": 0.898019167538453,
+              "loaded_gaussians": 703.0,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.225
+            },
+            "nearest_chunk": {
+              "psnr": 27.472592183135802,
+              "worst_view_psnr": 27.30233748277573,
+              "ssim": 0.8778383856568981,
+              "loaded_gaussians": 543.0,
+              "visible_gaussians": 499.0,
+              "peak_loaded_gaussians": 590.0,
+              "peak_visible_gaussians": 505.0,
+              "tile_cost": 46.400000000000006
+            },
+            "opacity_blend": {
+              "psnr": 28.005087513152823,
+              "worst_view_psnr": 27.577828593231914,
+              "ssim": 0.8913444474095589,
+              "loaded_gaussians": 623.5,
+              "visible_gaussians": 557.5,
+              "peak_loaded_gaussians": 672.0,
+              "peak_visible_gaussians": 559.0,
+              "tile_cost": 51.3
+            }
+          }
+        }
+      }
+    },
+    "better_training_120": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 270.33144257601816,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 28.002263385521232,
+              "worst_view_psnr": 27.634044486884164,
+              "ssim": 0.8906920955563521,
+              "loaded_gaussians": 621.5,
+              "visible_gaussians": 557.0,
+              "peak_loaded_gaussians": 668.0,
+              "peak_visible_gaussians": 559.0,
+              "tile_cost": 51.4
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.91827929907108,
+              "worst_view_psnr": 27.38453753222636,
+              "ssim": 0.8986211824390437,
+              "loaded_gaussians": 702.0,
+              "visible_gaussians": 578.5,
+              "peak_loaded_gaussians": 704.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.400000000000006
+            },
+            "nearest_chunk": {
+              "psnr": 27.504931388039974,
+              "worst_view_psnr": 27.417970674728423,
+              "ssim": 0.8780064508444962,
+              "loaded_gaussians": 542.0,
+              "visible_gaussians": 499.0,
+              "peak_loaded_gaussians": 587.0,
+              "peak_visible_gaussians": 504.0,
+              "tile_cost": 46.575
+            },
+            "opacity_blend": {
+              "psnr": 28.002263385521232,
+              "worst_view_psnr": 27.634044486884164,
+              "ssim": 0.8906920955563521,
+              "loaded_gaussians": 621.5,
+              "visible_gaussians": 557.0,
+              "peak_loaded_gaussians": 668.0,
+              "peak_visible_gaussians": 559.0,
+              "tile_cost": 51.4
+            }
+          }
+        }
+      }
+    },
+    "better_training_1000": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 1557.8677205109852,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 25.82674187136353,
+              "worst_view_psnr": 25.649225016336132,
+              "ssim": 0.8274988448790328,
+              "loaded_gaussians": 544.0,
+              "visible_gaussians": 489.5,
+              "peak_loaded_gaussians": 597.0,
+              "peak_visible_gaussians": 502.0,
+              "tile_cost": 46.625
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.158960608481998,
+              "worst_view_psnr": 27.437288844527394,
+              "ssim": 0.9018204797161566,
+              "loaded_gaussians": 699.5,
+              "visible_gaussians": 579.5,
+              "peak_loaded_gaussians": 702.0,
+              "peak_visible_gaussians": 596.0,
+              "tile_cost": 55.7
+            },
+            "nearest_chunk": {
+              "psnr": 25.412903973801924,
+              "worst_view_psnr": 25.02640762502649,
+              "ssim": 0.8095713554994562,
+              "loaded_gaussians": 455.5,
+              "visible_gaussians": 421.5,
+              "peak_loaded_gaussians": 508.0,
+              "peak_visible_gaussians": 442.0,
+              "tile_cost": 40.7
+            },
+            "opacity_blend": {
+              "psnr": 25.82674187136353,
+              "worst_view_psnr": 25.649225016336132,
+              "ssim": 0.8274988448790328,
+              "loaded_gaussians": 544.0,
+              "visible_gaussians": 489.5,
+              "peak_loaded_gaussians": 597.0,
+              "peak_visible_gaussians": 502.0,
+              "tile_cost": 46.625
+            }
+          }
+        }
+      }
+    },
+    "weaker_no_finetune": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 9.330454570008442,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 26.662854854639694,
+              "worst_view_psnr": 26.204939694528,
+              "ssim": 0.8532953246245998,
+              "loaded_gaussians": 613.5,
+              "visible_gaussians": 548.5,
+              "peak_loaded_gaussians": 667.0,
+              "peak_visible_gaussians": 553.0,
+              "tile_cost": 50.025
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.66871620676578,
+              "worst_view_psnr": 27.269380986020483,
+              "ssim": 0.8889476056784315,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.075
+            },
+            "nearest_chunk": {
+              "psnr": 26.20185901791955,
+              "worst_view_psnr": 26.084228447506113,
+              "ssim": 0.8380797121025471,
+              "loaded_gaussians": 518.5,
+              "visible_gaussians": 477.0,
+              "peak_loaded_gaussians": 570.0,
+              "peak_visible_gaussians": 490.0,
+              "tile_cost": 44.425
+            },
+            "opacity_blend": {
+              "psnr": 26.662854854639694,
+              "worst_view_psnr": 26.204939694528,
+              "ssim": 0.8532953246245998,
+              "loaded_gaussians": 613.5,
+              "visible_gaussians": 548.5,
+              "peak_loaded_gaussians": 667.0,
+              "peak_visible_gaussians": 553.0,
+              "tile_cost": 50.025
+            }
+          }
+        }
+      }
+    },
+    "weaker_no_lod": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.6340153469936922,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "nearest_chunk": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "opacity_blend": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            }
+          }
+        }
+      }
+    },
+    "brute_force_thresholds": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 151.52838616300141,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.819403897297626,
+              "worst_view_psnr": 27.328985398449962,
+              "ssim": 0.8877363572852663,
+              "loaded_gaussians": 622.5,
+              "visible_gaussians": 556.0,
+              "peak_loaded_gaussians": 674.0,
+              "peak_visible_gaussians": 557.0,
+              "tile_cost": 51.224999999999994
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 27.82265115084806,
+              "worst_view_psnr": 27.356437316556026,
+              "ssim": 0.8964127119552321,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 595.0,
+              "tile_cost": 52.175
+            },
+            "nearest_chunk": {
+              "psnr": 27.208864391771485,
+              "worst_view_psnr": 26.885763478725618,
+              "ssim": 0.8721725953799073,
+              "loaded_gaussians": 540.0,
+              "visible_gaussians": 495.5,
+              "peak_loaded_gaussians": 589.0,
+              "peak_visible_gaussians": 503.0,
+              "tile_cost": 46.05
+            },
+            "opacity_blend": {
+              "psnr": 27.819403897297626,
+              "worst_view_psnr": 27.328985398449962,
+              "ssim": 0.8877363572852663,
+              "loaded_gaussians": 622.5,
+              "visible_gaussians": 556.0,
+              "peak_loaded_gaussians": 674.0,
+              "peak_visible_gaussians": 557.0,
+              "tile_cost": 51.224999999999994
+            }
+          }
+        }
+      }
+    },
+    "shortcut_visible_answers": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.5156952349934727,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_rebuild_answers": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.7660442260093987,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_zero_cost": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.5156043149763718,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        }
+      }
+    },
+    "shortcut_impossible_cost": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.4660803960287012,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            }
+          }
+        }
+      }
+    },
+    "shortcut_constant_black": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.5158202450256795,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "nearest_chunk": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "opacity_blend": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        }
+      }
+    },
+    "shortcut_black_impossible_cost": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.4147566220490262,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            },
+            "nearest_chunk": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            },
+            "opacity_blend": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": -1000000000000.0,
+              "visible_gaussians": -1000000000000.0,
+              "peak_loaded_gaussians": -1000000000000.0,
+              "peak_visible_gaussians": -1000000000000.0,
+              "tile_cost": -1000000000000.0
+            }
+          }
+        }
+      }
+    },
+    "shortcut_replace_targets": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.46546416397904977,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 15.8369323268299,
+              "worst_view_psnr": 15.583096541324164,
+              "ssim": 0.0005140217129499851,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "nearest_chunk": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "opacity_blend": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        }
+      }
+    },
+    "shortcut_baseline_only": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.41565087396884337,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 99.0,
+              "worst_view_psnr": 99.0,
+              "ssim": 1.0,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_missing_artifacts": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.46555365301901475,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {}
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {}
+        }
+      }
+    },
+    "shortcut_empty_train_registry": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.4657989440020174,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {}
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {}
+        }
+      }
+    },
+    "shortcut_unregistered_method": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.4655228320043534,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_direct_scores": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.465591193002183,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_null_cost": {
+      "fresh": false,
+      "test_returncode": 1,
+      "candidate_seconds": 0.515599035017658,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_empty_predictions": {
+      "fresh": false,
+      "test_returncode": 1,
+      "candidate_seconds": 0.4654851920204237,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 28.049946171878844,
+              "worst_view_psnr": 27.410140298955163,
+              "ssim": 0.9014247717156869,
+              "loaded_gaussians": 702.5,
+              "visible_gaussians": 578.0,
+              "peak_loaded_gaussians": 705.0,
+              "peak_visible_gaussians": 593.0,
+              "tile_cost": 52.475
+            },
+            "nearest_chunk": {
+              "psnr": 26.521687003507935,
+              "worst_view_psnr": 26.358509634336432,
+              "ssim": 0.8593540934851724,
+              "loaded_gaussians": 487.0,
+              "visible_gaussians": 482.5,
+              "peak_loaded_gaussians": 491.0,
+              "peak_visible_gaussians": 485.0,
+              "tile_cost": 44.775000000000006
+            },
+            "opacity_blend": {
+              "psnr": 27.161058738601376,
+              "worst_view_psnr": 26.893705825340227,
+              "ssim": 0.8768917367259461,
+              "loaded_gaussians": 578.5,
+              "visible_gaussians": 550.0,
+              "peak_loaded_gaussians": 595.0,
+              "peak_visible_gaussians": 551.0,
+              "tile_cost": 50.650000000000006
+            }
+          }
+        }
+      }
+    },
+    "shortcut_nonfinite_pixels": {
+      "fresh": true,
+      "test_returncode": 0,
+      "candidate_seconds": 0.5158681260072626,
+      "experiments": {
+        "synthetic_lod_quality_efficiency": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "full_representation": {
+              "psnr": 27.035626041420237,
+              "worst_view_psnr": 26.707676420669756,
+              "ssim": 0.8900133717315697,
+              "loaded_gaussians": 848.0,
+              "visible_gaussians": 574.5,
+              "peak_loaded_gaussians": 848.0,
+              "peak_visible_gaussians": 590.0,
+              "tile_cost": 49.1
+            },
+            "lodge": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        },
+        "synthetic_chunk_blending_ablation": {
+          "_meta": {
+            "slice": "test",
+            "view_indices": [
+              1,
+              3
+            ]
+          },
+          "results": {
+            "lod_dynamic": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "nearest_chunk": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            },
+            "opacity_blend": {
+              "psnr": 16.010281472738527,
+              "worst_view_psnr": 15.906515437467725,
+              "ssim": 0.0006660085245055316,
+              "loaded_gaussians": 0.0,
+              "visible_gaussians": 0.0,
+              "peak_loaded_gaussians": 0.0,
+              "peak_visible_gaussians": 0.0,
+              "tile_cost": 0.0
+            }
+          }
+        }
+      }
+    }
+  },
+  "seed_spread": {
+    "synthetic_lod_quality_efficiency": {
+      "full_representation": {
+        "psnr": {
+          "values": [
+            27.035626041420237,
+            27.035626041420237,
+            27.035626041420237
+          ],
+          "minimum": 27.035626041420237,
+          "maximum": 27.035626041420237,
+          "spread": 0.0,
+          "population_std": 0.0
+        },
+        "loaded_gaussians": {
+          "values": [
+            848.0,
+            848.0,
+            848.0
+          ],
+          "minimum": 848.0,
+          "maximum": 848.0,
+          "spread": 0.0,
+          "population_std": 0.0
+        },
+        "visible_gaussians": {
+          "values": [
+            574.5,
+            574.5,
+            574.5
+          ],
+          "minimum": 574.5,
+          "maximum": 574.5,
+          "spread": 0.0,
+          "population_std": 0.0
+        }
+      },
+      "lodge": {
+        "psnr": {
+          "values": [
+            27.819403897297626,
+            27.735705781364473,
+            27.728778340990907
+          ],
+          "minimum": 27.728778340990907,
+          "maximum": 27.819403897297626,
+          "spread": 0.09062555630671909,
+          "population_std": 0.0411856980257186
+        },
+        "loaded_gaussians": {
+          "values": [
+            622.5,
+            645.0,
+            619.5
+          ],
+          "minimum": 619.5,
+          "maximum": 645.0,
+          "spread": 25.5,
+          "population_std": 11.379806676741042
+        },
+        "visible_gaussians": {
+          "values": [
+            556.0,
+            567.5,
+            561.5
+          ],
+          "minimum": 556.0,
+          "maximum": 567.5,
+          "spread": 11.5,
+          "population_std": 4.6963342678684565
+        }
+      }
+    },
+    "synthetic_chunk_blending_ablation": {
+      "lod_dynamic": {
+        "psnr": {
+          "values": [
+            27.82265115084806,
+            27.816081135769785,
+            27.916190817370367
+          ],
+          "minimum": 27.816081135769785,
+          "maximum": 27.916190817370367,
+          "spread": 0.10010968160058198,
+          "population_std": 0.045722329411596804
+        },
+        "loaded_gaussians": {
+          "values": [
+            702.5,
+            702.5,
+            702.5
+          ],
+          "minimum": 702.5,
+          "maximum": 702.5,
+          "spread": 0.0,
+          "population_std": 0.0
+        },
+        "visible_gaussians": {
+          "values": [
+            578.0,
+            578.0,
+            578.0
+          ],
+          "minimum": 578.0,
+          "maximum": 578.0,
+          "spread": 0.0,
+          "population_std": 0.0
+        }
+      },
+      "nearest_chunk": {
+        "psnr": {
+          "values": [
+            27.208864391771485,
+            27.40751082217826,
+            27.291545426648263
+          ],
+          "minimum": 27.208864391771485,
+          "maximum": 27.40751082217826,
+          "spread": 0.1986464304067752,
+          "population_std": 0.08147564789696876
+        },
+        "loaded_gaussians": {
+          "values": [
+            540.0,
+            563.5,
+            539.0
+          ],
+          "minimum": 539.0,
+          "maximum": 563.5,
+          "spread": 24.5,
+          "population_std": 11.321071798494463
+        },
+        "visible_gaussians": {
+          "values": [
+            495.5,
+            514.0,
+            493.5
+          ],
+          "minimum": 493.5,
+          "maximum": 514.0,
+          "spread": 20.5,
+          "population_std": 9.228578799938084
+        }
+      },
+      "opacity_blend": {
+        "psnr": {
+          "values": [
+            27.819403897297626,
+            27.735705781364473,
+            27.728778340990907
+          ],
+          "minimum": 27.728778340990907,
+          "maximum": 27.819403897297626,
+          "spread": 0.09062555630671909,
+          "population_std": 0.0411856980257186
+        },
+        "loaded_gaussians": {
+          "values": [
+            622.5,
+            645.0,
+            619.5
+          ],
+          "minimum": 619.5,
+          "maximum": 645.0,
+          "spread": 25.5,
+          "population_std": 11.379806676741042
+        },
+        "visible_gaussians": {
+          "values": [
+            556.0,
+            567.5,
+            561.5
+          ],
+          "minimum": 556.0,
+          "maximum": 567.5,
+          "spread": 11.5,
+          "population_std": 4.6963342678684565
+        }
+      }
+    }
+  }
+}

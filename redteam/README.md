@@ -1,45 +1,31 @@
-# Scoring audit
+# Scoring audit artifacts
 
-Run `bash redteam/run_all.sh` **as a compute job**, or run an individual
-`redteam/<case>/run.sh` in the gym container. Each case installs its own
-`method.py` as `method/audit_candidate.py`, runs it to completion, runs the
-visible evaluator, then starts the unmodified hidden test in a separate
-process with `bash scripts/evaluate_test.sh` and no arguments. No candidate
-process survives into evaluation. No interpreter packages, import paths,
-environment controls, evaluator code, or test scripts are modified.
+Read ../REDTEAM.md for conclusions. cases.json is the authoritative list of
+25 valid cases. Each case has one run.sh, candidate method.py, result.json,
+scores_train.json, scores_before_test.json, and scores_test.json. Check
+result.json's test.fresh_scores before interpreting a saved score file.
 
-The harness backs up the original generated data and checkpoint outputs once
-in ignored `_cache/`, restores them before and after each case, and checks
-hashes of all evaluator Python sources and the test script before testing.
-Only the harness reads the hidden-test scores; candidates use the visible
-data, method, baseline, checkpoint interface, and training images.
+Run a case with `bash redteam/<case>/run.sh` inside the gym compute container.
+It installs and finishes the candidate, runs visible evaluation, then invokes
+the original hidden test with no arguments. The harness restores the original
+reference artifacts/data/scores afterwards. For empty_train_registry it also
+installs the candidate's final empty registry after visible evaluation.
 
-The cached reference outputs are reused for artifact-only shortcuts as
-explicitly permitted by the audit. Three reference seeds and the longer
-training and ablation cases actually rebuild the representation. Seed offsets
-0, 1, 2 change training threshold jitter, chunk initialization, and orientation
-augmentation; the synthetic scene and camera split stay unchanged.
+The initial finished-gym outputs are cached under ignored redteam/_cache/;
+artifact-only probes reuse them. This cache and per-case binary checkpoints
+remain in this workspace but are not committed. A fresh checkout needs the
+original finished-gym artifacts to reproduce the cached-reference probes;
+rebuilding today's method is measurably different, as the report explains.
 
-Each case keeps `scores_train.json`, `scores_test.json`, `result.json`, and
-the pre-test score file. A failed test's copied `scores_test.json` is marked
-`fresh_scores: false` in `result.json`: it is a stale file, **not a score earned
-by that candidate**. Generated binary checkpoint archives and detailed stdout
-logs are ignored; the small score and status evidence is tracked.
+Run `python3 redteam/analyze.py` to regenerate analysis.json using only saved
+JSON and Python's standard library. It also verifies candidate wrapper hashes.
+No model execution or packages are needed for this summary.
 
-`shortcut_*` folders are explicitly scoring shortcuts, including tied entries
-that hide failed methods. The direct-score, null-cost and empty-prediction
-folders include probes that may fail; their status must be checked rather
-than interpreting a leftover score file as success. Quality variants and
-exhaustive search are honest algorithmic comparisons.
+first_job_cache_bug/ contains invalid, superseded first-job evidence. It is
+excluded from all case lists, panels, and reported conclusions. The audit
+retains it to explain why the first nominal seed comparisons were rerun.
 
-The ranking normalizers depend on future attempts and are not available at
-audit time. Report raw scored metrics and dominance first. Any normalized
-aggregate computed from an audit comparison panel is explicitly labeled as
-panel-dependent, not the unavailable final leaderboard rank.
-
-The initial job exposed stale candidate-module bytecode from timestamp-based
-caching. Its named results are superseded and archived in
-`first_job_cache_bug/`. The harness now deletes only that candidate module's
-bytecode on reset, records source hashes and checks seed/step metadata. The
-second batch also includes the paper's 1000 fine-tuning steps per round and
-a failed black-output candidate with impossible self-reported cost.
+hidden_hashes.json records evaluator/test-script hashes checked before every
+hidden-test invocation. restoration.json records final restoration checks.
+The main report distinguishes independent domination from panel-dependent
+trade-offs; no future leaderboard variance constants are assumed known.
