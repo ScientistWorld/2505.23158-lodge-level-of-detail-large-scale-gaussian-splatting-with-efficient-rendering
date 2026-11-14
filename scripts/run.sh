@@ -1,15 +1,4 @@
 #!/bin/bash
-# Re-run the actual reproduction pipeline, then refresh train/test split scores.
-
-set -e
-
+set -euo pipefail
 cd /home/user
-
-rm -rf checkpoints/full_representation checkpoints/lod_dynamic checkpoints/nearest_chunk checkpoints/lodge
-rm -rf data/lodge_synthetic
-rm -f scoring/scores.json scoring/scores_train.json scoring/scores_test.json
-
-bash scripts/download.sh
-bash scripts/reproduce.sh
-bash scripts/evaluate_train.sh
-bash scripts/evaluate_test.sh
+bash redteam/run_all.sh
