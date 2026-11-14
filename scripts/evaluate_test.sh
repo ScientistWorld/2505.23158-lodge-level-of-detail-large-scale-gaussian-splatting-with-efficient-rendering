@@ -1,16 +1,9 @@
 #!/bin/bash
-# Held-out test-slice evaluator. Mirrors scripts/evaluate.sh's artifact
-# contract and, when available, scores the same method entries as train.
-
+# Hidden test evaluator. Runs with no arguments and scores every method
+# directory under checkpoints/ (plus the required `lodge` entry) by rendering
+# its representation.npz at hidden cameras. Writes scoring/scores_test.json.
 set -e
-
 cd /home/user
-
 mkdir -p scoring
-
-python -m eval.test.evaluate \
-  --data-dir data/lodge_synthetic \
-  --checkpoints-dir checkpoints \
-  --reference scoring/reference.json \
-  --train-scores scoring/scores_train.json \
-  --scores scoring/scores_test.json
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
+python -m eval.test.evaluate --checkpoints-dir checkpoints --scores scoring/scores_test.json

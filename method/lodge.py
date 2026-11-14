@@ -1,563 +1,498 @@
-"""Compact implementation of the LODGE Gaussian-splatting algorithm."""
+"""LODGE: level-of-detail Gaussian splatting with chunk-based rendering.
+
+Implements the paper's pipeline (Sec. 3 and supp. A.2) on top of the public
+base reconstruction G0:
+
+1. Depth thresholds d_l are selected greedily (d_1 first, then d_2 > d_1, ...)
+   by minimising the average number of Gaussians per 16x16 tile when rendering
+   a subset of training views with LOD rendering (Eq. 2).
+2. Each LOD level G_l is built from G0: a depth-aware 3D smoothing filter
+   (Eq. 3, Mip-Splatting 3D filter with variance s*(d_l/f)^2 and opacity scaled
+   by sqrt(det(Sigma)/det(Sigma + eps I))) is added to the Gaussian function, then
+   three rounds of importance pruning (thresholds 0.2*gamma, 0.6*gamma, gamma;
+   importance = maximum alpha-blending weight over training pixels) each followed
+   by fine-tuning (L1 + D-SSIM) with LOD rendering over levels <= l, d_l drawn
+   from U(0.7 d_l, 1.3 d_l), and gradients only into G_l.
+3. Training camera positions are clustered with K-means into
+   N = 4/d_1 * max_i ||c_i - mean(c)|| chunks (Eq. 5).  Each chunk stores the
+   active set of Eq. (2) evaluated at its centre with depths reduced by the chunk
+   radius (distance to the closest other centre), followed by visibility
+   filtering with importance computed from the chunk's training positions with
+   the original and randomly sampled orientations.
+4. The pool and chunk sets are exported in the benchmark representation format;
+   the renderer blends the two closest chunks with the opacity interpolation of
+   Eq. (4).  Ablation variants (nearest chunk only, per-frame dynamic LOD) are
+   exported from the same build.
+"""
 
 from __future__ import annotations
 
 import argparse
 import json
+import math
+import os
+import time
 from pathlib import Path
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 
-from data.gaussian_scene import ensure_dataset, load_dataset, load_train_targets, render_scene, stack_renders
+from data.gsrender import (
+    Camera,
+    default_device,
+    load_base_gaussians,
+    load_camera_sets,
+    load_images,
+    render_gaussians,
+    save_representation,
+)
+
+KEYS = ("means", "scales", "quats", "opacities", "colors")
 
 
-def copy_scene(scene: dict) -> dict:
-    return {k: np.array(v, copy=True) for k, v in scene.items()}
+def log(msg: str) -> None:
+    print(f"[lodge {time.strftime('%H:%M:%S')}] {msg}", flush=True)
 
 
-def smooth_scene(scene: dict, depth: float, focal: float, smooth_s: float) -> dict:
-    out = copy_scene(scene)
-    # Eq. (3) in the paper adds a depth-aware 3D smoothing filter.  In this
-    # isotropic compact renderer sigma is the Gaussian radius, so adding the
-    # filter covariance corresponds to quadrature addition of radii.
-    filter_radius = smooth_s * depth / focal
-    base_sigma = out["sigma"]
-    out["sigma"] = np.sqrt(base_sigma * base_sigma + filter_radius * filter_radius).astype(np.float32)
-    # Preserve integrated density when smoothing by attenuating opacity in
-    # proportion to the original/filter covariance determinant ratio.
-    attenuation = (base_sigma / np.maximum(out["sigma"], 1e-6)) ** 1.5
-    out["opacity"] = np.clip(out["opacity"] * attenuation.astype(np.float32), 0.0, 0.98)
+# --------------------------------------------------------------------------
+# Levels and the 3D smoothing filter
+# --------------------------------------------------------------------------
+
+
+class Level:
+    """Raw Gaussian parameters plus the level's 3D filter variance ``eps``."""
+
+    def __init__(self, raw: dict, eps: float):
+        self.raw = raw
+        self.eps = float(eps)
+
+    @property
+    def n(self) -> int:
+        return int(self.raw["means"].shape[0])
+
+    def subset(self, keep: torch.Tensor) -> "Level":
+        return Level({k: v[keep].detach().clone() for k, v in self.raw.items()}, self.eps)
+
+    def effective(self) -> dict:
+        return effective_params(self.raw["means"], self.raw["scales"], self.raw["quats"], self.raw["opacities"], self.raw["colors"], self.eps)
+
+
+def effective_params(means, scales, quats, opacities, colors, eps: float) -> dict:
+    """Gaussian function after convolving with an isotropic 3D filter of variance eps (Eq. 3)."""
+    if eps <= 0:
+        return {"means": means, "scales": scales, "quats": quats, "opacities": opacities, "colors": colors}
+    s_eff = torch.sqrt(scales * scales + eps)
+    comp = torch.prod(scales / s_eff, dim=1)
+    return {"means": means, "scales": s_eff, "quats": quats, "opacities": opacities * comp, "colors": colors}
+
+
+def filter_variance(depth: float, focal: float, s: float) -> float:
+    return float(s * (depth / focal) ** 2)
+
+
+# --------------------------------------------------------------------------
+# LOD rendering (Eq. 2)
+# --------------------------------------------------------------------------
+
+
+def lod_render(levels_eff: list[dict], bounds: list[float], cam: Camera, return_importance: bool = False) -> dict:
+    """Render the LOD stack: level j is active for camera distances in [bounds[j], bounds[j+1])."""
+    eye = torch.as_tensor(cam.eye, dtype=torch.float32, device=levels_eff[0]["means"].device)
+    parts = {k: [] for k in KEYS}
+    sel = []
+    for j, lvl in enumerate(levels_eff):
+        d = (lvl["means"].detach() - eye).norm(dim=1)
+        idx = torch.nonzero((d >= bounds[j]) & (d < bounds[j + 1]), as_tuple=False).squeeze(1)
+        sel.append(idx)
+        for k in KEYS:
+            parts[k].append(lvl[k][idx])
+    cat = {k: torch.cat(v, 0) for k, v in parts.items()}
+    out = render_gaussians(cat["means"], cat["scales"], cat["quats"], cat["opacities"], cat["colors"], cam, return_importance=return_importance)
+    if return_importance:
+        per_level = []
+        off = 0
+        for j, idx in enumerate(sel):
+            imp = torch.zeros(levels_eff[j]["means"].shape[0], device=eye.device)
+            imp[idx] = out["importance"][off:off + idx.numel()]
+            off += idx.numel()
+            per_level.append(imp)
+        out["level_importance"] = per_level
     return out
 
 
-def importance_scores(scene: dict, cameras: list, indices: np.ndarray | None = None) -> np.ndarray:
-    if indices is None:
-        indices = np.arange(scene["means"].shape[0])
-    scores = np.zeros(indices.shape[0], dtype=np.float32)
-    for cam in cameras:
-        _, stats = render_scene(scene, cam, indices=indices, return_stats=True)
-        scores = np.maximum(scores, stats["importance"])
-    return scores
+def bounds_for(thresholds: list[float]) -> list[float]:
+    return [0.0] + list(thresholds) + [math.inf]
 
 
-def prune_by_importance(scene: dict, cameras: list, threshold: float) -> dict:
-    scores = importance_scores(scene, cameras)
-    keep = scores >= threshold
-    if keep.sum() < max(8, int(0.05 * keep.size)):
-        cutoff = np.quantile(scores, 0.65)
-        keep = scores >= cutoff
-    return {k: v[keep] for k, v in scene.items()}
+@torch.no_grad()
+def level_importance(frozen_eff: list[dict], current: Level, thresholds: list[float], cams: list[Camera]) -> torch.Tensor:
+    cur = current.effective()
+    imp = torch.zeros(current.n, device=current.raw["means"].device)
+    for cam in cams:
+        out = lod_render(frozen_eff + [cur], bounds_for(thresholds), cam, return_importance=True)
+        imp = torch.maximum(imp, out["level_importance"][-1])
+    return imp
 
 
-def _camera_basis_tensors(cam) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    def norm(v: np.ndarray) -> np.ndarray:
-        n = np.linalg.norm(v)
-        return v if n < 1e-8 else v / n
-
-    forward = norm(cam.target - cam.eye)
-    right = norm(np.cross(forward, cam.up))
-    up = norm(np.cross(right, forward))
-    return (
-        torch.as_tensor(right, dtype=torch.float32),
-        torch.as_tensor(up, dtype=torch.float32),
-        torch.as_tensor(forward, dtype=torch.float32),
-    )
+# --------------------------------------------------------------------------
+# Fine-tuning (L1 + D-SSIM, only the current level is updated)
+# --------------------------------------------------------------------------
 
 
-def differentiable_render(
-    means: torch.Tensor,
-    sigma: torch.Tensor,
-    opacity: torch.Tensor,
-    colors: torch.Tensor,
-    cam,
-) -> torch.Tensor:
-    """Small autograd renderer for the LOD fine-tuning stage.
-
-    The production renderer in data/ keeps exact stats and tile accounting.
-    This renderer mirrors the same front-to-back Gaussian alpha compositing but
-    evaluates full image footprints, which is compact and differentiable for
-    the CPU-scale benchmark.
-    """
-
-    right, up, forward = _camera_basis_tensors(cam)
-    eye = torch.as_tensor(cam.eye, dtype=torch.float32)
-    rel = means - eye[None, :]
-    x = rel @ right
-    y = rel @ up
-    z = rel @ forward
-    valid = z > 0.35
-    order = torch.argsort(z.detach())
-
-    yy, xx = torch.meshgrid(
-        torch.arange(cam.height, dtype=torch.float32),
-        torch.arange(cam.width, dtype=torch.float32),
-        indexing="ij",
-    )
-    img = torch.zeros((cam.height, cam.width, 3), dtype=torch.float32)
-    trans = torch.ones((cam.height, cam.width), dtype=torch.float32)
-    bg = torch.tensor([0.02, 0.025, 0.03], dtype=torch.float32)
-
-    for j_t in order:
-        j = int(j_t)
-        if not bool(valid[j]):
-            continue
-        zj = torch.clamp(z[j], min=1e-5)
-        u = cam.f * x[j] / zj + cam.width * 0.5
-        v = -cam.f * y[j] / zj + cam.height * 0.5
-        sig = torch.clamp(cam.f * sigma[j] / zj, min=0.45)
-        g = torch.exp(-0.5 * (((xx - u) ** 2 + (yy - v) ** 2) / (sig * sig)))
-        alpha = torch.clamp(opacity[j] * g, 0.0, 0.98)
-        contrib = trans * alpha
-        img = img + contrib[..., None] * colors[j]
-        trans = trans * (1.0 - alpha)
-    return torch.clamp(img + trans[..., None] * bg, 0.0, 1.0)
+def _ssim_window(device) -> torch.Tensor:
+    x = torch.arange(11, dtype=torch.float32, device=device) - 5.0
+    g = torch.exp(-(x * x) / (2 * 1.5 * 1.5))
+    g = g / g.sum()
+    return (g[:, None] * g[None, :]).expand(3, 1, 11, 11).contiguous()
 
 
-def differentiable_render_lod_stack(
-    frozen_levels: list[dict],
-    current_tensors: dict[str, torch.Tensor],
-    current_means_np: np.ndarray,
+def ssim_loss(pred: torch.Tensor, target: torch.Tensor, window: torch.Tensor) -> torch.Tensor:
+    x = pred.permute(2, 0, 1)[None]
+    y = target.permute(2, 0, 1)[None]
+    mu_x = F.conv2d(x, window, padding=5, groups=3)
+    mu_y = F.conv2d(y, window, padding=5, groups=3)
+    sxx = F.conv2d(x * x, window, padding=5, groups=3) - mu_x * mu_x
+    syy = F.conv2d(y * y, window, padding=5, groups=3) - mu_y * mu_y
+    sxy = F.conv2d(x * y, window, padding=5, groups=3) - mu_x * mu_y
+    c1, c2 = 0.01 ** 2, 0.03 ** 2
+    s = ((2 * mu_x * mu_y + c1) * (2 * sxy + c2)) / ((mu_x * mu_x + mu_y * mu_y + c1) * (sxx + syy + c2))
+    return 1.0 - s.mean()
+
+
+def pseudo_camera(rng: np.random.Generator, train: list[Camera]) -> Camera:
+    base = train[int(rng.integers(len(train)))]
+    eye = np.array(base.eye, dtype=np.float64) + np.array([rng.uniform(-1.0, 1.0), rng.uniform(-2.5, 2.5), rng.uniform(-0.5, 2.8)])
+    eye[2] = max(eye[2], 1.0)
+    return Camera(eye, float(rng.uniform(-math.pi, math.pi)), float(rng.uniform(-0.17, 0.26)), base.f, base.width, base.height)
+
+
+def finetune_level(
+    current: Level,
+    frozen_eff: list[dict],
     thresholds: list[float],
-    cam,
-) -> torch.Tensor:
-    """Render active LOD levels up to the current optimized level.
-
-    The paper fine-tunes level l with standard LOD rendering over levels
-    0..l, while gradients update only G_l.  Frozen finer levels enter the
-    compositing graph as constants; the active set itself follows Eq. (2).
-    """
-
-    d = [0.0] + list(thresholds) + [np.inf]
-    means_parts = []
-    sigma_parts = []
-    opacity_parts = []
-    color_parts = []
-    center = cam.eye
-
-    for lvl, scene in enumerate(frozen_levels):
-        dist = np.linalg.norm(scene["means"] - center[None, :], axis=1)
-        inds = np.where((dist >= d[lvl]) & (dist < d[lvl + 1]))[0]
-        if inds.size == 0:
-            continue
-        means_parts.append(torch.as_tensor(scene["means"][inds], dtype=torch.float32))
-        sigma_parts.append(torch.as_tensor(scene["sigma"][inds], dtype=torch.float32))
-        opacity_parts.append(torch.as_tensor(scene["opacity"][inds], dtype=torch.float32))
-        color_parts.append(torch.as_tensor(scene["colors"][inds], dtype=torch.float32))
-
-    current_lvl = len(frozen_levels)
-    dist = np.linalg.norm(current_means_np - center[None, :], axis=1)
-    inds_np = np.where((dist >= d[current_lvl]) & (dist < d[current_lvl + 1]))[0]
-    if inds_np.size:
-        inds = torch.as_tensor(inds_np, dtype=torch.long)
-        means_parts.append(current_tensors["means"][inds])
-        sigma_parts.append(current_tensors["sigma"][inds])
-        opacity_parts.append(current_tensors["opacity"][inds])
-        color_parts.append(current_tensors["colors"][inds])
-
-    if not means_parts:
-        empty = torch.empty((0, 3), dtype=torch.float32)
-        return differentiable_render(empty, torch.empty(0), torch.empty(0), empty, cam)
-
-    return differentiable_render(
-        torch.cat(means_parts, dim=0),
-        torch.cat(sigma_parts, dim=0),
-        torch.cat(opacity_parts, dim=0),
-        torch.cat(color_parts, dim=0),
-        cam,
-    )
-
-
-def dssim_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-    c1 = 0.01**2
-    c2 = 0.03**2
-    x = pred.reshape(-1, 3)
-    y = target.reshape(-1, 3)
-    vals = []
-    for ch in range(3):
-        a = x[:, ch]
-        b = y[:, ch]
-        mux = a.mean()
-        muy = b.mean()
-        vx = a.var(unbiased=False)
-        vy = b.var(unbiased=False)
-        cov = ((a - mux) * (b - muy)).mean()
-        ssim = ((2 * mux * muy + c1) * (2 * cov + c2)) / ((mux * mux + muy * muy + c1) * (vx + vy + c2))
-        vals.append(ssim)
-    return (1.0 - torch.stack(vals).mean()) * 0.5
-
-
-def gradient_finetune_lod(
-    scene: dict,
-    frozen_levels: list[dict],
-    thresholds: list[float],
-    cameras: list,
-    train_gt: np.ndarray,
+    cams: list[Camera],
+    images: torch.Tensor,
     steps: int,
-    lr: float,
     seed: int,
-) -> dict:
-    """Fine-tune a pruned LOD level with the paper's DSSIM+L1 objective.
-
-    The full paper uses 1000 CUDA optimization iterations after each pruning
-    round.  This compact reproduction scales the iteration count down but keeps
-    the same optimization stage and loss family on surviving LOD Gaussians.
-    """
-
-    if steps <= 0 or scene["means"].shape[0] == 0:
-        return scene
-
-    torch.manual_seed(seed)
+    lrs: dict,
+    pseudo_frac: float = 0.0,
+    base_eff: dict | None = None,
+) -> Level:
+    if steps <= 0 or current.n == 0:
+        return current
+    device = current.raw["means"].device
     rng = np.random.default_rng(seed)
-    means = torch.as_tensor(scene["means"], dtype=torch.float32)
-    sigma_floor = torch.as_tensor(scene["sigma"], dtype=torch.float32)
-    sigma_delta_raw = torch.nn.Parameter(torch.full_like(sigma_floor, -8.0))
-    opacity_init = torch.clamp(torch.as_tensor(scene["opacity"], dtype=torch.float32) / 0.98, 1e-4, 1 - 1e-4)
-    opacity_raw = torch.nn.Parameter(torch.logit(opacity_init))
-    color_raw = torch.nn.Parameter(torch.logit(torch.clamp(torch.as_tensor(scene["colors"], dtype=torch.float32), 1e-4, 1 - 1e-4)))
-    opt = torch.optim.Adam([sigma_delta_raw, opacity_raw, color_raw], lr=lr)
-
-    targets = torch.as_tensor(train_gt, dtype=torch.float32)
-    level_idx = len(frozen_levels)
-    for step in range(steps):
-        cam_idx = (step + seed) % len(cameras)
-        active_thresholds = list(thresholds)
-        if active_thresholds:
-            active_thresholds[-1] = float(rng.uniform(0.7 * active_thresholds[-1], 1.3 * active_thresholds[-1]))
-        current_tensors = {
-            "means": means,
-            "sigma": sigma_floor + torch.nn.functional.softplus(sigma_delta_raw),
-            "opacity": torch.sigmoid(opacity_raw) * 0.98,
-            "colors": torch.sigmoid(color_raw),
-        }
-        pred = differentiable_render_lod_stack(
-            frozen_levels[:level_idx],
-            current_tensors,
-            scene["means"],
-            active_thresholds,
-            cameras[cam_idx],
-        )
+    torch.manual_seed(seed)
+    means = torch.nn.Parameter(current.raw["means"].clone())
+    log_s = torch.nn.Parameter(torch.log(current.raw["scales"].clamp(min=1e-7)))
+    quats = torch.nn.Parameter(current.raw["quats"].clone())
+    op_logit = torch.nn.Parameter(torch.logit(current.raw["opacities"].clamp(1e-4, 1 - 1e-4)))
+    col_logit = torch.nn.Parameter(torch.logit(current.raw["colors"].clamp(1e-4, 1 - 1e-4)))
+    opt = torch.optim.Adam(
+        [
+            {"params": [means], "lr": lrs["means"]},
+            {"params": [log_s], "lr": lrs["scales"]},
+            {"params": [quats], "lr": lrs["quats"]},
+            {"params": [op_logit], "lr": lrs["opacities"]},
+            {"params": [col_logit], "lr": lrs["colors"]},
+        ],
+        eps=1e-15,
+    )
+    window = _ssim_window(device)
+    for _ in range(steps):
+        thr = list(thresholds)
+        thr[-1] = float(thr[-1] * rng.uniform(0.7, 1.3))
+        if pseudo_frac > 0 and rng.random() < pseudo_frac:
+            cam = pseudo_camera(rng, cams)
+            with torch.no_grad():
+                target = render_gaussians(base_eff["means"], base_eff["scales"], base_eff["quats"], base_eff["opacities"], base_eff["colors"], cam)["image"]
+        else:
+            i = int(rng.integers(len(cams)))
+            cam = cams[i]
+            target = images[i]
+        cur = effective_params(means, torch.exp(log_s), quats, torch.sigmoid(op_logit), torch.sigmoid(col_logit), current.eps)
+        pred = lod_render(frozen_eff + [cur], bounds_for(thr), cam)["image"]
         if not pred.requires_grad:
             continue
-        target = targets[cam_idx]
-        loss = torch.mean(torch.abs(pred - target)) + dssim_loss(pred, target)
-        opt.zero_grad()
+        loss = 0.8 * torch.abs(pred - target).mean() + 0.2 * ssim_loss(pred, target, window)
+        opt.zero_grad(set_to_none=True)
         loss.backward()
         opt.step()
-
-    return {
-        "means": scene["means"],
-        "sigma": (sigma_floor + torch.nn.functional.softplus(sigma_delta_raw)).detach().numpy().astype(np.float32),
-        "opacity": (torch.sigmoid(opacity_raw) * 0.98).detach().numpy().astype(np.float32),
-        "colors": torch.sigmoid(color_raw).detach().numpy().astype(np.float32),
+    raw = {
+        "means": means.detach(),
+        "scales": torch.exp(log_s).detach(),
+        "quats": quats.detach(),
+        "opacities": torch.sigmoid(op_logit).detach(),
+        "colors": torch.sigmoid(col_logit).detach(),
     }
+    return Level(raw, current.eps)
 
 
-def build_lod_levels(
-    scene: dict,
-    cameras: list,
-    train_gt: np.ndarray,
+# --------------------------------------------------------------------------
+# Building LOD levels
+# --------------------------------------------------------------------------
+
+
+def build_levels(
+    g0: Level,
     thresholds: list[float],
-    gamma: float,
-    smooth_s: float,
-    finetune_steps: int,
-    finetune_lr: float,
-) -> list[dict]:
-    levels = [copy_scene(scene)]
-    focal = float(np.mean([c.f for c in cameras]))
-    for level_idx, depth in enumerate(thresholds, start=1):
-        lod = smooth_scene(scene, depth, focal, smooth_s)
-        for round_idx, mult in enumerate([0.2, 0.6, 1.0]):
-            lod = prune_by_importance(lod, cameras, gamma * mult)
-            lod = gradient_finetune_lod(
-                lod,
-                levels,
-                thresholds[:level_idx],
-                cameras,
-                train_gt,
-                steps=finetune_steps,
-                lr=finetune_lr,
-                seed=level_idx * 100 + round_idx,
+    cams: list[Camera],
+    images: torch.Tensor | None,
+    cfg: dict,
+    steps: int,
+    seed: int,
+    prefix: list[Level] | None = None,
+) -> list[Level]:
+    """Build levels for ``thresholds`` from G0 (levels already in ``prefix`` are reused)."""
+    levels = list(prefix) if prefix else [g0]
+    focal = float(cams[0].f)
+    base_eff = {k: v.detach() for k, v in g0.effective().items()}
+    for l in range(len(levels), len(thresholds) + 1):
+        d_l = thresholds[l - 1]
+        lvl = Level({k: v.detach().clone() for k, v in g0.raw.items()}, filter_variance(d_l, focal, cfg["smooth_s"]))
+        frozen = [{k: v.detach() for k, v in L.effective().items()} for L in levels]
+        for r, mult in enumerate((0.2, 0.6, 1.0)):
+            imp = level_importance(frozen, lvl, thresholds[:l], cams)
+            lvl = lvl.subset(imp >= mult * cfg["gamma"])
+            lvl = finetune_level(
+                lvl, frozen, thresholds[:l], cams, images, steps, seed * 1000 + 10 * l + r, cfg["lrs"],
+                pseudo_frac=cfg.get("pseudo_frac", 0.0), base_eff=base_eff,
             )
-        levels.append(lod)
+            log(f"level {l} (d={d_l:.1f}) round {r}: kept {lvl.n}")
+        levels.append(lvl)
     return levels
 
 
-def active_indices_for_center(levels: list[dict], thresholds: list[float], center: np.ndarray, radius_offset: float = 0.0) -> list[np.ndarray]:
-    d = [0.0] + [max(0.0, t - radius_offset) for t in thresholds] + [np.inf]
-    selected = []
-    for lvl, scene in enumerate(levels):
-        dist = np.linalg.norm(scene["means"] - center[None, :], axis=1)
-        selected.append(np.where((dist >= d[lvl]) & (dist < d[lvl + 1]))[0])
-    return selected
+@torch.no_grad()
+def tile_cost(levels: list[Level], thresholds: list[float], cams: list[Camera]) -> float:
+    eff = [L.effective() for L in levels]
+    ntiles = (cams[0].width // 16) * (cams[0].height // 16)
+    vals = [lod_render(eff, bounds_for(thresholds), cam)["tile_pairs"] / ntiles for cam in cams]
+    return float(np.mean(vals))
 
 
-def gather_active_scene(levels: list[dict], active: list[np.ndarray]) -> dict:
-    parts = []
-    for scene, inds in zip(levels, active):
-        if len(inds) == 0:
-            continue
-        parts.append({k: v[inds] for k, v in scene.items()})
-    if not parts:
-        return {k: v[:0] for k, v in levels[0].items()}
-    return {k: np.concatenate([p[k] for p in parts], axis=0) for k in levels[0].keys()}
-
-
-def render_lod_at_camera(levels: list[dict], thresholds: list[float], cam) -> tuple[np.ndarray, dict]:
-    active = active_indices_for_center(levels, thresholds, cam.eye, 0.0)
-    active_scene = gather_active_scene(levels, active)
-    img, stats = render_scene(active_scene, cam, return_stats=True)
-    return img, {"loaded": stats["loaded"], "visible": stats["visible"], "tile_cost": stats["tile_cost"]}
-
-
-def threshold_cost(scene: dict, cameras: list, train_gt: np.ndarray, thresholds: list[float], gamma: float, smooth_s: float) -> float:
-    levels = build_lod_levels(
-        scene,
-        cameras[:3],
-        train_gt[:3],
-        thresholds,
-        gamma=gamma,
-        smooth_s=smooth_s,
-        finetune_steps=0,
-        finetune_lr=0.0,
-    )
-    costs = []
-    for cam in cameras[:3]:
-        _, stats = render_lod_at_camera(levels, thresholds, cam)
-        costs.append(stats["tile_cost"])
-    return float(np.mean(costs))
-
-
-def select_thresholds(
-    scene: dict,
-    cameras: list,
-    train_gt: np.ndarray,
-    n_levels: int,
-    candidates: list[float],
-    gamma: float,
-    smooth_s: float,
-) -> list[float]:
+def select_thresholds(g0: Level, cams: list[Camera], cost_cams: list[Camera], cfg: dict, n_levels: int) -> tuple[list[float], list]:
+    """Greedy threshold search (Sec. 3, 'Selecting depth thresholds')."""
     selected: list[float] = []
+    prefix = [g0]
+    trace = []
     for _ in range(n_levels):
         best = None
-        for cand in candidates:
-            if selected and cand <= selected[-1] + 0.5:
+        for cand in cfg["candidates"]:
+            if selected and cand <= selected[-1]:
                 continue
-            trial = selected + [cand]
-            cost = threshold_cost(scene, cameras, train_gt, trial, gamma=gamma, smooth_s=smooth_s)
+            thr = selected + [cand]
+            levels = build_levels(g0, thr, cams, None, cfg, steps=0, seed=0, prefix=prefix)
+            cost = tile_cost(levels, thr, cost_cams)
+            trace.append({"thresholds": thr, "cost": cost})
+            log(f"threshold candidate {thr}: avg Gaussians/tile {cost:.2f}")
             if best is None or cost < best[0]:
-                best = (cost, cand)
+                best = (cost, cand, levels)
         if best is None:
             break
         selected.append(float(best[1]))
-    return selected
+        prefix = best[2]
+    return selected, trace
 
 
-def kmeans(points: np.ndarray, k: int, seed: int = 3, iters: int = 30) -> tuple[np.ndarray, np.ndarray]:
+# --------------------------------------------------------------------------
+# Chunks (K-means on camera positions, Eq. 5) and visibility filtering
+# --------------------------------------------------------------------------
+
+
+def kmeans(points: np.ndarray, k: int, seed: int, iters: int = 100) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
-    centers = points[rng.choice(points.shape[0], size=k, replace=False)].copy()
-    labels = np.zeros(points.shape[0], dtype=np.int64)
+    centers = [points[int(rng.integers(len(points)))]]
+    for _ in range(1, k):
+        d2 = np.min(((points[:, None, :] - np.array(centers)[None]) ** 2).sum(-1), axis=1)
+        p = d2 / d2.sum() if d2.sum() > 0 else np.full(len(points), 1.0 / len(points))
+        centers.append(points[int(rng.choice(len(points), p=p))])
+    centers = np.array(centers, dtype=np.float64)
+    labels = np.zeros(len(points), dtype=np.int64)
     for _ in range(iters):
-        dist = np.linalg.norm(points[:, None, :] - centers[None, :, :], axis=2)
-        labels = np.argmin(dist, axis=1)
+        labels = np.argmin(((points[:, None, :] - centers[None]) ** 2).sum(-1), axis=1)
+        new = centers.copy()
         for j in range(k):
             if np.any(labels == j):
-                centers[j] = points[labels == j].mean(axis=0)
+                new[j] = points[labels == j].mean(axis=0)
+        if np.allclose(new, centers):
+            break
+        centers = new
     return centers, labels
 
 
-def random_orientation_cameras(cameras: list, seed: int, per_camera: int = 2) -> list:
-    rng = np.random.default_rng(seed)
-    augmented = list(cameras)
-    for cam in cameras:
+def random_orientations(cams: list[Camera], per_camera: int, rng: np.random.Generator) -> list[Camera]:
+    out = list(cams)
+    for cam in cams:
         for _ in range(per_camera):
-            direction = rng.normal(size=3).astype(np.float32)
-            direction[2] *= 0.35
-            norm = np.linalg.norm(direction)
-            if norm < 1e-6:
-                direction = np.array([0.0, 1.0, 0.0], dtype=np.float32)
-            else:
-                direction = direction / norm
-            target = cam.eye + direction * 8.0
-            augmented.append(
-                cam.__class__(
-                    np.array(cam.eye, copy=True),
-                    target.astype(np.float32),
-                    np.array(cam.up, copy=True),
-                    cam.f,
-                    cam.width,
-                    cam.height,
-                )
-            )
-    return augmented
+            out.append(Camera(cam.eye, float(rng.uniform(-math.pi, math.pi)), float(rng.uniform(-0.3, 0.3)), cam.f, cam.width, cam.height))
+    return out
 
 
-def build_chunks(levels: list[dict], thresholds: list[float], train_cameras: list, vis_threshold: float) -> dict:
-    cam_pos = np.stack([c.eye for c in train_cameras])
-    d1 = max(thresholds[0], 1e-3)
-    n_clusters = int(np.clip(round((4.0 / d1) * np.max(np.linalg.norm(cam_pos - cam_pos.mean(axis=0), axis=1))), 2, 8))
-    centers, labels = kmeans(cam_pos, n_clusters)
-    center_dist = np.linalg.norm(centers[:, None, :] - centers[None, :, :], axis=2)
-    np.fill_diagonal(center_dist, np.inf)
+@torch.no_grad()
+def build_chunks(levels: list[Level], thresholds: list[float], train: list[Camera], cfg: dict, seed: int) -> dict:
+    pos = np.stack([c.eye for c in train])
+    spread = float(np.max(np.linalg.norm(pos - pos.mean(0), axis=1)))
+    n_clusters = max(2, int(round(4.0 / thresholds[0] * spread)))
+    n_clusters = min(n_clusters, len(pos))
+    centers, labels = kmeans(pos, n_clusters, seed=seed)
+    cd = np.linalg.norm(centers[:, None] - centers[None], axis=-1)
+    np.fill_diagonal(cd, np.inf)
+    eff = [L.effective() for L in levels]
+    rng = np.random.default_rng(seed + 17)
     chunks = []
-    for j, center in enumerate(centers):
-        members = np.where(labels == j)[0]
-        if len(members) == 0:
-            member_cams = train_cameras
-        else:
-            member_cams = [train_cameras[int(i)] for i in members]
-        radius = float(np.min(center_dist[j])) if n_clusters > 1 else 0.0
-        active = active_indices_for_center(levels, thresholds, center, radius_offset=radius)
-        visibility_cams = random_orientation_cameras(member_cams, seed=1000 + j)
-        filtered = []
-        for scene, inds in zip(levels, active):
-            if inds.size == 0:
-                filtered.append(inds)
-                continue
-            scores = importance_scores(scene, visibility_cams, indices=inds)
-            keep = scores >= vis_threshold
-            if keep.sum() < max(4, int(0.10 * keep.size)):
-                keep = scores >= np.quantile(scores, 0.80)
-            filtered.append(inds[keep])
-        chunks.append({"center": center, "radius": radius, "indices": filtered})
-    return {"centers": centers, "chunks": chunks}
+    for j, c in enumerate(centers):
+        radius = float(cd[j].min())
+        d = [0.0] + [max(0.0, t - radius) for t in thresholds] + [math.inf]
+        ct = torch.as_tensor(c, dtype=torch.float32, device=eff[0]["means"].device)
+        active = []
+        for l, e in enumerate(eff):
+            dist = (e["means"] - ct).norm(dim=1)
+            active.append(torch.nonzero((dist >= d[l]) & (dist < d[l + 1]), as_tuple=False).squeeze(1))
+        members = [train[i] for i in np.where(labels == j)[0]]
+        if not members:
+            nearest = np.argsort(np.linalg.norm(pos - c[None], axis=1))[:3]
+            members = [train[int(i)] for i in nearest]
+        views = random_orientations(members, cfg["vis_random_views"], rng)
+        cat = {k: torch.cat([e[k][a] for e, a in zip(eff, active)], 0) for k in KEYS}
+        imp = torch.zeros(cat["means"].shape[0], device=ct.device)
+        for cam in views:
+            out = render_gaussians(cat["means"], cat["scales"], cat["quats"], cat["opacities"], cat["colors"], cam, return_importance=True)
+            imp = torch.maximum(imp, out["importance"])
+        keep = imp >= cfg["vis_threshold"]
+        kept, off = [], 0
+        for a in active:
+            kept.append(a[keep[off:off + a.numel()]].cpu().numpy())
+            off += a.numel()
+        chunks.append({"center": c, "radius": radius, "indices": kept, "members": len(members)})
+        log(f"chunk {j}: radius {radius:.2f} m, members {len(members)}, active {sum(x.numel() for x in active)} -> {sum(k.size for k in kept)}")
+    return {"centers": centers, "chunks": chunks, "n_clusters": n_clusters}
 
 
-def render_chunk(levels: list[dict], chunk: dict, cam, opacity_scale: float = 1.0) -> tuple[np.ndarray, dict]:
-    active_scene = gather_active_scene(levels, chunk["indices"])
-    img, stats = render_scene(active_scene, cam, opacity_scale=opacity_scale, return_stats=True)
-    return img, {"loaded": stats["loaded"], "visible": stats["visible"], "tile_cost": stats["tile_cost"]}
+# --------------------------------------------------------------------------
+# Export
+# --------------------------------------------------------------------------
 
 
-def render_opacity_blend(levels: list[dict], chunks: dict, cam) -> tuple[np.ndarray, dict]:
-    centers = chunks["centers"]
-    dist = np.linalg.norm(centers - cam.eye[None, :], axis=1)
-    nearest = np.argsort(dist)[:2]
-    merged_parts = []
-    opacity_parts = []
-    idx0 = int(nearest[0])
-    idx1 = int(nearest[1])
-    c0 = chunks["chunks"][idx0]["indices"]
-    c1 = chunks["chunks"][idx1]["indices"]
-    m0 = centers[idx0]
-    m1 = centers[idx1]
-    denom = float(np.sum((m0 - m1) ** 2))
-    if denom <= 1e-8:
-        t0 = t1 = 1.0
-    else:
-        # Eq. (4): project the camera onto the line between chunk centers.
-        t0 = float(np.clip(np.dot(cam.eye - m1, m0 - m1) / denom, 0.0, 1.0))
-        t1 = float(np.clip(np.dot(cam.eye - m0, m1 - m0) / denom, 0.0, 1.0))
-    for scene, inds0, inds1 in zip(levels, c0, c1):
-        set0 = {int(i) for i in inds0}
-        set1 = {int(i) for i in inds1}
-        union = sorted(set0 | set1)
-        if not union:
-            continue
-        weights = []
-        for idx in union:
-            if idx in set0 and idx in set1:
-                weights.append(1.0)
-            elif idx in set0:
-                weights.append(t0)
-            else:
-                weights.append(t1)
-        inds = np.array(union, dtype=np.int64)
-        merged_parts.append({k: v[inds] for k, v in scene.items()})
-        opacity_parts.append(np.array(weights, dtype=np.float32))
-    if not merged_parts:
-        empty = {k: v[:0] for k, v in levels[0].items()}
-        img, stats = render_scene(empty, cam, return_stats=True)
-        return img, {"loaded": 0, "visible": 0, "tile_cost": 0.0}
-    merged = {k: np.concatenate([p[k] for p in merged_parts], axis=0) for k in levels[0].keys()}
-    opacity = np.concatenate(opacity_parts, axis=0)
-    img, stats = render_scene(merged, cam, opacity_scale=opacity, return_stats=True)
-    return img, {"loaded": stats["loaded"], "visible": stats["visible"], "tile_cost": stats["tile_cost"]}
+def export_chunked(levels: list[Level], chunks: dict, path: Path, blend: bool) -> dict:
+    eff = [{k: v.detach().cpu().numpy() for k, v in L.effective().items()} for L in levels]
+    offsets = np.cumsum([0] + [e["means"].shape[0] for e in eff])
+    used = np.zeros(offsets[-1], dtype=bool)
+    for ch in chunks["chunks"]:
+        for l, idx in enumerate(ch["indices"]):
+            used[offsets[l] + idx] = True
+    remap = -np.ones(offsets[-1], dtype=np.int64)
+    remap[used] = np.arange(int(used.sum()))
+    pool = {k: np.concatenate([e[k] for e in eff])[used] for k in KEYS}
+    lists = []
+    for ch in chunks["chunks"]:
+        lists.append(np.concatenate([remap[offsets[l] + idx] for l, idx in enumerate(ch["indices"])]))
+    save_representation(path, pool, chunks["centers"], lists, blend_two_nearest=blend)
+    return {"pool": int(used.sum()), "chunk_sizes": [int(x.size) for x in lists]}
 
 
-def render_nearest_chunk(levels: list[dict], chunks: dict, cam) -> tuple[np.ndarray, dict]:
-    centers = chunks["centers"]
-    dist = np.linalg.norm(centers - cam.eye[None, :], axis=1)
-    nearest = int(np.argmin(dist))
-    return render_chunk(levels, chunks["chunks"][nearest], cam)
+def export_dynamic(levels: list[Level], thresholds: list[float], center: np.ndarray, path: Path) -> dict:
+    eff = [{k: v.detach().cpu().numpy() for k, v in L.effective().items()} for L in levels]
+    pool = {k: np.concatenate([e[k] for e in eff]) for k in KEYS}
+    b = bounds_for(thresholds)
+    lo = np.concatenate([np.full(e["means"].shape[0], b[l], dtype=np.float32) for l, e in enumerate(eff)])
+    hi = np.concatenate([np.full(e["means"].shape[0], b[l + 1], dtype=np.float32) for l, e in enumerate(eff)])
+    n = pool["means"].shape[0]
+    save_representation(path, pool, center[None], [np.arange(n)], blend_two_nearest=False, band_lo=lo, band_hi=hi)
+    return {"pool": int(n)}
 
 
-def render_variant(levels: list[dict], thresholds: list[float], chunks: dict, cam, variant: str) -> tuple[np.ndarray, dict]:
-    if variant == "lod_dynamic":
-        return render_lod_at_camera(levels, thresholds, cam)
-    if variant == "nearest_chunk":
-        return render_nearest_chunk(levels, chunks, cam)
-    if variant == "opacity_blend":
-        return render_opacity_blend(levels, chunks, cam)
-    raise ValueError(f"Unknown LODGE variant: {variant}")
+# --------------------------------------------------------------------------
+# Main
+# --------------------------------------------------------------------------
 
 
-def save_run(out_dir: Path, images: np.ndarray, stats: list[dict], config: dict) -> None:
-    out_dir.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(out_dir / "renders.npz", images=images)
-    scalar = [{k: v for k, v in st.items() if k != "importance"} for st in stats]
-    (out_dir / "stats.json").write_text(json.dumps({"config": config, "per_view": scalar}, indent=2))
+DEFAULTS = {
+    "levels": 2,
+    "gamma": 0.06,
+    "smooth_s": 0.2,
+    "vis_threshold": 0.02,
+    "vis_random_views": 2,
+    "finetune_steps": 1000,
+    "candidates": [4.0, 6.0, 8.0, 11.0, 15.0, 20.0, 27.0, 36.0, 48.0, 64.0],
+    "selection_views": 32,
+    "lrs": {"means": 2e-4, "scales": 5e-3, "quats": 1e-3, "opacities": 2.5e-2, "colors": 5e-3},
+    "pseudo_frac": 0.0,
+}
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_synthetic"))
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_city"))
     parser.add_argument("--out-dir", type=Path, default=Path("checkpoints/lodge"))
-    parser.add_argument("--levels", type=int, default=2)
-    parser.add_argument("--gamma", type=float, default=0.055)
-    parser.add_argument("--visibility-threshold", type=float, default=0.220)
-    parser.add_argument("--smooth-s", type=float, default=1.0)
-    parser.add_argument("--finetune-steps", type=int, default=12)
-    parser.add_argument("--finetune-lr", type=float, default=0.035)
-    parser.add_argument("--thresholds", type=float, nargs="*", default=None)
-    parser.add_argument(
-        "--variant",
-        choices=["opacity_blend", "nearest_chunk", "lod_dynamic"],
-        default="opacity_blend",
-        help="Rendering mode: full LODGE, nearest precomputed chunk without blending, or per-camera dynamic LOD.",
-    )
+    parser.add_argument("--ablation-dir", type=Path, default=None, help="also export nearest-chunk and dynamic-LOD variants here")
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--levels", type=int, default=DEFAULTS["levels"])
+    parser.add_argument("--gamma", type=float, default=DEFAULTS["gamma"])
+    parser.add_argument("--smooth-s", type=float, default=DEFAULTS["smooth_s"])
+    parser.add_argument("--vis-threshold", type=float, default=DEFAULTS["vis_threshold"])
+    parser.add_argument("--finetune-steps", type=int, default=DEFAULTS["finetune_steps"])
+    parser.add_argument("--pseudo-frac", type=float, default=DEFAULTS["pseudo_frac"])
+    parser.add_argument("--thresholds", type=float, nargs="*", default=None, help="manual thresholds (skip automatic selection)")
+    parser.add_argument("--threshold-cache", type=Path, default=None, help="JSON cache for the deterministic threshold search")
     args = parser.parse_args()
 
-    ensure_dataset(args.data_dir)
-    scene, train, test, _ = load_dataset(args.data_dir)
-    train_gt = load_train_targets(args.data_dir)
-    candidates = [3.0, 5.0, 7.0, 9.0]
-    thresholds = args.thresholds or select_thresholds(scene, train, train_gt, args.levels, candidates, args.gamma, args.smooth_s)
-    levels = build_lod_levels(
-        scene,
-        train,
-        train_gt,
-        thresholds,
-        args.gamma,
-        args.smooth_s,
-        args.finetune_steps,
-        args.finetune_lr,
-    )
-    chunks = build_chunks(levels, thresholds, train, args.visibility_threshold)
+    torch.use_deterministic_algorithms(True, warn_only=True)
+    device = default_device()
+    cfg = dict(DEFAULTS)
+    cfg.update({"levels": args.levels, "gamma": args.gamma, "smooth_s": args.smooth_s, "vis_threshold": args.vis_threshold,
+                "finetune_steps": args.finetune_steps, "pseudo_frac": args.pseudo_frac})
+    t0 = time.time()
+    sets = load_camera_sets(args.data_dir)
+    train = sets["train"]
+    images = torch.as_tensor(load_images(args.data_dir, "train"), device=device).float() / 255.0
+    base = load_base_gaussians(args.data_dir)
+    g0 = Level({k: torch.as_tensor(v, device=device) for k, v in base.items()}, 0.0)
+    log(f"device={device} base Gaussians={g0.n} train views={len(train)} cfg={json.dumps({k: cfg[k] for k in ('levels','gamma','smooth_s','vis_threshold','finetune_steps','pseudo_frac')})}")
 
-    outputs = []
-    stats = []
-    for cam in test:
-        img, st = render_variant(levels, thresholds, chunks, cam, args.variant)
-        outputs.append(img)
-        stats.append(st)
-    save_run(
-        args.out_dir,
-        stack_renders(outputs),
-        stats,
-        {
-            "method": args.variant,
-            "thresholds": thresholds,
-            "levels": args.levels,
-            "gamma": args.gamma,
-            "visibility_threshold": args.visibility_threshold,
-            "smooth_s": args.smooth_s,
-            "finetune_steps": args.finetune_steps,
-            "finetune_lr": args.finetune_lr,
-            "num_chunks": len(chunks["chunks"]),
-            "level_gaussians": [int(x["means"].shape[0]) for x in levels],
-        },
-    )
+    trace = []
+    if args.thresholds:
+        thresholds = [float(t) for t in args.thresholds]
+    else:
+        key = json.dumps({"levels": cfg["levels"], "gamma": cfg["gamma"], "s": cfg["smooth_s"], "cands": cfg["candidates"], "views": cfg["selection_views"], "n0": g0.n})
+        cache = json.loads(args.threshold_cache.read_text()) if args.threshold_cache and args.threshold_cache.exists() else {}
+        if key in cache:
+            thresholds, trace = cache[key]["thresholds"], cache[key]["trace"]
+            log(f"thresholds from cache: {thresholds}")
+        else:
+            step = max(1, len(train) // cfg["selection_views"])
+            cost_cams = train[::step]
+            thresholds, trace = select_thresholds(g0, train, cost_cams, cfg, cfg["levels"])
+            if args.threshold_cache:
+                cache[key] = {"thresholds": thresholds, "trace": trace}
+                args.threshold_cache.parent.mkdir(parents=True, exist_ok=True)
+                args.threshold_cache.write_text(json.dumps(cache, indent=1))
+    log(f"thresholds: {thresholds}")
+
+    levels = build_levels(g0, thresholds, train, images, cfg, steps=cfg["finetune_steps"], seed=args.seed)
+    chunks = build_chunks(levels, thresholds, train, cfg, seed=args.seed + 3)
+    info = export_chunked(levels, chunks, args.out_dir / "representation.npz", blend=True)
+    meta = {
+        "method": "lodge",
+        "seed": args.seed,
+        "config": {k: cfg[k] for k in ("levels", "gamma", "smooth_s", "vis_threshold", "vis_random_views", "finetune_steps", "pseudo_frac", "lrs")},
+        "thresholds": thresholds,
+        "threshold_search": trace,
+        "level_sizes": [L.n for L in levels],
+        "n_chunks": chunks["n_clusters"],
+        "pool": info["pool"],
+        "mean_chunk_size": float(np.mean(info["chunk_sizes"])),
+        "seconds": time.time() - t0,
+        "note": "Informational only; the evaluator recomputes every scored number from representation.npz.",
+    }
+    (args.out_dir / "method_info.json").write_text(json.dumps(meta, indent=1))
+    log(f"wrote {args.out_dir} pool={info['pool']} chunks={chunks['n_clusters']} in {meta['seconds']:.0f}s")
+    if args.ablation_dir:
+        export_chunked(levels, chunks, args.ablation_dir / "nearest_chunk" / "representation.npz", blend=False)
+        center = np.stack([c.eye for c in train]).mean(0)
+        export_dynamic(levels, thresholds, center, args.ablation_dir / "lod_dynamic" / "representation.npz")
+        log(f"wrote ablation variants to {args.ablation_dir}")
 
 
 if __name__ == "__main__":

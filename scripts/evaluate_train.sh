@@ -1,15 +1,8 @@
 #!/bin/bash
-# Visible train-slice evaluator. Mirrors scripts/evaluate.sh's artifact
-# contract: read method outputs from checkpoints/ and write a scores JSON.
-
+# Visible evaluator on the public validation cameras (same protocol and gates
+# as the hidden test). Scores every method directory under checkpoints/.
+# Writes scoring/scores_train.json.
 set -e
-
 cd /home/user
-
 mkdir -p scoring
-
-python -m eval.train.evaluate \
-  --data-dir data/lodge_synthetic \
-  --checkpoints-dir checkpoints \
-  --reference scoring/reference.json \
-  --scores scoring/scores_train.json
+python -m eval.train.evaluate --data-dir data/lodge_city --checkpoints-dir checkpoints --scores scoring/scores_train.json

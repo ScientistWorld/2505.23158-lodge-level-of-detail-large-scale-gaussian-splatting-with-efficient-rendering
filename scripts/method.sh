@@ -1,40 +1,15 @@
 #!/bin/bash
-# Run the paper's proposed method.
-#
-# This script trains/runs the paper's method using code in method/.
-#
-# Usage:
-#   bash scripts/method.sh
-
+# Run the paper's method (LODGE) on the public data and write
+# checkpoints/lodge/representation.npz (scored entry). Ablation variants of the
+# same build (nearest chunk only, per-frame dynamic LOD) go to
+# checkpoints/_ablation/, which evaluators do not score.
 set -e
-
 cd /home/user
-
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
 python -m method.lodge \
-  --data-dir data/lodge_synthetic \
-  --out-dir checkpoints/lod_dynamic \
-  --levels 2 \
-  --gamma 0.055 \
-  --visibility-threshold 0.220 \
-  --smooth-s 1.0 \
-  --variant lod_dynamic
-
-python -m method.lodge \
-  --data-dir data/lodge_synthetic \
-  --out-dir checkpoints/nearest_chunk \
-  --levels 2 \
-  --gamma 0.055 \
-  --visibility-threshold 0.220 \
-  --smooth-s 1.0 \
-  --variant nearest_chunk
-
-python -m method.lodge \
-  --data-dir data/lodge_synthetic \
+  --data-dir data/lodge_city \
   --out-dir checkpoints/lodge \
-  --levels 2 \
-  --gamma 0.055 \
-  --visibility-threshold 0.220 \
-  --smooth-s 1.0 \
-  --variant opacity_blend
-
+  --ablation-dir checkpoints/_ablation \
+  --threshold-cache checkpoints/_cache/thresholds.json \
+  --seed 0
 bash scripts/evaluate.sh

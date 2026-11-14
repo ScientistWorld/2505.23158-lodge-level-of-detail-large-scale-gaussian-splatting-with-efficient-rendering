@@ -30,6 +30,9 @@ checkpoints/
 data/downloads/
 !data/downloads/.gitkeep
 data/lodge_synthetic/
+# Committed benchmark data (agent-generated, small) and hidden test targets
+!data/lodge_city/*.npz
+!eval/test/hidden_set.npz
 
 # Container artifacts (multi-GB)
 environment/container.sif

@@ -1,45 +1,26 @@
-"""Full-representation Gaussian splatting baseline."""
+"""Write the base reconstruction (full representation) in the submission format."""
 
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
 import numpy as np
 
-from data.gaussian_scene import ensure_dataset, load_dataset, render_scene, stack_renders
-
-
-def scalar_stats(stats: dict) -> dict:
-    return {k: v for k, v in stats.items() if k != "importance"}
+from data.gsrender import load_base_gaussians, load_camera_sets, save_representation
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_synthetic"))
-    parser.add_argument("--out-dir", type=Path, default=Path("checkpoints/full_representation"))
+    parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_city"))
+    parser.add_argument("--out", type=Path, default=Path("checkpoints/_examples/full_representation/representation.npz"))
     args = parser.parse_args()
-
-    ensure_dataset(args.data_dir)
-    scene, _, test, _ = load_dataset(args.data_dir)
-    renders = []
-    stats = []
-    for cam in test:
-        img, st = render_scene(scene, cam, return_stats=True)
-        renders.append(img)
-        stats.append(scalar_stats(st))
-    args.out_dir.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(args.out_dir / "renders.npz", images=stack_renders(renders))
-    (args.out_dir / "stats.json").write_text(
-        json.dumps(
-            {
-                "config": {"method": "full_representation", "level_gaussians": [int(scene["means"].shape[0])]},
-                "per_view": stats,
-            },
-            indent=2,
-        )
-    )
+    base = load_base_gaussians(args.data_dir)
+    train = load_camera_sets(args.data_dir)["train"]
+    center = np.stack([c.eye for c in train]).mean(0)
+    n = base["means"].shape[0]
+    save_representation(args.out, base, center[None], [np.arange(n)], blend_two_nearest=False)
+    print(f"wrote {args.out} ({n} Gaussians, one chunk)")
 
 
 if __name__ == "__main__":

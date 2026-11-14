@@ -1,24 +1,7 @@
 #!/bin/bash
-# Run a baseline method from the paper.
-#
-# Baselines are simple reference methods the paper compares against. 
-# Implement this only if applicable, i.e. the paper has baselines.
-# You do not need to implement all baselines to begin — 
-# just enough to validate that the evaluation pipeline works 
-# and provide a reference point. You can decide to expand more baselines later.
-# Each baseline must be actually run and scored through evaluate.sh
-# so the numbers are verified, not self-reported.
-# You can decide what this baseline script should do yourself.
-#
-# Usage:
-#   bash scripts/baseline.sh <name>
-
+# Full-representation baseline. The evaluators compute this baseline
+# themselves (entry `full_representation`), so nothing here is scored; this
+# script writes the base model in the submission format as a template.
 set -e
-
 cd /home/user
-
-python -m baseline.full_representation \
-  --data-dir data/lodge_synthetic \
-  --out-dir checkpoints/full_representation
-
-bash scripts/evaluate.sh
+python -m baseline.full_representation --data-dir data/lodge_city --out checkpoints/_examples/full_representation/representation.npz

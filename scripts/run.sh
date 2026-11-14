@@ -1,15 +1,10 @@
 #!/bin/bash
-# Re-run the actual reproduction pipeline, then refresh train/test split scores.
-
+# Hardening smoke test: tiny world, every stage of the audit harness.
 set -e
-
 cd /home/user
-
-rm -rf checkpoints/full_representation checkpoints/lod_dynamic checkpoints/nearest_chunk checkpoints/lodge
-rm -rf data/lodge_synthetic
-rm -f scoring/scores.json scoring/scores_train.json scoring/scores_test.json
-
-bash scripts/download.sh
-bash scripts/reproduce.sh
-bash scripts/evaluate_train.sh
-bash scripts/evaluate_test.sh
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
+nvidia-smi || true
+nproc
+python -c "import torch, numpy; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), 'numpy', numpy.__version__)"
+rm -rf tmp/audit_smoke
+python notes/hardening/audit.py --smoke

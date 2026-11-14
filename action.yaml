@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
-# Do NOT sleep, poll, or wait for jobs. The system reads this file
-# only after your turn ends.
-action: pending
-gpus: 0
-test: false
+action: submit
+gpus: 1
+test: true
 milestone: secondary_claims
-notes: ""
+notes: "Smoke test of the rebuilt gym (tiny world): world build, LODGE method, evaluators, audit harness; checks CUDA in container."
