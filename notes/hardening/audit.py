@@ -110,9 +110,9 @@ def stage_tune(ctx: Ctx) -> dict:
     path = ctx.out / "tuning.json"
     if path.exists():
         return json.loads(path.read_text())
-    grid = [(g, s) for s in (0.2, 1.0) for g in (0.02, 0.06, 0.15)]
+    grid = [(g, s) for s in (0.2, 1.0) for g in (0.01, 0.03, 0.1)]
     if ctx.smoke:
-        grid = [(0.06, 0.2), (0.15, 1.0)]
+        grid = [(0.03, 0.2), (0.03, 1.0)]
     rows = []
     for g, s in grid:
         tag = f"tune_g{g}_s{s}"

@@ -1,6 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 action: submit
 gpus: 1
-test: true
+test: false
 milestone: secondary_claims
-notes: "Smoke test of the rebuilt gym (tiny world): world build, LODGE method, evaluators, audit harness; checks CUDA in container."
+notes: "Full hardening audit: build street world + trained base, tune gamma/s on val, LODGE reference x3 seeds, variants, rules, shortcuts through hidden test, final scores."

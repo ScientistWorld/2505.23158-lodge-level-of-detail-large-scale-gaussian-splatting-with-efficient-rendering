@@ -7,8 +7,9 @@ renderer.  Every number is recomputed from the representation: images, loaded
 (resident) Gaussians, visible Gaussians, tile work.  Nothing the method writes
 besides ``representation.npz`` is read.
 
-The full-representation baseline is regenerated here from the hidden world
-definition, so it cannot be altered by editing public files.
+The full-representation baseline is this directory's own copy of the trained
+base reconstruction (stored in the hidden set), so it cannot be altered by
+editing public files.
 
 A method fails (and receives the worst value of every metric in every
 experiment) when its representation is missing or invalid, when it ever needs
@@ -30,7 +31,6 @@ import numpy as np
 import torch
 
 from eval.test import render as R
-from eval.test import world as W
 
 BASELINE = "full_representation"
 REQUIRED = ("lodge",)
@@ -54,12 +54,13 @@ def load_hidden(path: Path):
     with np.load(path, allow_pickle=False) as z:
         data = {k: np.array(z[k]) for k in z.files}
     cfg = json.loads(str(data["world_config"]))
+    base = {k: data[f"full_{k}"].astype(np.float32) for k in ("means", "scales", "quats", "opacities", "colors")}
     sets = {}
     for exp, spec in EXPERIMENTS.items():
         key = spec["set"]
         cams = R.cameras_from_arrays(data[f"{key}_eye"], data[f"{key}_yaw"], data[f"{key}_pitch"], cfg["focal"], cfg["width"], cfg["height"])
         sets[exp] = (cams, data[f"{key}_images"])
-    return cfg, sets
+    return cfg, base, sets
 
 
 def measure(rep: dict, rep_t: dict, cams: list, gts: np.ndarray, kind: str) -> dict:
@@ -117,8 +118,7 @@ def main() -> None:
 
     torch.set_grad_enabled(False)
     device = R.default_device()
-    cfg, sets = load_hidden(args.hidden)
-    base = W.build_scene(cfg, "base")
+    cfg, base, sets = load_hidden(args.hidden)
     n0 = int(base["means"].shape[0])
     max_pool = POOL_FACTOR * n0
     worst_count = float(max_pool)

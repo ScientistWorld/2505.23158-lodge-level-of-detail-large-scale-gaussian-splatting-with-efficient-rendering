@@ -322,11 +322,17 @@ def kmeans(points: np.ndarray, k: int, seed: int, iters: int = 100) -> tuple[np.
     return centers, labels
 
 
-def random_orientations(cams: list[Camera], per_camera: int, rng: np.random.Generator) -> list[Camera]:
+def random_orientations(cams: list[Camera], per_camera: int, min_total: int, rng: np.random.Generator) -> list[Camera]:
+    """Original training views plus views at the same positions with random orientations.
+
+    At least ``min_total`` random-orientation views are drawn per chunk so the
+    whole sphere of directions around the chunk is covered.
+    """
     out = list(cams)
-    for cam in cams:
-        for _ in range(per_camera):
-            out.append(Camera(cam.eye, float(rng.uniform(-math.pi, math.pi)), float(rng.uniform(-0.3, 0.3)), cam.f, cam.width, cam.height))
+    n_rand = max(per_camera * len(cams), min_total)
+    for r in range(n_rand):
+        cam = cams[r % len(cams)]
+        out.append(Camera(cam.eye, float(rng.uniform(-math.pi, math.pi)), float(rng.uniform(-0.35, 0.6)), cam.f, cam.width, cam.height))
     return out
 
 
@@ -354,7 +360,7 @@ def build_chunks(levels: list[Level], thresholds: list[float], train: list[Camer
         if not members:
             nearest = np.argsort(np.linalg.norm(pos - c[None], axis=1))[:3]
             members = [train[int(i)] for i in nearest]
-        views = random_orientations(members, cfg["vis_random_views"], rng)
+        views = random_orientations(members, cfg["vis_random_views"], cfg["vis_min_views"], rng)
         cat = {k: torch.cat([e[k][a] for e, a in zip(eff, active)], 0) for k in KEYS}
         imp = torch.zeros(cat["means"].shape[0], device=ct.device)
         for cam in views:
@@ -414,6 +420,7 @@ DEFAULTS = {
     "smooth_s": 0.2,
     "vis_threshold": 0.02,
     "vis_random_views": 2,
+    "vis_min_views": 32,
     "finetune_steps": 1000,
     "candidates": [4.0, 6.0, 8.0, 11.0, 15.0, 20.0, 27.0, 36.0, 48.0, 64.0],
     "selection_views": 32,
@@ -476,7 +483,7 @@ def main() -> None:
     meta = {
         "method": "lodge",
         "seed": args.seed,
-        "config": {k: cfg[k] for k in ("levels", "gamma", "smooth_s", "vis_threshold", "vis_random_views", "finetune_steps", "pseudo_frac", "lrs")},
+        "config": {k: cfg[k] for k in ("levels", "gamma", "smooth_s", "vis_threshold", "vis_random_views", "vis_min_views", "finetune_steps", "pseudo_frac", "lrs")},
         "thresholds": thresholds,
         "threshold_search": trace,
         "level_sizes": [L.n for L in levels],

@@ -5,13 +5,14 @@ Builds a long synthetic street canyon twice:
 * the *true* scene: dense anisotropic surface Gaussians carrying a procedural
   facade/road/object texture.  Image targets are 3x3-supersampled renders of it.
 * the *base* reconstruction: the same surfaces at half the density with
-  box-averaged colours and small geometric jitter.  This plays the role of the
+  box-averaged colours and small geometric jitter, then optimised on the
+  training images (L1 + D-SSIM, no densification).  This plays the role of the
   trained full 3DGS model that LOD methods start from and is public.
 
 Running ``python -m eval.test.world --build`` writes the public dataset to
 ``data/lodge_city`` and the hidden test cameras/targets to
-``eval/test/hidden_set.npz``.  The hidden evaluator imports this module only to
-regenerate the base reconstruction for its fixed full-representation baseline.
+``eval/test/hidden_set.npz`` (which also keeps the evaluator's own copy of the
+trained base reconstruction for the fixed full-representation baseline).
 """
 
 from __future__ import annotations
@@ -44,6 +45,7 @@ FULL_CONFIG = {
     "off_path_views": 30,
     "posts_every": 15.0,
     "n_cars": 14,
+    "base_train_steps": 5000,
 }
 
 SMOKE_CONFIG = dict(FULL_CONFIG)
@@ -62,6 +64,7 @@ SMOKE_CONFIG.update(
         "fly_val": [18.0, 26.0, 0.5, -1.3],
         "off_path_views": 6,
         "n_cars": 3,
+        "base_train_steps": 100,
     }
 )
 
@@ -449,6 +452,62 @@ def camera_sets(cfg: dict) -> dict:
 # --------------------------------------------------------------------------
 
 
+def train_base(scene: dict, cams: list, images: np.ndarray, steps: int, device) -> dict:
+    """Optimise the base reconstruction on the training images (3DGS-style, no densification).
+
+    This makes the public full representation a converged model of the
+    training views, as in the paper, instead of a raw geometric downsample.
+    """
+    import torch
+    import torch.nn.functional as F
+
+    from eval.test.render import render_gaussians
+
+    torch.manual_seed(0)
+    rng = np.random.default_rng(WORLD_SEED + 3)
+    t = {k: torch.as_tensor(v, device=device) for k, v in scene.items()}
+    means = torch.nn.Parameter(t["means"].clone())
+    log_s = torch.nn.Parameter(torch.log(t["scales"]))
+    quats = torch.nn.Parameter(t["quats"].clone())
+    op = torch.nn.Parameter(torch.logit(t["opacities"].clamp(1e-4, 1 - 1e-4)))
+    col = torch.nn.Parameter(torch.logit(t["colors"].clamp(1e-3, 1 - 1e-3)))
+    opt = torch.optim.Adam(
+        [{"params": [means], "lr": 1e-4}, {"params": [log_s], "lr": 5e-3}, {"params": [quats], "lr": 1e-3},
+         {"params": [op], "lr": 2.5e-2}, {"params": [col], "lr": 5e-3}], eps=1e-15)
+    target = torch.as_tensor(images, device=device).float() / 255.0
+    x = torch.arange(11, dtype=torch.float32, device=device) - 5.0
+    g = torch.exp(-(x * x) / 4.5)
+    g = g / g.sum()
+    win = (g[:, None] * g[None, :]).expand(3, 1, 11, 11).contiguous()
+
+    def dssim(a, b):
+        a = a.permute(2, 0, 1)[None]
+        b = b.permute(2, 0, 1)[None]
+        ma, mb = F.conv2d(a, win, padding=5, groups=3), F.conv2d(b, win, padding=5, groups=3)
+        saa = F.conv2d(a * a, win, padding=5, groups=3) - ma * ma
+        sbb = F.conv2d(b * b, win, padding=5, groups=3) - mb * mb
+        sab = F.conv2d(a * b, win, padding=5, groups=3) - ma * mb
+        s = ((2 * ma * mb + 1e-4) * (2 * sab + 9e-4)) / ((ma * ma + mb * mb + 1e-4) * (saa + sbb + 9e-4))
+        return 1.0 - s.mean()
+
+    for step in range(steps):
+        i = int(rng.integers(len(cams)))
+        out = render_gaussians(means, torch.exp(log_s), quats, torch.sigmoid(op), torch.sigmoid(col), cams[i])
+        loss = 0.8 * torch.abs(out["image"] - target[i]).mean() + 0.2 * dssim(out["image"], target[i])
+        opt.zero_grad(set_to_none=True)
+        loss.backward()
+        opt.step()
+        if step % 500 == 0 or step == steps - 1:
+            print(f"[world] base training step {step}: loss {float(loss):.4f}", flush=True)
+    return {
+        "means": means.detach().cpu().numpy().astype(np.float32),
+        "scales": torch.exp(log_s).detach().cpu().numpy().astype(np.float32),
+        "quats": quats.detach().cpu().numpy().astype(np.float32),
+        "opacities": torch.sigmoid(op).detach().cpu().numpy().astype(np.float32),
+        "colors": torch.sigmoid(col).detach().cpu().numpy().astype(np.float32),
+    }
+
+
 def build(cfg: dict, data_dir: Path, hidden_path: Path) -> None:
     import torch
 
@@ -474,6 +533,23 @@ def build(cfg: dict, data_dir: Path, hidden_path: Path) -> None:
     for key, cams in sets.items():
         images[key] = render_set(cams)
         print(f"[world] rendered {key}: {len(cams)} views", flush=True)
+    del gt
+    train_cams = [Camera(np.asarray(c["eye"]), c["yaw"], c["pitch"], cfg["focal"], cfg["width"], cfg["height"]) for c in sets["train"]]
+    from eval.test.render import psnr_u8, render_gaussians
+
+    def val_psnr(scene: dict) -> float:
+        t = {k: torch.as_tensor(v, device=device) for k, v in scene.items()}
+        vals = []
+        for c, img in zip(sets["val_on_path"], images["val_on_path"]):
+            cam = Camera(np.asarray(c["eye"]), c["yaw"], c["pitch"], cfg["focal"], cfg["width"], cfg["height"])
+            with torch.no_grad():
+                out = render_gaussians(t["means"], t["scales"], t["quats"], t["opacities"], t["colors"], cam)
+            vals.append(psnr_u8(to_uint8(out["image"]), img))
+        return float(np.mean(vals))
+
+    before = val_psnr(base_scene)
+    base_scene = train_base(base_scene, train_cams, images["train"], cfg["base_train_steps"], device)
+    print(f"[world] base reconstruction val PSNR: init {before:.3f} dB -> trained {val_psnr(base_scene):.3f} dB", flush=True)
 
     data_dir.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(data_dir / "base_gaussians.npz", **base_scene)
@@ -487,6 +563,8 @@ def build(cfg: dict, data_dir: Path, hidden_path: Path) -> None:
     np.savez_compressed(data_dir / "images.npz", **{k: v for k, v in images.items() if not k.startswith("test_")})
 
     hidden = {"world_config": np.array(json.dumps(cfg))}
+    for k, v in base_scene.items():
+        hidden[f"full_{k}"] = v
     for key in ("test_on_path", "test_flythrough", "test_off_path"):
         cams = sets[key]
         hidden[f"{key}_eye"] = np.array([c["eye"] for c in cams], dtype=np.float64)
