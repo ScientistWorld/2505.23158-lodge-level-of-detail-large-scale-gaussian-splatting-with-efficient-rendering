@@ -1,2 +1,8 @@
-action: done
-notes: "Audit complete: genuine training gains exceed seed noise, but public answers, trusted costs, mutable comparisons and missing results produce paying shortcuts; see REDTEAM.md."
+# Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends.
+action: pending
+gpus: 0
+test: false
+milestone: secondary_claims
+notes: ""
