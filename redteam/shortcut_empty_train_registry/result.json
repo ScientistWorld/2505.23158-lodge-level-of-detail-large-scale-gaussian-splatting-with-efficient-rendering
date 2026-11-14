@@ -1,0 +1,35 @@
+{
+  "case": "shortcut_empty_train_registry",
+  "candidate_source_sha256": "f8b6386602a717e778bae367ce52aba998359c9ac74c4c4495afb4bbd944f7d2",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.4657989440020174
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.5160678469692357
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.4654885519994423,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "artifact_configs": {
+    "nearest_chunk": {},
+    "lodge": {},
+    "full_representation": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lod_dynamic": {}
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

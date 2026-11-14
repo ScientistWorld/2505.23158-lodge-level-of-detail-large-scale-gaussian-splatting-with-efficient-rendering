@@ -8,7 +8,7 @@
     "psnr": 27.737829356026275,
     "loaded": 617.8,
     "visible": 516.0,
-    "build_seconds": 34.39671348000411
+    "build_seconds": 27.525870438024867
   },
   {
     "thresholds": [
@@ -19,7 +19,7 @@
     "psnr": 26.24977759032917,
     "loaded": 520.6,
     "visible": 424.4,
-    "build_seconds": 27.5945071640308
+    "build_seconds": 22.122693600016646
   },
   {
     "thresholds": [
@@ -30,7 +30,7 @@
     "psnr": 22.581610509667605,
     "loaded": 265.8,
     "visible": 195.4,
-    "build_seconds": 27.886591618007515
+    "build_seconds": 22.48786980600562
   },
   {
     "thresholds": [
@@ -41,7 +41,7 @@
     "psnr": 26.837637993551066,
     "loaded": 587.7,
     "visible": 478.2,
-    "build_seconds": 31.00683712004684
+    "build_seconds": 21.905010998016223
   },
   {
     "thresholds": [
@@ -52,7 +52,7 @@
     "psnr": 23.41924436226903,
     "loaded": 323.2,
     "visible": 258.4,
-    "build_seconds": 33.669361806008965
+    "build_seconds": 21.878873494977597
   },
   {
     "thresholds": [
@@ -63,6 +63,6 @@
     "psnr": 23.344040962250645,
     "loaded": 336.2,
     "visible": 273.0,
-    "build_seconds": 32.901185460039414
+    "build_seconds": 24.508576613967307
   }
 ]

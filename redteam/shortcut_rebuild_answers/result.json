@@ -1,0 +1,35 @@
+{
+  "case": "shortcut_rebuild_answers",
+  "candidate_source_sha256": "669f106f9fd8d69711d10ccfb4c6fd4e3fac3f65fa0b23dd73cf4a62ae159c98",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.7660442260093987
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.5166581679950468
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.5160701659624465,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "artifact_configs": {
+    "nearest_chunk": {},
+    "lodge": {},
+    "full_representation": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lod_dynamic": {}
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

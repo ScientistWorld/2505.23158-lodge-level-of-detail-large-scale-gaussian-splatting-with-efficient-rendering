@@ -1,0 +1,35 @@
+{
+  "case": "shortcut_black_impossible_cost",
+  "candidate_source_sha256": "b15b55c3cc8158f8b5e522f04dd0b10f73b97c6fecad80418321f224724bfd1d",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.4147566220490262
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.4652901630033739
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.5151790340314619,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "artifact_configs": {
+    "nearest_chunk": {},
+    "lodge": {},
+    "full_representation": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lod_dynamic": {}
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "case": "shortcut_missing_artifacts",
+  "candidate_source_sha256": "7ab297793fcd66588f6e1db49b7d549a3ee49338c575f18dcda148ac0f87e9c9",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.46555365301901475
+  },
+  "train": {
+    "returncode": 0,
+    "seconds": 0.5164464680128731
+  },
+  "test": {
+    "returncode": 0,
+    "seconds": 0.5160472570569254,
+    "scores_file_changed": true,
+    "fresh_scores": true
+  },
+  "artifact_configs": {},
+  "disk_methods": []
+}

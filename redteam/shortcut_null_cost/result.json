@@ -1,0 +1,36 @@
+{
+  "case": "shortcut_null_cost",
+  "candidate_source_sha256": "8be87717807e941e304e465d0d2774f6243e8ee242bd13b33e4a2b33c170b665",
+  "candidate": {
+    "returncode": 0,
+    "seconds": 0.515599035017658
+  },
+  "train": {
+    "returncode": 1,
+    "seconds": 0.5161991279455833
+  },
+  "test": {
+    "returncode": 1,
+    "seconds": 0.5165100289741531,
+    "error_tail": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/user/eval/test/evaluate.py\", line 150, in <module>\n    main()\n  File \"/home/user/eval/test/evaluate.py\", line 143, in main\n    scores = build_scores(args)\n             ^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/test/evaluate.py\", line 115, in build_scores\n    results[method_name] = evaluate_run(run_dir, args.data_dir, VIEW_INDICES)\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/test/evaluate.py\", line 88, in evaluate_run\n    loaded = [float(stats[i][\"loaded\"]) for i in view_indices]\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/eval/test/evaluate.py\", line 88, in <listcomp>\n    loaded = [float(stats[i][\"loaded\"]) for i in view_indices]\n              ^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: float() argument must be a string or a real number, not 'NoneType'\n",
+    "scores_file_changed": false,
+    "fresh_scores": false
+  },
+  "artifact_configs": {
+    "nearest_chunk": {},
+    "lodge": {},
+    "full_representation": {
+      "method": "full_representation",
+      "level_gaussians": [
+        848
+      ]
+    },
+    "lod_dynamic": {}
+  },
+  "disk_methods": [
+    "full_representation",
+    "lod_dynamic",
+    "lodge",
+    "nearest_chunk"
+  ]
+}
