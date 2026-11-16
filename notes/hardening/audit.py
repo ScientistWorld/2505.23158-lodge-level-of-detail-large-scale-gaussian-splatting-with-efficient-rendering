@@ -65,7 +65,7 @@ class Ctx:
         self.reps = self.work / "reps"
         self.out = (self.work / "notes") if smoke else NOTES
         self.steps = 20 if smoke else 1000
-        self.tune_steps = 10 if smoke else 150
+        self.tune_steps = 10 if smoke else 400
         self.cache = self.work / "threshold_cache.json"
         for p in (self.work, self.reps, self.out):
             p.mkdir(parents=True, exist_ok=True)
@@ -82,6 +82,56 @@ class Ctx:
 
 
 # --------------------------------------------------------------------------
+
+
+def check_rasterizer() -> None:
+    """Compare the vectorised rasteriser with a straightforward per-tile loop."""
+    import torch
+
+    from data import gsrender as R
+
+    def loop_raster(mean2d, conic, opac, colors, depth, radius, width, height, background):
+        ntx, nty = width // 16, height // 16
+        bg = torch.as_tensor(background, dtype=torch.float32, device=mean2d.device)
+        img = bg.expand(height, width, 3).clone()
+        order = torch.sort(depth, stable=True).indices
+        for ty in range(nty):
+            for tx in range(ntx):
+                x0, y0 = tx * 16, ty * 16
+                u, v, r = mean2d[order, 0], mean2d[order, 1], radius[order]
+                m = (torch.clamp(torch.floor((u - r) / 16), 0, ntx - 1) <= tx) & (torch.clamp(torch.floor((u + r) / 16), 0, ntx - 1) >= tx) & \
+                    (torch.clamp(torch.floor((v - r) / 16), 0, nty - 1) <= ty) & (torch.clamp(torch.floor((v + r) / 16), 0, nty - 1) >= ty)
+                g = order[m]
+                yy, xx = torch.meshgrid(torch.arange(16, device=mean2d.device) + y0 + 0.5, torch.arange(16, device=mean2d.device) + x0 + 0.5, indexing="ij")
+                T = torch.ones(16, 16, device=mean2d.device)
+                acc = torch.zeros(16, 16, 3, device=mean2d.device)
+                for j in g.tolist():
+                    dx, dy = xx - mean2d[j, 0], yy - mean2d[j, 1]
+                    p = torch.clamp(-0.5 * (conic[j, 0] * dx * dx + conic[j, 2] * dy * dy) - conic[j, 1] * dx * dy, max=0)
+                    a = torch.clamp(opac[j] * torch.exp(p), max=R.ALPHA_MAX)
+                    a = torch.where(a >= R.ALPHA_MIN, a, torch.zeros_like(a))
+                    a = torch.where(T > R.T_MIN, a, torch.zeros_like(a)) if False else a
+                    w = a * T * (T > R.T_MIN).float()
+                    acc += w[..., None] * colors[j]
+                    T = T * (1 - a)
+                img[y0:y0 + 16, x0:x0 + 16] = acc + T[..., None] * bg
+        return img
+
+    g = torch.Generator().manual_seed(0)
+    n = 400
+    means = torch.rand(n, 3, generator=g) * torch.tensor([8.0, 6.0, 3.0]) + torch.tensor([3.0, -3.0, 0.0])
+    scales = torch.rand(n, 3, generator=g) * 0.3 + 0.01
+    quats = torch.randn(n, 4, generator=g)
+    opac = torch.rand(n, generator=g) * 0.9 + 0.05
+    cols = torch.rand(n, 3, generator=g)
+    cam = R.Camera(np.array([0.0, 0.0, 1.5]), 0.1, 0.05, 40.0, 64, 48)
+    proj = R.project_gaussians(means, scales, quats, cam)
+    vec, _, _ = R._rasterize(proj["mean2d"], proj["conic"], opac * proj["comp"], cols, proj["depth"], proj["radius"], 64, 48, R.BACKGROUND, False)
+    ref = loop_raster(proj["mean2d"], proj["conic"], opac * proj["comp"], cols, proj["depth"], proj["radius"], 64, 48, R.BACKGROUND)
+    err = float((vec - ref).abs().max())
+    log(f"rasteriser self-check: max abs difference vs per-tile loop = {err:.2e}")
+    if err > 1e-4:
+        raise RuntimeError("vectorised rasteriser disagrees with the reference loop")
 
 
 def stage_world(ctx: Ctx) -> None:
@@ -132,16 +182,11 @@ def stage_tune(ctx: Ctx) -> dict:
         })
         log(f"tune {tag}: {rows[-1]['val_psnr']} loaded={rows[-1]['val_loaded']} visible={rows[-1]['val_visible']}")
 
-    def feasible(r):
-        return r["val_psnr"]["trajectory_views"] is not None and r["val_psnr"]["trajectory_views"] >= r["val_full_psnr"]["trajectory_views"] - 0.3
-
-    cands = [r for r in rows if feasible(r)]
-    if cands:
-        best = min(cands, key=lambda r: r["val_loaded"] + r["val_visible"])
-        rule = "lowest loaded+visible among settings within 0.3 dB of the full representation (val trajectory views)"
-    else:
-        best = max(rows, key=lambda r: r["val_psnr"]["trajectory_views"] or -1)
-        rule = "no setting within 0.3 dB; highest val trajectory PSNR"
+    valid = [r for r in rows if r["val_psnr"]["trajectory_views"] is not None]
+    top = max(r["val_psnr"]["trajectory_views"] for r in valid)
+    cands = [r for r in valid if r["val_psnr"]["trajectory_views"] >= top - 0.5]
+    best = min(cands, key=lambda r: r["val_loaded"] + r["val_visible"])
+    rule = "lowest val loaded+visible among settings within 0.5 dB of the best val trajectory PSNR of the grid"
     res = {"grid": rows, "chosen": {"gamma": best["gamma"], "smooth_s": best["smooth_s"]}, "rule": rule, "tune_steps": ctx.tune_steps}
     path.write_text(json.dumps(res, indent=1))
     log(f"chosen {res['chosen']}")
@@ -345,6 +390,7 @@ def main() -> None:
 
     log(f"torch {torch.__version__} cuda={torch.cuda.is_available()} " + (torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu"))
     stages = args.stages.split(",")
+    check_rasterizer()
     if "world" in stages:
         stage_world(ctx)
     if "tune" in stages:

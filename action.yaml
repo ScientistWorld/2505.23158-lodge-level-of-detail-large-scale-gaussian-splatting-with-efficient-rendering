@@ -3,4 +3,4 @@ action: submit
 gpus: 1
 test: false
 milestone: secondary_claims
-notes: "Full hardening audit: build street world + trained base, tune gamma/s on val, LODGE reference x3 seeds, variants, rules, shortcuts through hidden test, final scores."
+notes: "Full hardening audit (vectorised rasteriser, finer base world): rasteriser self-check, world build + trained base, tune gamma/s, LODGE x3 seeds, variants, rules, shortcuts via hidden test, final scores."

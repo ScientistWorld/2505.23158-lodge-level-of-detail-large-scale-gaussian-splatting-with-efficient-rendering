@@ -192,7 +192,17 @@ def project_gaussians(means: torch.Tensor, scales: torch.Tensor, quats: torch.Te
 # --------------------------------------------------------------------------
 
 
+MAX_PAIRS_PER_GROUP = 1 << 17
+
+
 def _rasterize(mean2d, conic, opac, colors, depth, radius, width, height, background, return_importance):
+    """Vectorised tile rasteriser.
+
+    Gaussian/tile pairs are sorted by tile and, within a tile, front to back.
+    Tiles are processed in groups of at most ``MAX_PAIRS_PER_GROUP`` pairs; the
+    per-tile exclusive transmittance is a segmented cumulative sum of
+    log(1 - alpha) in float64 (identical compositing to a per-tile loop).
+    """
     device = mean2d.device
     ntx, nty = width // TILE, height // TILE
     ntiles = ntx * nty
@@ -222,39 +232,70 @@ def _rasterize(mean2d, conic, opac, colors, depth, radius, width, height, backgr
     tile = (ty0[gid] + torch.div(k, wt_r, rounding_mode="floor")) * ntx + (tx0[gid] + k % wt_r)
     srt = torch.sort(tile, stable=True)
     gid = gid[srt.indices]
-    counts = torch.bincount(srt.values, minlength=ntiles).tolist()
+    tl = srt.values
+    counts = torch.bincount(tl, minlength=ntiles)
+    starts = torch.cumsum(counts, 0) - counts
+    counts_l = counts.tolist()
+    starts_l = starts.tolist()
 
     lin = torch.arange(TILE * TILE, device=device)
     base_x = (lin % TILE).float() + 0.5
     base_y = torch.div(lin, TILE, rounding_mode="floor").float() + 0.5
 
-    tiles = []
-    start = 0
-    bg_tile = bg.expand(TILE * TILE, 3)
+    groups, cur, cur_pairs = [], [], 0
     for t in range(ntiles):
-        c = counts[t]
-        if c == 0:
-            tiles.append(bg_tile)
+        c = counts_l[t]
+        if cur and cur_pairs + c > MAX_PAIRS_PER_GROUP:
+            groups.append(cur)
+            cur, cur_pairs = [], 0
+        cur.append(t)
+        cur_pairs += c
+    if cur:
+        groups.append(cur)
+
+    out_tiles = []
+    for grp in groups:
+        t0, t1 = grp[0], grp[-1]
+        nt = t1 - t0 + 1
+        p0 = starts_l[t0]
+        p1 = starts_l[t1] + counts_l[t1]
+        if p1 == p0:
+            out_tiles.append(bg.expand(nt, TILE * TILE, 3))
             continue
-        g = gid[start:start + c]
-        start += c
-        ty, tx = divmod(t, ntx)
-        dx = (base_x + tx * TILE)[None, :] - mean2d[g, 0:1]
-        dy = (base_y + ty * TILE)[None, :] - mean2d[g, 1:2]
+        g = gid[p0:p1]
+        tlg = tl[p0:p1]
+        txg = (tlg % ntx).float()
+        tyg = torch.div(tlg, ntx, rounding_mode="floor").float()
+        dx = (base_x[None, :] + txg[:, None] * TILE) - mean2d[g, 0:1]
+        dy = (base_y[None, :] + tyg[:, None] * TILE) - mean2d[g, 1:2]
         cg = conic[g]
         power = -0.5 * (cg[:, 0:1] * dx * dx + cg[:, 2:3] * dy * dy) - cg[:, 1:2] * dx * dy
         power = torch.clamp(power, max=0.0)
         alpha = torch.clamp(opac[g, None] * torch.exp(power), max=ALPHA_MAX)
         alpha = torch.where(alpha >= ALPHA_MIN, alpha, torch.zeros_like(alpha))
-        trans = torch.cumprod(1.0 - alpha, dim=0)
-        t_excl = torch.cat([torch.ones_like(trans[:1]), trans[:-1]], dim=0)
+        la = torch.log1p(-alpha.double())
+        cs = torch.cumsum(la, dim=0)
+        excl = cs - la
+        seg_first = starts[tlg] - p0
+        t_excl = torch.exp(excl - excl[seg_first]).float()
         alive = (t_excl.detach() > T_MIN).to(alpha.dtype)
         w = alpha * t_excl * alive
-        rgb = w.transpose(0, 1) @ colors[g]
-        tiles.append(rgb + trans[-1][:, None] * bg)
+        local = tlg - t0
+        col = colors[g]
+        rgb = torch.stack(
+            [torch.zeros(nt, TILE * TILE, dtype=w.dtype, device=device).index_add(0, local, w * col[:, ch:ch + 1]) for ch in range(3)],
+            dim=-1,
+        )
+        cnt_g = counts[t0:t1 + 1]
+        has = cnt_g > 0
+        first_t = torch.clamp(starts[t0:t1 + 1] - p0, min=0)
+        last_t = torch.clamp(starts[t0:t1 + 1] + cnt_g - 1 - p0, min=0)
+        log_tf = cs[last_t] - excl[first_t]
+        t_final = torch.where(has[:, None], torch.exp(log_tf).float(), torch.ones_like(log_tf, dtype=torch.float32))
+        out_tiles.append(rgb + t_final[..., None] * bg)
         if importance is not None:
             importance.scatter_reduce_(0, g, w.detach().amax(dim=1), reduce="amax", include_self=True)
-    img = torch.stack(tiles, 0).view(nty, ntx, TILE, TILE, 3).permute(0, 2, 1, 3, 4).reshape(height, width, 3)
+    img = torch.cat(out_tiles, 0).view(nty, ntx, TILE, TILE, 3).permute(0, 2, 1, 3, 4).reshape(height, width, 3)
     return img, total, importance
 
 
