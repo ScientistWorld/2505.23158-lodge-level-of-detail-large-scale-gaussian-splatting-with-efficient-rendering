@@ -445,7 +445,6 @@ def main() -> None:
     parser.add_argument("--threshold-cache", type=Path, default=None, help="JSON cache for the deterministic threshold search")
     args = parser.parse_args()
 
-    torch.use_deterministic_algorithms(True, warn_only=True)
     device = default_device()
     cfg = dict(DEFAULTS)
     cfg.update({"levels": args.levels, "gamma": args.gamma, "smooth_s": args.smooth_s, "vis_threshold": args.vis_threshold,

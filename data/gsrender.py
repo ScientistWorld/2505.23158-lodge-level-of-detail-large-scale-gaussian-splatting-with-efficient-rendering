@@ -281,11 +281,8 @@ def _rasterize(mean2d, conic, opac, colors, depth, radius, width, height, backgr
         alive = (t_excl.detach() > T_MIN).to(alpha.dtype)
         w = alpha * t_excl * alive
         local = tlg - t0
-        col = colors[g]
-        rgb = torch.stack(
-            [torch.zeros(nt, TILE * TILE, dtype=w.dtype, device=device).index_add(0, local, w * col[:, ch:ch + 1]) for ch in range(3)],
-            dim=-1,
-        )
+        contrib = (w[:, :, None] * colors[g][:, None, :]).reshape(w.shape[0], TILE * TILE * 3)
+        rgb = torch.zeros(nt, TILE * TILE * 3, dtype=w.dtype, device=device).index_add(0, local, contrib).view(nt, TILE * TILE, 3)
         cnt_g = counts[t0:t1 + 1]
         has = cnt_g > 0
         first_t = torch.clamp(starts[t0:t1 + 1] - p0, min=0)

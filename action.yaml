@@ -1,6 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 action: submit
 gpus: 1
-test: false
+test: true
 milestone: secondary_claims
-notes: "Full hardening audit (vectorised rasteriser, finer base world): rasteriser self-check, world build + trained base, tune gamma/s, LODGE x3 seeds, variants, rules, shortcuts via hidden test, final scores."
+notes: "Profile the vectorised renderer on the built world to plan the audit job."
