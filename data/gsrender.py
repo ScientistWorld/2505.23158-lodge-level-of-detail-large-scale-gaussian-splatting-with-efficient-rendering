@@ -274,7 +274,8 @@ def _rasterize(mean2d, conic, opac, colors, depth, radius, width, height, backgr
         alpha = torch.clamp(opac[g, None] * torch.exp(power), max=ALPHA_MAX)
         alpha = torch.where(alpha >= ALPHA_MIN, alpha, torch.zeros_like(alpha))
         la = torch.log1p(-alpha.double())
-        cs = torch.cumsum(la, dim=0)
+        # scan along the contiguous (inner) dimension: far faster than an outer-dim scan
+        cs = torch.cumsum(la.t().contiguous(), dim=1).t()
         excl = cs - la
         seg_first = starts[tlg] - p0
         t_excl = torch.exp(excl - excl[seg_first]).float()
