@@ -286,8 +286,9 @@ def _rasterize(mean2d, conic, opac, colors, depth, radius, width, height, backgr
         rgb = torch.zeros(nt, TILE * TILE * 3, dtype=w.dtype, device=device).index_add(0, local, contrib).view(nt, TILE * TILE, 3)
         cnt_g = counts[t0:t1 + 1]
         has = cnt_g > 0
-        first_t = torch.clamp(starts[t0:t1 + 1] - p0, min=0)
-        last_t = torch.clamp(starts[t0:t1 + 1] + cnt_g - 1 - p0, min=0)
+        npair = p1 - p0
+        first_t = torch.clamp(starts[t0:t1 + 1] - p0, min=0, max=npair - 1)
+        last_t = torch.clamp(starts[t0:t1 + 1] + cnt_g - 1 - p0, min=0, max=npair - 1)
         log_tf = cs[last_t] - excl[first_t]
         t_final = torch.where(has[:, None], torch.exp(log_tf).float(), torch.ones_like(log_tf, dtype=torch.float32))
         out_tiles.append(rgb + t_final[..., None] * bg)

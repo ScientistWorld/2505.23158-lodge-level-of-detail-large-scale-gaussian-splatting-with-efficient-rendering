@@ -124,11 +124,18 @@ def check_rasterizer() -> None:
     quats = torch.randn(n, 4, generator=g)
     opac = torch.rand(n, generator=g) * 0.9 + 0.05
     cols = torch.rand(n, 3, generator=g)
-    cam = R.Camera(np.array([0.0, 0.0, 1.5]), 0.1, 0.05, 40.0, 64, 48)
-    proj = R.project_gaussians(means, scales, quats, cam)
-    vec, _, _ = R._rasterize(proj["mean2d"], proj["conic"], opac * proj["comp"], cols, proj["depth"], proj["radius"], 64, 48, R.BACKGROUND, False)
-    ref = loop_raster(proj["mean2d"], proj["conic"], opac * proj["comp"], cols, proj["depth"], proj["radius"], 64, 48, R.BACKGROUND)
-    err = float((vec - ref).abs().max())
+    err = 0.0
+    dev = R.default_device()
+    for yaw, pitch, mp in ((0.1, 0.05, 1 << 17), (-0.75, 0.3, 1 << 17), (-0.75, 0.3, 300), (0.4, -0.2, 50)):
+        R.MAX_PAIRS_PER_GROUP = mp
+        cam = R.Camera(np.array([0.0, 0.0, 1.5]), yaw, pitch, 40.0, 64, 48)
+        proj = R.project_gaussians(means.to(dev), scales.to(dev), quats.to(dev), cam)
+        m = proj["valid"]
+        args_ = (proj["mean2d"][m], proj["conic"][m], (opac.to(dev) * proj["comp"])[m], cols.to(dev)[m], proj["depth"][m], proj["radius"][m])
+        vec, _, _ = R._rasterize(*args_, 64, 48, R.BACKGROUND, False)
+        ref = loop_raster(*[a.cpu() for a in args_], 64, 48, R.BACKGROUND)
+        err = max(err, float((vec.cpu() - ref).abs().max()))
+    R.MAX_PAIRS_PER_GROUP = 1 << 17
     log(f"rasteriser self-check: max abs difference vs per-tile loop = {err:.2e}")
     if err > 1e-4:
         raise RuntimeError("vectorised rasteriser disagrees with the reference loop")
