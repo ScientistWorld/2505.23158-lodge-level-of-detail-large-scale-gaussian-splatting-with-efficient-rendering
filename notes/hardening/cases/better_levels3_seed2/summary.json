@@ -1,0 +1,234 @@
+{
+ "methods": {
+  "lodge": {
+   "passed": false,
+   "reason": "quality: off_path_views PSNR 30.866 below floor 31.758",
+   "measured": {
+    "trajectory_views": {
+     "psnr": 40.982090196175825,
+     "ssim": 0.9919924239384944,
+     "worst_view_psnr": 36.13489553601235,
+     "loaded_gaussians": 138102.14285714287,
+     "visible_gaussians": 29036.77142857143,
+     "peak_loaded_gaussians": 161823.0,
+     "tile_pairs": 56869.514285714286
+    },
+    "flythrough": {
+     "psnr": 36.94549657196076,
+     "ssim": 0.9873559936270706,
+     "worst_view_psnr": 30.326172467988826,
+     "loaded_gaussians": 142258.16049382716,
+     "visible_gaussians": 62495.32098765432,
+     "peak_loaded_gaussians": 159228.0,
+     "tile_pairs": 115205.07407407407,
+     "transition_psnr": 33.252882680348186
+    },
+    "off_path_views": {
+     "psnr": 30.86570872780876,
+     "ssim": 0.937972072206703,
+     "worst_view_psnr": 21.358520300792545,
+     "loaded_gaussians": 137252.46666666667,
+     "visible_gaussians": 25346.966666666667,
+     "peak_loaded_gaussians": 161823.0,
+     "tile_pairs": 50214.1
+    }
+   }
+  }
+ },
+ "results": {
+  "trajectory_views": {
+   "full_representation": {
+    "psnr": 41.18095990888739,
+    "loaded_gaussians": 247095.0,
+    "visible_gaussians": 50817.171428571426,
+    "ssim": 0.9923005160954445,
+    "worst_view_psnr": 36.36963969756905,
+    "peak_loaded_gaussians": 247095.0,
+    "tile_pairs": 87596.94285714286
+   },
+   "lodge": {
+    "psnr": 0.0,
+    "loaded_gaussians": 988380.0,
+    "visible_gaussians": 988380.0,
+    "ssim": 0.0,
+    "worst_view_psnr": 0.0,
+    "peak_loaded_gaussians": 988380.0,
+    "tile_pairs": 63256320.0
+   }
+  },
+  "flythrough": {
+   "full_representation": {
+    "transition_psnr": 33.24500330577183,
+    "psnr": 37.49844006503614,
+    "ssim": 0.9880731623818773,
+    "loaded_gaussians": 247095.0,
+    "visible_gaussians": 135381.22222222222,
+    "peak_loaded_gaussians": 247095.0
+   },
+   "lodge": {
+    "transition_psnr": 0.0,
+    "psnr": 0.0,
+    "ssim": 0.0,
+    "loaded_gaussians": 988380.0,
+    "visible_gaussians": 988380.0,
+    "peak_loaded_gaussians": 988380.0
+   }
+  },
+  "off_path_views": {
+   "full_representation": {
+    "psnr": 33.25835753543596,
+    "loaded_gaussians": 247095.0,
+    "visible_gaussians": 48171.73333333333,
+    "ssim": 0.9491894409532062,
+    "worst_view_psnr": 24.6568969223954,
+    "peak_loaded_gaussians": 247095.0,
+    "tile_pairs": 85470.9
+   },
+   "lodge": {
+    "psnr": 0.0,
+    "loaded_gaussians": 988380.0,
+    "visible_gaussians": 988380.0,
+    "ssim": 0.0,
+    "worst_view_psnr": 0.0,
+    "peak_loaded_gaussians": 988380.0,
+    "tile_pairs": 63256320.0
+   }
+  }
+ },
+ "method_info": {
+  "method": "lodge",
+  "seed": 2,
+  "config": {
+   "levels": 3,
+   "gamma": 0.03,
+   "smooth_s": 0.2,
+   "vis_threshold": 0.02,
+   "vis_random_views": 2,
+   "vis_min_views": 32,
+   "finetune_steps": 1000,
+   "pseudo_frac": 0.0,
+   "lrs": {
+    "means": 0.0002,
+    "scales": 0.005,
+    "quats": 0.001,
+    "opacities": 0.025,
+    "colors": 0.005
+   }
+  },
+  "thresholds": [
+   27.0,
+   36.0,
+   48.0
+  ],
+  "threshold_search": [
+   {
+    "thresholds": [
+     4.0
+    ],
+    "cost": 1373.148095238095
+   },
+   {
+    "thresholds": [
+     6.0
+    ],
+    "cost": 1363.8580952380955
+   },
+   {
+    "thresholds": [
+     8.0
+    ],
+    "cost": 1340.8285714285714
+   },
+   {
+    "thresholds": [
+     11.0
+    ],
+    "cost": 1275.7871428571432
+   },
+   {
+    "thresholds": [
+     15.0
+    ],
+    "cost": 1078.4680952380952
+   },
+   {
+    "thresholds": [
+     20.0
+    ],
+    "cost": 853.5538095238096
+   },
+   {
+    "thresholds": [
+     27.0
+    ],
+    "cost": 773.5752380952381
+   },
+   {
+    "thresholds": [
+     36.0
+    ],
+    "cost": 870.8280952380951
+   },
+   {
+    "thresholds": [
+     48.0
+    ],
+    "cost": 1016.0666666666667
+   },
+   {
+    "thresholds": [
+     64.0
+    ],
+    "cost": 1162.1423809523808
+   },
+   {
+    "thresholds": [
+     27.0,
+     36.0
+    ],
+    "cost": 740.7514285714285
+   },
+   {
+    "thresholds": [
+     27.0,
+     48.0
+    ],
+    "cost": 745.9719047619047
+   },
+   {
+    "thresholds": [
+     27.0,
+     64.0
+    ],
+    "cost": 756.3933333333333
+   },
+   {
+    "thresholds": [
+     27.0,
+     36.0,
+     48.0
+    ],
+    "cost": 737.4938095238095
+   },
+   {
+    "thresholds": [
+     27.0,
+     36.0,
+     64.0
+    ],
+    "cost": 738.6419047619048
+   }
+  ],
+  "level_sizes": [
+   247095,
+   39949,
+   12079,
+   3332
+  ],
+  "n_chunks": 9,
+  "pool": 278168,
+  "mean_chunk_size": 110685.66666666667,
+  "seconds": 221.95141625404358,
+  "note": "Informational only; the evaluator recomputes every scored number from representation.npz."
+ }
+}
