@@ -174,8 +174,11 @@ def stage_tune(ctx: Ctx) -> dict:
     for g, s in grid:
         tag = f"tune_g{g}_s{s}"
         out = ctx.reps / tag
-        ctx.method(out, "--gamma", str(g), "--smooth-s", str(s), "--finetune-steps", str(ctx.tune_steps), "--seed", "0")
+        ctx.method(out, "--gamma", str(g), "--smooth-s", str(s), "--finetune-steps", str(ctx.tune_steps), "--seed", "0",
+                   ablation=ctx.reps / f"{tag}_ablation")
         sc = eval_train_on(ctx, out, tag)
+        dyn = eval_train_on(ctx, ctx.reps / f"{tag}_ablation" / "lod_dynamic", tag + "_dynamic")
+        dyn_m = dyn["_meta"]["status"]["lodge"].get("measured", {})
         st = sc["_meta"]["status"]["lodge"]
         m = st.get("measured", {})
         base = {e: sc["experiments"][e]["results"]["full_representation"] for e in sc["experiments"]}
@@ -185,9 +188,11 @@ def stage_tune(ctx: Ctx) -> dict:
             "val_full_psnr": {e: base[e]["psnr"] for e in base},
             "val_loaded": m.get("trajectory_views", {}).get("loaded_gaussians"),
             "val_visible": m.get("trajectory_views", {}).get("visible_gaussians"),
+            "val_psnr_dynamic_lod": {e: dyn_m.get(e, {}).get("psnr") for e in base},
+            "val_visible_dynamic_lod": dyn_m.get("trajectory_views", {}).get("visible_gaussians"),
             "method_info": json.loads((out / "method_info.json").read_text()),
         })
-        log(f"tune {tag}: {rows[-1]['val_psnr']} loaded={rows[-1]['val_loaded']} visible={rows[-1]['val_visible']}")
+        log(f"tune {tag}: {rows[-1]['val_psnr']} loaded={rows[-1]['val_loaded']} visible={rows[-1]['val_visible']} dynamic-LOD psnr={rows[-1]['val_psnr_dynamic_lod']}")
 
     valid = [r for r in rows if r["val_psnr"]["trajectory_views"] is not None]
     top = max(r["val_psnr"]["trajectory_views"] for r in valid)
