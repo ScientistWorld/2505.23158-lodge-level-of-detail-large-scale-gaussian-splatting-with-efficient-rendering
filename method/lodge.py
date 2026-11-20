@@ -15,8 +15,8 @@ base reconstruction G0:
    from U(0.7 d_l, 1.3 d_l), and gradients only into G_l.
 3. Training camera positions are clustered with K-means into
    N = 4/d_1 * max_i ||c_i - mean(c)|| chunks (Eq. 5).  Each chunk stores the
-   active set of Eq. (2) evaluated at its centre with depths reduced by the chunk
-   radius (distance to the closest other centre), followed by visibility
+   active set of Eq. (2) evaluated at its centre with depths increased by the
+   chunk radius (distance to the closest other centre), followed by visibility
    filtering with importance computed from the chunk's training positions with
    the original and randomly sampled orientations.
 4. The pool and chunk sets are exported in the benchmark representation format;
@@ -350,7 +350,10 @@ def build_chunks(levels: list[Level], thresholds: list[float], train: list[Camer
     chunks = []
     for j, c in enumerate(centers):
         radius = float(cd[j].min())
-        d = [0.0] + [max(0.0, t - radius) for t in thresholds] + [math.inf]
+        # Depths are offset by the chunk radius so that every camera position in
+        # the chunk gets at least the resolution Eq. (2) would give it (finer
+        # levels extend further; paper Sec. 3 and Table 3 "finer LOD resolutions").
+        d = [0.0] + [t + radius for t in thresholds] + [math.inf]
         ct = torch.as_tensor(c, dtype=torch.float32, device=eff[0]["means"].device)
         active = []
         for l, e in enumerate(eff):
