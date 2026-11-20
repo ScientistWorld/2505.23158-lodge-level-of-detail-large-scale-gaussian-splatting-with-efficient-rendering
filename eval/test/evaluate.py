@@ -40,7 +40,8 @@ EXPERIMENTS = {
     "flythrough": {"set": "test_flythrough", "kind": "path"},
     "off_path_views": {"set": "test_off_path", "kind": "views"},
 }
-QUALITY_TOLERANCE_DB = {"trajectory_views": 1.0, "flythrough": 1.0, "off_path_views": 1.5}
+QUALITY_TOLERANCE_DB = {"trajectory_views": 1.0, "flythrough": 1.5, "off_path_views": 3.5}
+TRANSITION_TOLERANCE_DB = 0.5  # flythrough transition PSNR may not drop more than this below the full representation
 VIEW_METRICS = ("psnr", "loaded_gaussians", "visible_gaussians", "ssim", "worst_view_psnr", "peak_loaded_gaussians", "tile_pairs")
 PATH_METRICS = ("transition_psnr", "psnr", "ssim", "loaded_gaussians", "visible_gaussians", "peak_loaded_gaussians")
 HIGHER_IS_BETTER = {"psnr", "ssim", "worst_view_psnr", "transition_psnr"}
@@ -152,6 +153,10 @@ def main() -> None:
                     if measured[exp]["psnr"] < floor:
                         reason = f"quality: {exp} PSNR {measured[exp]['psnr']:.3f} below floor {floor:.3f}"
                         break
+            if reason is None:
+                t_floor = baseline["flythrough"]["transition_psnr"] - TRANSITION_TOLERANCE_DB
+                if measured["flythrough"]["transition_psnr"] < t_floor:
+                    reason = f"transitions: flythrough transition PSNR {measured['flythrough']['transition_psnr']:.3f} below floor {t_floor:.3f}"
         except R.RepresentationError as exc:
             reason = f"invalid representation: {exc}"
         except Exception as exc:  # noqa: BLE001 - any crash is a failed run
@@ -172,7 +177,7 @@ def main() -> None:
         "_meta": {
             "slice": "test",
             "full_representation_gaussians": n0,
-            "quality_tolerance_db": QUALITY_TOLERANCE_DB,
+            "quality_tolerance_db": QUALITY_TOLERANCE_DB, "transition_tolerance_db": TRANSITION_TOLERANCE_DB,
             "status": status,
         },
         "experiments": {

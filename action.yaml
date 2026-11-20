@@ -3,4 +3,4 @@ action: submit
 gpus: 1
 test: false
 milestone: secondary_claims
-notes: "Full hardening audit with fast inner-dim scan renderer: tune gamma/s, LODGE x3 seeds, variants, rules, shortcuts via hidden test, final scores."
+notes: "Audit rerun with deterministic chunking + transition gate: reference x3 seeds, variants, trade-off probes, rules, shortcuts via hidden test, final scores."

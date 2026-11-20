@@ -224,6 +224,9 @@ def stage_variants(ctx: Ctx) -> None:
         ctx.method(ctx.reps / f"better_levels3_seed{seed}", *base, *steps, "--levels", "3", "--seed", str(seed))
         ctx.method(ctx.reps / f"better_pseudo_seed{seed}", *base, *steps, "--pseudo-frac", "0.5", "--seed", str(seed))
     ctx.method(ctx.reps / "weaker_no_finetune", *base, "--finetune-steps", "0", "--seed", "0")
+    gamma = float(json.loads((ctx.out / "tuning.json").read_text())["chosen"]["gamma"])
+    for g in (2 * gamma, 10 * gamma / 3):
+        ctx.method(ctx.reps / f"tradeoff_gamma{g:.2f}", "--gamma", f"{g:.4f}", "--smooth-s", base[3], *steps, "--seed", "0")
     info = json.loads((ctx.reps / "reference_seed0" / "method_info.json").read_text())
     t = info["thresholds"]
     manual = [str(round(t[0] * 1.5, 1)), str(round(t[-1] * 2.5, 1))]
@@ -294,6 +297,8 @@ def stage_cases(ctx: Ctx) -> None:
     for v in ("weaker_no_finetune", "weaker_manual_thresholds", "rule_distance_decimation", "rule_distance_cull", "full_as_method"):
         if (ctx.reps / v).exists():
             cases[v] = single(v)
+    for d in sorted(ctx.reps.glob("tradeoff_gamma*")):
+        cases[d.name] = single(d.name)
     cases["ablation_nearest_chunk"] = {"lodge": ctx.reps / "ablation_seed0" / "nearest_chunk" / "representation.npz"}
     cases["ablation_lod_dynamic"] = {"lodge": ctx.reps / "ablation_seed0" / "lod_dynamic" / "representation.npz"}
 

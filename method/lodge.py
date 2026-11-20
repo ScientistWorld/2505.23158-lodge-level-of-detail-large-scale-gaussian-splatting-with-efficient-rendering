@@ -301,25 +301,34 @@ def select_thresholds(g0: Level, cams: list[Camera], cost_cams: list[Camera], cf
 # --------------------------------------------------------------------------
 
 
-def kmeans(points: np.ndarray, k: int, seed: int, iters: int = 100) -> tuple[np.ndarray, np.ndarray]:
-    rng = np.random.default_rng(seed)
-    centers = [points[int(rng.integers(len(points)))]]
-    for _ in range(1, k):
-        d2 = np.min(((points[:, None, :] - np.array(centers)[None]) ** 2).sum(-1), axis=1)
-        p = d2 / d2.sum() if d2.sum() > 0 else np.full(len(points), 1.0 / len(points))
-        centers.append(points[int(rng.choice(len(points), p=p))])
-    centers = np.array(centers, dtype=np.float64)
-    labels = np.zeros(len(points), dtype=np.int64)
-    for _ in range(iters):
-        labels = np.argmin(((points[:, None, :] - centers[None]) ** 2).sum(-1), axis=1)
-        new = centers.copy()
-        for j in range(k):
-            if np.any(labels == j):
-                new[j] = points[labels == j].mean(axis=0)
-        if np.allclose(new, centers):
-            break
-        centers = new
-    return centers, labels
+def kmeans(points: np.ndarray, k: int, seed: int = 0, iters: int = 100, n_init: int = 10) -> tuple[np.ndarray, np.ndarray]:
+    """K-means (k-means++ init) with ``n_init`` restarts; returns the lowest-inertia solution."""
+    best = None
+    for r in range(n_init):
+        rng = np.random.default_rng(seed + r)
+        centers = [points[int(rng.integers(len(points)))]]
+        for _ in range(1, k):
+            d2 = np.min(((points[:, None, :] - np.array(centers)[None]) ** 2).sum(-1), axis=1)
+            p = d2 / d2.sum() if d2.sum() > 0 else np.full(len(points), 1.0 / len(points))
+            centers.append(points[int(rng.choice(len(points), p=p))])
+        centers = np.array(centers, dtype=np.float64)
+        labels = np.zeros(len(points), dtype=np.int64)
+        for _ in range(iters):
+            labels = np.argmin(((points[:, None, :] - centers[None]) ** 2).sum(-1), axis=1)
+            new = centers.copy()
+            for j in range(k):
+                if np.any(labels == j):
+                    new[j] = points[labels == j].mean(axis=0)
+            if np.allclose(new, centers):
+                break
+            centers = new
+        inertia = float(((points - centers[labels]) ** 2).sum())
+        if best is None or inertia < best[0]:
+            best = (inertia, centers, labels)
+    order = np.lexsort((best[1][:, 1], best[1][:, 0]))
+    remap = np.empty_like(order)
+    remap[order] = np.arange(len(order))
+    return best[1][order], remap[best[2]]
 
 
 def random_orientations(cams: list[Camera], per_camera: int, min_total: int, rng: np.random.Generator) -> list[Camera]:
@@ -337,18 +346,19 @@ def random_orientations(cams: list[Camera], per_camera: int, min_total: int, rng
 
 
 @torch.no_grad()
-def build_chunks(levels: list[Level], thresholds: list[float], train: list[Camera], cfg: dict, seed: int) -> dict:
+def build_chunks(levels: list[Level], thresholds: list[float], train: list[Camera], cfg: dict) -> dict:
+    """Chunks are a deterministic function of the training camera positions and the levels."""
     pos = np.stack([c.eye for c in train])
     spread = float(np.max(np.linalg.norm(pos - pos.mean(0), axis=1)))
     n_clusters = max(2, int(round(4.0 / thresholds[0] * spread)))
     n_clusters = min(n_clusters, len(pos))
-    centers, labels = kmeans(pos, n_clusters, seed=seed)
+    centers, labels = kmeans(pos, n_clusters, seed=0)
     cd = np.linalg.norm(centers[:, None] - centers[None], axis=-1)
     np.fill_diagonal(cd, np.inf)
     eff = [L.effective() for L in levels]
-    rng = np.random.default_rng(seed + 17)
     chunks = []
     for j, c in enumerate(centers):
+        rng = np.random.default_rng(1000 + j)
         radius = float(cd[j].min())
         # Depths are offset by the chunk radius so that every camera position in
         # the chunk gets at least the resolution Eq. (2) would give it (finer
@@ -419,7 +429,7 @@ def export_dynamic(levels: list[Level], thresholds: list[float], center: np.ndar
 
 DEFAULTS = {
     "levels": 2,
-    "gamma": 0.06,
+    "gamma": 0.03,
     "smooth_s": 0.2,
     "vis_threshold": 0.02,
     "vis_random_views": 2,
@@ -480,7 +490,7 @@ def main() -> None:
     log(f"thresholds: {thresholds}")
 
     levels = build_levels(g0, thresholds, train, images, cfg, steps=cfg["finetune_steps"], seed=args.seed)
-    chunks = build_chunks(levels, thresholds, train, cfg, seed=args.seed + 3)
+    chunks = build_chunks(levels, thresholds, train, cfg)
     info = export_chunked(levels, chunks, args.out_dir / "representation.npz", blend=True)
     meta = {
         "method": "lodge",
