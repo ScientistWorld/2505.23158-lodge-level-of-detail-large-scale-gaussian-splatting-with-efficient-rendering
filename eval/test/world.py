@@ -41,8 +41,8 @@ FULL_CONFIG = {
     "capture_x1": 117.0,
     "capture_step": 1.25,
     "fly_test": [25.0, 65.0, 0.5, 1.3],
-    "fly_val": [70.0, 100.0, 0.5, -1.3],
-    "off_path_views": 30,
+    "fly_val": [30.0, 70.0, 0.5, -1.3],
+    "off_path_views": 40,
     "posts_every": 15.0,
     "n_cars": 14,
     "base_train_steps": 5000,
@@ -435,11 +435,18 @@ def camera_sets(cfg: dict) -> dict:
     sets["val_flythrough"] = fly(cfg["fly_val"], 1.0)
 
     def off_path(seed):
+        # Stratified in position along the street and in heading, so that the
+        # public and hidden off-path sets have the same content distribution.
         rng = np.random.default_rng(seed)
+        n = cfg["off_path_views"]
+        lo, hi = cfg["capture_x0"] + 6, cfg["capture_x1"] - 5
+        xs = lo + (np.arange(n) + rng.uniform(0, 1, n)) * (hi - lo) / n
+        yaws = (np.arange(n) + rng.uniform(0, 1, n)) / n * 2 * math.pi - math.pi
+        rng.shuffle(yaws)
         out = []
-        for _ in range(cfg["off_path_views"]):
-            eye = (rng.uniform(cfg["capture_x0"] + 6, cfg["capture_x1"] - 5), rng.uniform(-2.2, 2.2), rng.uniform(1.2, 4.5))
-            out.append(_cam(eye, rng.uniform(-math.pi, math.pi), rng.uniform(-10.0, 15.0) * deg))
+        for x, yaw in zip(xs, yaws):
+            eye = (x, rng.uniform(-2.2, 2.2), rng.uniform(1.2, 4.5))
+            out.append(_cam(eye, float(yaw), rng.uniform(-10.0, 15.0) * deg))
         return out
 
     sets["test_off_path"] = off_path(WORLD_SEED + 101)
@@ -576,9 +583,57 @@ def build(cfg: dict, data_dir: Path, hidden_path: Path) -> None:
     print(f"[world] wrote {data_dir} and {hidden_path}", flush=True)
 
 
+def rerender_eval_sets(cfg: dict, data_dir: Path, hidden_path: Path) -> None:
+    """Re-render only the validation and hidden test sets from the true scene.
+
+    The trained base reconstruction and the training images/cameras are kept
+    byte-identical, so representations built from them remain valid.
+    """
+    import torch
+
+    from eval.test.render import Camera, default_device, render_supersampled, to_uint8
+
+    device = default_device()
+    true_scene = build_scene(cfg, "true")
+    sets = camera_sets(cfg)
+    gt = {k: torch.as_tensor(v, device=device) for k, v in true_scene.items()}
+    meta = json.loads((data_dir / "cameras.json").read_text())
+    if meta["sets"]["train"] != json.loads(json.dumps(sets["train"])):
+        raise RuntimeError("training cameras changed; a full rebuild is required")
+    with np.load(data_dir / "images.npz", allow_pickle=False) as z:
+        public_images = {k: np.array(z[k]) for k in z.files}
+    with np.load(hidden_path, allow_pickle=False) as z:
+        hidden = {k: np.array(z[k]) for k in z.files}
+    images = {}
+    for key, cams in sets.items():
+        if key == "train":
+            continue
+        out = []
+        for c in cams:
+            cam = Camera(np.asarray(c["eye"]), c["yaw"], c["pitch"], cfg["focal"], cfg["width"], cfg["height"])
+            with torch.no_grad():
+                out.append(to_uint8(render_supersampled(gt, cam, cfg["supersample"])))
+        images[key] = np.stack(out)
+        print(f"[world] re-rendered {key}: {len(cams)} views", flush=True)
+    meta["sets"] = {k: v for k, v in sets.items() if not k.startswith("test_")}
+    (data_dir / "cameras.json").write_text(json.dumps(meta, indent=1))
+    public_images.update({k: v for k, v in images.items() if not k.startswith("test_")})
+    np.savez_compressed(data_dir / "images.npz", **public_images)
+    hidden["world_config"] = np.array(json.dumps(cfg))
+    for key in ("test_on_path", "test_flythrough", "test_off_path"):
+        cams = sets[key]
+        hidden[f"{key}_eye"] = np.array([c["eye"] for c in cams], dtype=np.float64)
+        hidden[f"{key}_yaw"] = np.array([c["yaw"] for c in cams], dtype=np.float64)
+        hidden[f"{key}_pitch"] = np.array([c["pitch"] for c in cams], dtype=np.float64)
+        hidden[f"{key}_images"] = images[key]
+    np.savez_compressed(hidden_path, **hidden)
+    print(f"[world] updated evaluation sets in {data_dir} and {hidden_path}", flush=True)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--build", action="store_true")
+    parser.add_argument("--rerender-eval-sets", action="store_true")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--data-dir", type=Path, default=Path("data/lodge_city"))
     parser.add_argument("--hidden", type=Path, default=Path("eval/test/hidden_set.npz"))
@@ -586,6 +641,8 @@ def main() -> None:
     cfg = SMOKE_CONFIG if args.smoke else FULL_CONFIG
     if args.build:
         build(cfg, args.data_dir, args.hidden)
+    if args.rerender_eval_sets:
+        rerender_eval_sets(cfg, args.data_dir, args.hidden)
 
 
 if __name__ == "__main__":

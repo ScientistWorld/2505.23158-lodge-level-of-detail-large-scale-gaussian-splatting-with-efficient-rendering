@@ -12,9 +12,12 @@ base reconstruction (stored in the hidden set), so it cannot be altered by
 editing public files.
 
 A method fails (and receives the worst value of every metric in every
-experiment) when its representation is missing or invalid, when it ever needs
-more resident Gaussians than the full representation, or when its PSNR in any
-experiment falls more than the tolerance below the full representation.
+experiment) when its representation is missing or invalid, when it exceeds the
+device budget (peak resident Gaussians above 0.65x the full representation, or
+mean visible Gaussians above the per-experiment fraction of the full
+representation's), when its PSNR in any experiment falls more than the tolerance
+below the full representation, or when its flythrough transition PSNR falls
+more than 0.5 dB below the full representation's (popping).
 """
 
 from __future__ import annotations
@@ -42,6 +45,10 @@ EXPERIMENTS = {
 }
 QUALITY_TOLERANCE_DB = {"trajectory_views": 1.0, "flythrough": 1.5, "off_path_views": 3.5}
 TRANSITION_TOLERANCE_DB = 0.5  # flythrough transition PSNR may not drop more than this below the full representation
+# Device budget (the paper's memory-constrained setting): peak resident Gaussians and
+# per-view rasterisation work, as fractions of the full representation measured here.
+MEMORY_BUDGET_FRACTION = 0.65
+VISIBLE_BUDGET_FRACTION = {"trajectory_views": 0.65, "flythrough": 0.53, "off_path_views": 0.57}
 VIEW_METRICS = ("psnr", "loaded_gaussians", "visible_gaussians", "ssim", "worst_view_psnr", "peak_loaded_gaussians", "tile_pairs")
 PATH_METRICS = ("transition_psnr", "psnr", "ssim", "loaded_gaussians", "visible_gaussians", "peak_loaded_gaussians")
 HIGHER_IS_BETTER = {"psnr", "ssim", "worst_view_psnr", "transition_psnr"}
@@ -145,8 +152,14 @@ def main() -> None:
             for exp in EXPERIMENTS:
                 if not all(math.isfinite(v) for v in measured[exp].values()):
                     reason = f"non-finite metric in {exp}"
-            if reason is None and peak > n0:
-                reason = f"memory: peak resident Gaussians {peak:.0f} exceed the full representation ({n0})"
+            if reason is None and peak > MEMORY_BUDGET_FRACTION * n0:
+                reason = f"memory budget: peak resident Gaussians {peak:.0f} exceed {MEMORY_BUDGET_FRACTION} x {n0}"
+            if reason is None:
+                for exp in EXPERIMENTS:
+                    budget = VISIBLE_BUDGET_FRACTION[exp] * baseline[exp]["visible_gaussians"]
+                    if measured[exp]["visible_gaussians"] > budget:
+                        reason = f"work budget: {exp} visible Gaussians {measured[exp]['visible_gaussians']:.0f} exceed {budget:.0f}"
+                        break
             if reason is None:
                 for exp in EXPERIMENTS:
                     floor = baseline[exp]["psnr"] - QUALITY_TOLERANCE_DB[exp]
@@ -177,7 +190,7 @@ def main() -> None:
         "_meta": {
             "slice": "test",
             "full_representation_gaussians": n0,
-            "quality_tolerance_db": QUALITY_TOLERANCE_DB, "transition_tolerance_db": TRANSITION_TOLERANCE_DB,
+            "quality_tolerance_db": QUALITY_TOLERANCE_DB, "transition_tolerance_db": TRANSITION_TOLERANCE_DB, "memory_budget_fraction": MEMORY_BUDGET_FRACTION, "visible_budget_fraction": VISIBLE_BUDGET_FRACTION,
             "status": status,
         },
         "experiments": {

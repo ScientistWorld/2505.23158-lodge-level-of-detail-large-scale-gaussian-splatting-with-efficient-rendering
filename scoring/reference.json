@@ -1,132 +1,237 @@
 {
+  "_note": "Synthetic street-canyon substitute for the paper's large scenes (see scoring/EXPERIMENTS.md). Absolute PSNRs and Gaussian counts are not on the paper's scale; the paper's numbers are kept under _paper_results. Results entries hold the paper's PSNR where the paper reports one; experiments the paper does not report hold this gym's own reference run (seed 0), marked by _results_source.",
   "experiments": {
-    "synthetic_lod_quality_efficiency": {
-      "description": "Compact reproduction of the SmallCity performance-analysis claim: preserve rendering quality while reducing visible and loaded Gaussians through level-of-detail chunked rendering.",
-      "weight": 0.65,
+    "trajectory_views": {
+      "description": "Held-out views interleaved along the capture trajectory (every 8th frame, paper protocol): rendering quality, resident memory and rasterisation work of a large Gaussian scene.",
+      "weight": 0.45,
       "primary_metric": "psnr",
       "metrics": {
         "psnr": {
           "higher_is_better": true,
           "coefficient": 1.0,
-          "description": "Average held-out view reconstruction quality after uint8 quantization."
+          "description": "Mean PSNR (dB) of the evaluator's renders vs. hidden target images, both quantised to uint8."
         },
-        "worst_view_psnr": {
-          "higher_is_better": true,
-          "coefficient": 0.0,
-          "description": "Diagnostic lowest per-view PSNR; not paper-reported for Table 3."
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.35,
+          "description": "Mean number of Gaussians resident in memory per view (memory footprint), counted by the evaluator from the submitted resident sets."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.35,
+          "description": "Mean number of resident Gaussians the rasteriser must process per view (in front of the camera, footprint overlapping the image, effective opacity >= 1/255)."
         },
         "ssim": {
           "higher_is_better": true,
           "coefficient": 0.0,
-          "description": "Diagnostic structural image fidelity for the compact benchmark."
+          "description": "Diagnostic: mean SSIM (11x11 Gaussian window)."
         },
-        "visible_gaussians": {
-          "higher_is_better": false,
-          "coefficient": -0.35,
-          "description": "Mean rendered Gaussian count, a machine-independent rasterization-work proxy."
-        },
-        "loaded_gaussians": {
-          "higher_is_better": false,
-          "coefficient": -0.35,
-          "description": "Mean active Gaussian count loaded for rendering, a memory-footprint proxy."
-        },
-        "peak_visible_gaussians": {
-          "higher_is_better": false,
+        "worst_view_psnr": {
+          "higher_is_better": true,
           "coefficient": 0.0,
-          "description": "Diagnostic worst-case visible Gaussian count across compact views."
+          "description": "Diagnostic: lowest per-view PSNR."
         },
         "peak_loaded_gaussians": {
           "higher_is_better": false,
           "coefficient": 0.0,
-          "description": "Diagnostic worst-case loaded Gaussian count across compact views."
+          "description": "Diagnostic: maximum resident Gaussians over views (the memory gate uses the maximum over all experiments)."
         },
-        "tile_cost": {
+        "tile_pairs": {
           "higher_is_better": false,
           "coefficient": 0.0,
-          "description": "Diagnostic per-tile overlap proxy used by threshold selection."
+          "description": "Diagnostic: mean number of Gaussian/16x16-tile intersections per view (rasterisation work)."
         }
       },
       "results": {
         "full_representation": {
           "type": "baseline",
-          "psnr": 26.62,
-          "visible_gaussians": 925000,
-          "loaded_gaussians": 2639000
+          "psnr": 26.62
         },
         "lodge": {
           "type": "proposed",
-          "psnr": 26.57,
-          "visible_gaussians": 268000,
-          "loaded_gaussians": 877000
+          "psnr": 26.57
+        }
+      },
+      "_results_source": "paper Table 3 (SmallCity): Full representation 26.62 dB, Opacity blending (LODGE) 26.57 dB",
+      "_paper_results": {
+        "table3": {
+          "source": "Table 3 (SmallCity performance analysis); Time in ms, #Vis.G and #G as printed",
+          "full_representation": {
+            "psnr": 26.62,
+            "time_ms": 15.17,
+            "visible_gaussians": 925000,
+            "loaded_gaussians": 2639000
+          },
+          "lod_d10": {
+            "psnr": 26.45,
+            "time_ms": 5.61,
+            "visible_gaussians": 324000,
+            "loaded_gaussians_as_printed": "3465M"
+          },
+          "lod_d10_28_dynamic": {
+            "psnr": 26.5,
+            "time_ms": 4.75,
+            "visible_gaussians": 209000,
+            "loaded_gaussians": 3815000
+          },
+          "lod_d10_28_47": {
+            "psnr": 26.46,
+            "time_ms": 4.17,
+            "visible_gaussians": 182000,
+            "loaded_gaussians": 4016000
+          },
+          "lod_d10_28_47_63": {
+            "psnr": 26.5,
+            "time_ms": 4.07,
+            "visible_gaussians": 172000,
+            "loaded_gaussians": 4145000
+          },
+          "lod_manual_d15_70": {
+            "psnr": 26.55,
+            "time_ms": 5.24,
+            "visible_gaussians": 267000,
+            "loaded_gaussians": 3377000
+          },
+          "lod_clusters": {
+            "psnr": 26.54,
+            "time_ms": 3.62,
+            "visible_gaussians": 244000,
+            "loaded_gaussians": 795000
+          },
+          "lod_clusters_visibility_filtering_nearest_chunk": {
+            "psnr": 26.55,
+            "time_ms": 3.15,
+            "visible_gaussians": 185000,
+            "loaded_gaussians": 612000
+          },
+          "opacity_blending_lodge": {
+            "psnr": 26.57,
+            "time_ms": 3.88,
+            "visible_gaussians": 268000,
+            "loaded_gaussians": 877000
+          }
+        },
+        "table1": {
+          "source": "Table 1 (SmallCity / Campus, ours)",
+          "smallcity": {
+            "psnr": 26.57,
+            "ssim": 0.815,
+            "lpips": 0.325,
+            "loaded_gaussians": 877000,
+            "fps": 257.46
+          },
+          "campus": {
+            "psnr": 24.75,
+            "ssim": 0.803,
+            "lpips": 0.394,
+            "loaded_gaussians": 1464000,
+            "fps": 218.96
+          }
         }
       }
     },
-    "synthetic_chunk_blending_ablation": {
-      "description": "Compact reproduction of the paper's Table 3 design validation: dynamic LOD reduces work, chunk caching lowers loaded Gaussians, and opacity blending restores chunk-boundary quality at moderate extra cost.",
+    "flythrough": {
+      "description": "Dense hidden camera path crossing many resident-set switches: temporal stability of the rendering (no popping) and per-frame quality.",
+      "weight": 0.2,
+      "primary_metric": "transition_psnr",
+      "metrics": {
+        "transition_psnr": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Temporal PSNR of the 5 worst frame-to-frame changes along a dense hidden camera path: rendered change vs. target change (popping/flicker at chunk or level switches)."
+        },
+        "psnr": {
+          "higher_is_better": true,
+          "coefficient": 0.5,
+          "description": "Mean PSNR (dB) over the path frames, uint8 protocol."
+        },
+        "ssim": {
+          "higher_is_better": true,
+          "coefficient": 0.0,
+          "description": "Diagnostic: mean SSIM (11x11 Gaussian window)."
+        },
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Mean number of Gaussians resident in memory per view (memory footprint), counted by the evaluator from the submitted resident sets."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Mean number of resident Gaussians the rasteriser must process per view (in front of the camera, footprint overlapping the image, effective opacity >= 1/255)."
+        },
+        "peak_loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.0,
+          "description": "Diagnostic: maximum resident Gaussians over views (the memory gate uses the maximum over all experiments)."
+        }
+      },
+      "results": {
+        "full_representation": {
+          "type": "baseline",
+          "transition_psnr": 33.245,
+          "psnr": 37.498
+        },
+        "lodge": {
+          "type": "proposed",
+          "transition_psnr": 33.227,
+          "psnr": 36.919
+        }
+      },
+      "_results_source": "Not reported numerically in the paper (Fig. 7 / video show qualitative chunk-boundary artifacts). Values are this gym's hidden-test full representation and reference run (seed 0)."
+    },
+    "off_path_views": {
+      "description": "Hidden views off the capture trajectory (lateral/height offsets, arbitrary heading): robustness of the reduced representation away from the training camera distribution.",
       "weight": 0.35,
       "primary_metric": "psnr",
       "metrics": {
         "psnr": {
           "higher_is_better": true,
           "coefficient": 1.0,
-          "description": "Average held-out view reconstruction quality after uint8 quantization."
+          "description": "Mean PSNR (dB) of the evaluator's renders vs. hidden target images, both quantised to uint8."
         },
-        "worst_view_psnr": {
-          "higher_is_better": true,
-          "coefficient": 0.0,
-          "description": "Diagnostic lowest per-view PSNR; not paper-reported for Table 3."
+        "loaded_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.35,
+          "description": "Mean number of Gaussians resident in memory per view (memory footprint), counted by the evaluator from the submitted resident sets."
+        },
+        "visible_gaussians": {
+          "higher_is_better": false,
+          "coefficient": 0.35,
+          "description": "Mean number of resident Gaussians the rasteriser must process per view (in front of the camera, footprint overlapping the image, effective opacity >= 1/255)."
         },
         "ssim": {
           "higher_is_better": true,
           "coefficient": 0.0,
-          "description": "Diagnostic structural image fidelity for the compact benchmark."
+          "description": "Diagnostic: mean SSIM (11x11 Gaussian window)."
         },
-        "visible_gaussians": {
-          "higher_is_better": false,
-          "coefficient": -0.35,
-          "description": "Mean rendered Gaussian count, a machine-independent rasterization-work proxy."
-        },
-        "loaded_gaussians": {
-          "higher_is_better": false,
-          "coefficient": -0.35,
-          "description": "Mean active Gaussian count loaded for rendering, a memory-footprint proxy."
-        },
-        "peak_visible_gaussians": {
-          "higher_is_better": false,
+        "worst_view_psnr": {
+          "higher_is_better": true,
           "coefficient": 0.0,
-          "description": "Diagnostic worst-case visible Gaussian count across compact views."
+          "description": "Diagnostic: lowest per-view PSNR."
         },
         "peak_loaded_gaussians": {
           "higher_is_better": false,
           "coefficient": 0.0,
-          "description": "Diagnostic worst-case loaded Gaussian count across compact views."
+          "description": "Diagnostic: maximum resident Gaussians over views (the memory gate uses the maximum over all experiments)."
         },
-        "tile_cost": {
+        "tile_pairs": {
           "higher_is_better": false,
           "coefficient": 0.0,
-          "description": "Diagnostic per-tile overlap proxy used by threshold selection."
+          "description": "Diagnostic: mean number of Gaussian/16x16-tile intersections per view (rasterisation work)."
         }
       },
       "results": {
-        "lod_dynamic": {
-          "type": "proposed",
-          "psnr": 26.50,
-          "visible_gaussians": 209000,
-          "loaded_gaussians": 3815000
+        "full_representation": {
+          "type": "baseline",
+          "psnr": 33.258
         },
-        "nearest_chunk": {
+        "lodge": {
           "type": "proposed",
-          "psnr": 26.55,
-          "visible_gaussians": 185000,
-          "loaded_gaussians": 612000
-        },
-        "opacity_blend": {
-          "type": "proposed",
-          "psnr": 26.57,
-          "visible_gaussians": 268000,
-          "loaded_gaussians": 877000
+          "psnr": 31.067
         }
-      }
+      },
+      "_results_source": "Not reported in the paper (it motivates robustness to cameras outside the training trajectory, supp. A.2). Values are this gym's hidden-test full representation and reference run (seed 0)."
     }
   }
 }

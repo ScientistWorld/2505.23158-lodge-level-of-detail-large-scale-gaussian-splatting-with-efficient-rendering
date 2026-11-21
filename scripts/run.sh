@@ -1,7 +1,8 @@
 #!/bin/bash
-# Hardening audit job (world and tuning already done): LODGE reference x3 seeds,
-# better/weaker variants, trade-off probes, simple rules and shortcut probes
-# through the unchanged hidden test, then final scores from the reference.
+# Hardening: re-render comparable validation/test view sets (base model and
+# training data unchanged), then score every saved case through the final
+# hidden test (budget + transition gates) and write the final scores.
 set -e
 cd /home/user
-python notes/hardening/audit.py
+python -m eval.test.world --rerender-eval-sets
+python notes/hardening/audit.py --stages cases,final

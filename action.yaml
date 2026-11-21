@@ -3,4 +3,4 @@ action: submit
 gpus: 1
 test: false
 milestone: secondary_claims
-notes: "Resume audit after worker loss: remaining hidden-test cases (reps already built) and final scores from reference seed 0."
+notes: "Re-render comparable val/test view sets (stratified off-path, matched flythrough), rescore all saved cases with final budget/transition gates, final scores."
