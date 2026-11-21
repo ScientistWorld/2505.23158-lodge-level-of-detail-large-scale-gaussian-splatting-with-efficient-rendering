@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "slice": "test",
+    "full_representation_gaussians": 247095,
+    "quality_tolerance_db": {
+      "trajectory_views": 1.0,
+      "flythrough": 1.5,
+      "off_path_views": 3.5
+    },
+    "transition_tolerance_db": 0.5,
+    "status": {
+      "lodge": {
+        "passed": false,
+        "reason": "quality: trajectory_views PSNR 30.361 below floor 40.181",
+        "measured": {
+          "trajectory_views": {
+            "psnr": 30.360774991733198,
+            "ssim": 0.9631552476538036,
+            "worst_view_psnr": 19.73133713606922,
+            "loaded_gaussians": 106042.31428571428,
+            "visible_gaussians": 24624.6,
+            "peak_loaded_gaussians": 116250.0,
+            "tile_pairs": 49098.857142857145
+          },
+          "flythrough": {
+            "psnr": 20.842156635327903,
+            "ssim": 0.8979738427727424,
+            "worst_view_psnr": 18.955187620314106,
+            "loaded_gaussians": 112533.98765432098,
+            "visible_gaussians": 42216.83950617284,
+            "peak_loaded_gaussians": 116250.0,
+            "tile_pairs": 78739.66666666667,
+            "transition_psnr": 27.923866397805355
+          },
+          "off_path_views": {
+            "psnr": 27.03572045847351,
+            "ssim": 0.9092810302174752,
+            "worst_view_psnr": 18.158888403326596,
+            "loaded_gaussians": 110038.5,
+            "visible_gaussians": 18794.366666666665,
+            "peak_loaded_gaussians": 116250.0,
+            "tile_pairs": 38746.8
+          }
+        }
+      }
+    }
+  },
+  "experiments": {
+    "trajectory_views": {
+      "_meta": {
+        "cameras": 35,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 41.1809613072756,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 50817.171428571426,
+          "ssim": 0.9923005070064791,
+          "worst_view_psnr": 36.36963969756905,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 87596.94285714286
+        },
+        "lodge": {
+          "psnr": 0.0,
+          "loaded_gaussians": 988380.0,
+          "visible_gaussians": 988380.0,
+          "ssim": 0.0,
+          "worst_view_psnr": 0.0,
+          "peak_loaded_gaussians": 988380.0,
+          "tile_pairs": 63256320.0
+        }
+      }
+    },
+    "flythrough": {
+      "_meta": {
+        "cameras": 81,
+        "kind": "path"
+      },
+      "results": {
+        "full_representation": {
+          "transition_psnr": 33.2450057536056,
+          "psnr": 37.49844485227261,
+          "ssim": 0.9880731521242905,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 135381.22222222222,
+          "peak_loaded_gaussians": 247095.0
+        },
+        "lodge": {
+          "transition_psnr": 0.0,
+          "psnr": 0.0,
+          "ssim": 0.0,
+          "loaded_gaussians": 988380.0,
+          "visible_gaussians": 988380.0,
+          "peak_loaded_gaussians": 988380.0
+        }
+      }
+    },
+    "off_path_views": {
+      "_meta": {
+        "cameras": 30,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 33.258351509227836,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 48171.73333333333,
+          "ssim": 0.9491896485424757,
+          "worst_view_psnr": 24.656896498868353,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 85470.9
+        },
+        "lodge": {
+          "psnr": 0.0,
+          "loaded_gaussians": 988380.0,
+          "visible_gaussians": 988380.0,
+          "ssim": 0.0,
+          "worst_view_psnr": 0.0,
+          "peak_loaded_gaussians": 988380.0,
+          "tile_pairs": 63256320.0
+        }
+      }
+    }
+  }
+}

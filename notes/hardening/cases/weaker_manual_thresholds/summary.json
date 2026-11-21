@@ -1,0 +1,134 @@
+{
+ "methods": {
+  "lodge": {
+   "passed": true,
+   "reason": "ok",
+   "measured": {
+    "trajectory_views": {
+     "psnr": 40.88404482283427,
+     "ssim": 0.9919665763238833,
+     "worst_view_psnr": 35.67454181968158,
+     "loaded_gaussians": 161821.45714285714,
+     "visible_gaussians": 35205.25714285715,
+     "peak_loaded_gaussians": 197106.0,
+     "tile_pairs": 66062.71428571429
+    },
+    "flythrough": {
+     "psnr": 37.077707446561455,
+     "ssim": 0.9877149952544666,
+     "worst_view_psnr": 30.36158900623862,
+     "loaded_gaussians": 180128.28395061727,
+     "visible_gaussians": 82267.43209876544,
+     "peak_loaded_gaussians": 197106.0,
+     "tile_pairs": 143909.83950617284,
+     "transition_psnr": 33.24182412257602
+    },
+    "off_path_views": {
+     "psnr": 32.139318646476575,
+     "ssim": 0.9456726445774184,
+     "worst_view_psnr": 23.474989240794415,
+     "loaded_gaussians": 161888.0,
+     "visible_gaussians": 30192.2,
+     "peak_loaded_gaussians": 197106.0,
+     "tile_pairs": 57676.3
+    }
+   }
+  }
+ },
+ "results": {
+  "trajectory_views": {
+   "full_representation": {
+    "psnr": 41.18095328080907,
+    "loaded_gaussians": 247095.0,
+    "visible_gaussians": 50817.171428571426,
+    "ssim": 0.9923004928293087,
+    "worst_view_psnr": 36.36963969756905,
+    "peak_loaded_gaussians": 247095.0,
+    "tile_pairs": 87596.94285714286
+   },
+   "lodge": {
+    "psnr": 40.88404482283427,
+    "loaded_gaussians": 161821.45714285714,
+    "visible_gaussians": 35205.25714285715,
+    "ssim": 0.9919665763238833,
+    "worst_view_psnr": 35.67454181968158,
+    "peak_loaded_gaussians": 197106.0,
+    "tile_pairs": 66062.71428571429
+   }
+  },
+  "flythrough": {
+   "full_representation": {
+    "transition_psnr": 33.24501064927725,
+    "psnr": 37.498445031877246,
+    "ssim": 0.9880731505771211,
+    "loaded_gaussians": 247095.0,
+    "visible_gaussians": 135381.22222222222,
+    "peak_loaded_gaussians": 247095.0
+   },
+   "lodge": {
+    "transition_psnr": 33.24182412257602,
+    "psnr": 37.077707446561455,
+    "ssim": 0.9877149952544666,
+    "loaded_gaussians": 180128.28395061727,
+    "visible_gaussians": 82267.43209876544,
+    "peak_loaded_gaussians": 197106.0
+   }
+  },
+  "off_path_views": {
+   "full_representation": {
+    "psnr": 33.25835607469408,
+    "loaded_gaussians": 247095.0,
+    "visible_gaussians": 48171.73333333333,
+    "ssim": 0.9491894238001403,
+    "worst_view_psnr": 24.65689522828746,
+    "peak_loaded_gaussians": 247095.0,
+    "tile_pairs": 85470.9
+   },
+   "lodge": {
+    "psnr": 32.139318646476575,
+    "loaded_gaussians": 161888.0,
+    "visible_gaussians": 30192.2,
+    "ssim": 0.9456726445774184,
+    "worst_view_psnr": 23.474989240794415,
+    "peak_loaded_gaussians": 197106.0,
+    "tile_pairs": 57676.3
+   }
+  }
+ },
+ "method_info": {
+  "method": "lodge",
+  "seed": 0,
+  "config": {
+   "levels": 2,
+   "gamma": 0.03,
+   "smooth_s": 0.2,
+   "vis_threshold": 0.02,
+   "vis_random_views": 2,
+   "vis_min_views": 32,
+   "finetune_steps": 1000,
+   "pseudo_frac": 0.0,
+   "lrs": {
+    "means": 0.0002,
+    "scales": 0.005,
+    "quats": 0.001,
+    "opacities": 0.025,
+    "colors": 0.005
+   }
+  },
+  "thresholds": [
+   40.5,
+   90.0
+  ],
+  "threshold_search": [],
+  "level_sizes": [
+   247095,
+   9867,
+   6
+  ],
+  "n_chunks": 6,
+  "pool": 251001,
+  "mean_chunk_size": 132863.83333333334,
+  "seconds": 344.8568637371063,
+  "note": "Informational only; the evaluator recomputes every scored number from representation.npz."
+ }
+}

@@ -14,32 +14,32 @@
         "reason": "ok",
         "measured": {
           "trajectory_views": {
-            "psnr": 40.82024177572157,
-            "ssim": 0.9919280576059756,
-            "worst_view_psnr": 36.029612999039664,
-            "loaded_gaussians": 137638.94285714286,
-            "visible_gaussians": 31232.114285714284,
-            "peak_loaded_gaussians": 153867.0,
-            "tile_pairs": 60472.514285714286
+            "psnr": 40.829566775024446,
+            "ssim": 0.9919450554181848,
+            "worst_view_psnr": 36.1909388720083,
+            "loaded_gaussians": 137677.51428571428,
+            "visible_gaussians": 31197.542857142857,
+            "peak_loaded_gaussians": 153949.0,
+            "tile_pairs": 60407.65714285714
           },
           "flythrough": {
-            "psnr": 37.021321879788694,
-            "ssim": 0.9875087532746594,
-            "worst_view_psnr": 30.36659016321721,
-            "loaded_gaussians": 149181.7037037037,
-            "visible_gaussians": 66778.67901234567,
-            "peak_loaded_gaussians": 153867.0,
-            "tile_pairs": 121888.04938271605,
-            "transition_psnr": 33.231497602058575
+            "psnr": 36.91875950032518,
+            "ssim": 0.9874269812754107,
+            "worst_view_psnr": 30.34831103691827,
+            "loaded_gaussians": 149095.17283950618,
+            "visible_gaussians": 66661.0,
+            "peak_loaded_gaussians": 153949.0,
+            "tile_pairs": 121562.46913580247,
+            "transition_psnr": 33.2268471792459
           },
           "off_path_views": {
-            "psnr": 31.417888858926695,
-            "ssim": 0.9400308974029763,
+            "psnr": 31.066657630434687,
+            "ssim": 0.9387907732813957,
             "worst_view_psnr": 22.16081167854024,
-            "loaded_gaussians": 137690.56666666668,
-            "visible_gaussians": 25671.9,
-            "peak_loaded_gaussians": 153867.0,
-            "tile_pairs": 51149.96666666667
+            "loaded_gaussians": 137704.66666666666,
+            "visible_gaussians": 25659.1,
+            "peak_loaded_gaussians": 153949.0,
+            "tile_pairs": 51099.6
           }
         }
       }
@@ -53,22 +53,22 @@
       },
       "results": {
         "full_representation": {
-          "psnr": 41.180950111191315,
+          "psnr": 41.1809551357292,
           "loaded_gaussians": 247095.0,
           "visible_gaussians": 50817.171428571426,
-          "ssim": 0.9923004911326393,
+          "ssim": 0.9923004792833968,
           "worst_view_psnr": 36.36963969756905,
           "peak_loaded_gaussians": 247095.0,
           "tile_pairs": 87596.94285714286
         },
         "lodge": {
-          "psnr": 40.82024177572157,
-          "loaded_gaussians": 137638.94285714286,
-          "visible_gaussians": 31232.114285714284,
-          "ssim": 0.9919280576059756,
-          "worst_view_psnr": 36.029612999039664,
-          "peak_loaded_gaussians": 153867.0,
-          "tile_pairs": 60472.514285714286
+          "psnr": 40.829566775024446,
+          "loaded_gaussians": 137677.51428571428,
+          "visible_gaussians": 31197.542857142857,
+          "ssim": 0.9919450554181848,
+          "worst_view_psnr": 36.1909388720083,
+          "peak_loaded_gaussians": 153949.0,
+          "tile_pairs": 60407.65714285714
         }
       }
     },
@@ -79,20 +79,20 @@
       },
       "results": {
         "full_representation": {
-          "transition_psnr": 33.24500820144073,
-          "psnr": 37.498443832891276,
-          "ssim": 0.9880731711704513,
+          "transition_psnr": 33.24500758948182,
+          "psnr": 37.49844231362084,
+          "ssim": 0.9880731718029414,
           "loaded_gaussians": 247095.0,
           "visible_gaussians": 135381.22222222222,
           "peak_loaded_gaussians": 247095.0
         },
         "lodge": {
-          "transition_psnr": 33.231497602058575,
-          "psnr": 37.021321879788694,
-          "ssim": 0.9875087532746594,
-          "loaded_gaussians": 149181.7037037037,
-          "visible_gaussians": 66778.67901234567,
-          "peak_loaded_gaussians": 153867.0
+          "transition_psnr": 33.2268471792459,
+          "psnr": 36.91875950032518,
+          "ssim": 0.9874269812754107,
+          "loaded_gaussians": 149095.17283950618,
+          "visible_gaussians": 66661.0,
+          "peak_loaded_gaussians": 153949.0
         }
       }
     },
@@ -103,22 +103,22 @@
       },
       "results": {
         "full_representation": {
-          "psnr": 33.25835684833728,
+          "psnr": 33.2583547255991,
           "loaded_gaussians": 247095.0,
           "visible_gaussians": 48171.73333333333,
-          "ssim": 0.9491896000524296,
+          "ssim": 0.9491895751853925,
           "worst_view_psnr": 24.656896498868353,
           "peak_loaded_gaussians": 247095.0,
           "tile_pairs": 85470.9
         },
         "lodge": {
-          "psnr": 31.417888858926695,
-          "loaded_gaussians": 137690.56666666668,
-          "visible_gaussians": 25671.9,
-          "ssim": 0.9400308974029763,
+          "psnr": 31.066657630434687,
+          "loaded_gaussians": 137704.66666666666,
+          "visible_gaussians": 25659.1,
+          "ssim": 0.9387907732813957,
           "worst_view_psnr": 22.16081167854024,
-          "peak_loaded_gaussians": 153867.0,
-          "tile_pairs": 51149.96666666667
+          "peak_loaded_gaussians": 153949.0,
+          "tile_pairs": 51099.6
         }
       }
     }
