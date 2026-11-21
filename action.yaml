@@ -3,4 +3,4 @@ action: submit
 gpus: 1
 test: false
 milestone: secondary_claims
-notes: "Audit rerun with deterministic chunking + transition gate: reference x3 seeds, variants, trade-off probes, rules, shortcuts via hidden test, final scores."
+notes: "Resume audit after worker loss: remaining hidden-test cases (reps already built) and final scores from reference seed 0."
