@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "slice": "test",
+    "full_representation_gaussians": 247095,
+    "quality_tolerance_db": {
+      "trajectory_views": 1.0,
+      "flythrough": 1.5,
+      "off_path_views": 3.5
+    },
+    "transition_tolerance_db": 0.5,
+    "memory_budget_fraction": 0.65,
+    "visible_budget_fraction": {
+      "trajectory_views": 0.65,
+      "flythrough": 0.53,
+      "off_path_views": 0.57
+    },
+    "status": {
+      "lodge": {
+        "passed": true,
+        "reason": "ok",
+        "measured": {
+          "trajectory_views": {
+            "psnr": 40.655972507777264,
+            "ssim": 0.991609369750025,
+            "worst_view_psnr": 35.67241696163662,
+            "loaded_gaussians": 114828.97142857143,
+            "visible_gaussians": 27243.685714285715,
+            "peak_loaded_gaussians": 128256.0,
+            "tile_pairs": 53924.54285714286
+          },
+          "flythrough": {
+            "psnr": 36.47590106557642,
+            "ssim": 0.986282016917646,
+            "worst_view_psnr": 30.23516938035599,
+            "loaded_gaussians": 117728.09876543209,
+            "visible_gaussians": 49766.72839506173,
+            "peak_loaded_gaussians": 121089.0,
+            "tile_pairs": 95500.97530864198,
+            "transition_psnr": 33.15720327118799
+          },
+          "off_path_views": {
+            "psnr": 30.45473390128968,
+            "ssim": 0.9354371012080225,
+            "worst_view_psnr": 18.266594094096906,
+            "loaded_gaussians": 116157.225,
+            "visible_gaussians": 22925.5,
+            "peak_loaded_gaussians": 128256.0,
+            "tile_pairs": 45474.025
+          }
+        }
+      }
+    }
+  },
+  "experiments": {
+    "trajectory_views": {
+      "_meta": {
+        "cameras": 35,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 41.18093902571923,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 50817.171428571426,
+          "ssim": 0.9923005295958518,
+          "worst_view_psnr": 36.36963969756905,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 87596.94285714286
+        },
+        "lodge": {
+          "psnr": 40.655972507777264,
+          "loaded_gaussians": 114828.97142857143,
+          "visible_gaussians": 27243.685714285715,
+          "ssim": 0.991609369750025,
+          "worst_view_psnr": 35.67241696163662,
+          "peak_loaded_gaussians": 128256.0,
+          "tile_pairs": 53924.54285714286
+        }
+      }
+    },
+    "flythrough": {
+      "_meta": {
+        "cameras": 81,
+        "kind": "path"
+      },
+      "results": {
+        "full_representation": {
+          "transition_psnr": 33.2450057536056,
+          "psnr": 37.49844234082516,
+          "ssim": 0.9880731461520459,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 135381.22222222222,
+          "peak_loaded_gaussians": 247095.0
+        },
+        "lodge": {
+          "transition_psnr": 33.15720327118799,
+          "psnr": 36.47590106557642,
+          "ssim": 0.986282016917646,
+          "loaded_gaussians": 117728.09876543209,
+          "visible_gaussians": 49766.72839506173,
+          "peak_loaded_gaussians": 121089.0
+        }
+      }
+    },
+    "off_path_views": {
+      "_meta": {
+        "cameras": 40,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 33.567018004450766,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 46366.35,
+          "ssim": 0.9554359259379464,
+          "worst_view_psnr": 27.983993386001874,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 82820.9
+        },
+        "lodge": {
+          "psnr": 30.45473390128968,
+          "loaded_gaussians": 116157.225,
+          "visible_gaussians": 22925.5,
+          "ssim": 0.9354371012080225,
+          "worst_view_psnr": 18.266594094096906,
+          "peak_loaded_gaussians": 128256.0,
+          "tile_pairs": 45474.025
+        }
+      }
+    }
+  }
+}

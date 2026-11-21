@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "slice": "train",
+    "full_representation_gaussians": 247095,
+    "quality_tolerance_db": {
+      "trajectory_views": 1.0,
+      "flythrough": 1.5,
+      "off_path_views": 3.5
+    },
+    "transition_tolerance_db": 0.5,
+    "memory_budget_fraction": 0.65,
+    "visible_budget_fraction": {
+      "trajectory_views": 0.65,
+      "flythrough": 0.53,
+      "off_path_views": 0.57
+    },
+    "status": {
+      "lodge": {
+        "passed": true,
+        "reason": "ok",
+        "measured": {
+          "trajectory_views": {
+            "psnr": 40.93000757604367,
+            "ssim": 0.9919484087692845,
+            "worst_view_psnr": 34.2787298182995,
+            "loaded_gaussians": 136972.74285714285,
+            "visible_gaussians": 30064.85714285714,
+            "peak_loaded_gaussians": 153949.0,
+            "tile_pairs": 58333.45714285714
+          },
+          "flythrough": {
+            "psnr": 38.33126866017412,
+            "ssim": 0.9892513388679667,
+            "worst_view_psnr": 34.585305153060865,
+            "loaded_gaussians": 150739.82716049382,
+            "visible_gaussians": 66939.29629629629,
+            "peak_loaded_gaussians": 153949.0,
+            "tile_pairs": 122156.43209876544,
+            "transition_psnr": 34.76594742182991
+          },
+          "off_path_views": {
+            "psnr": 30.925446179865993,
+            "ssim": 0.9377261940195961,
+            "worst_view_psnr": 18.528039551219663,
+            "loaded_gaussians": 139861.675,
+            "visible_gaussians": 29408.0,
+            "peak_loaded_gaussians": 153949.0,
+            "tile_pairs": 56450.175
+          }
+        }
+      }
+    }
+  },
+  "experiments": {
+    "trajectory_views": {
+      "_meta": {
+        "cameras": 35,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 41.055139416866645,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 47477.91428571429,
+          "ssim": 0.9921842291260123,
+          "worst_view_psnr": 33.71732701068885,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 82588.37142857142
+        },
+        "lodge": {
+          "psnr": 40.93000757604367,
+          "loaded_gaussians": 136972.74285714285,
+          "visible_gaussians": 30064.85714285714,
+          "ssim": 0.9919484087692845,
+          "worst_view_psnr": 34.2787298182995,
+          "peak_loaded_gaussians": 153949.0,
+          "tile_pairs": 58333.45714285714
+        }
+      }
+    },
+    "flythrough": {
+      "_meta": {
+        "cameras": 81,
+        "kind": "path"
+      },
+      "results": {
+        "full_representation": {
+          "transition_psnr": 34.81653327977833,
+          "psnr": 38.692672649106036,
+          "ssim": 0.9898939014673771,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 126557.86419753087,
+          "peak_loaded_gaussians": 247095.0
+        },
+        "lodge": {
+          "transition_psnr": 34.76594742182991,
+          "psnr": 38.33126866017412,
+          "ssim": 0.9892513388679667,
+          "loaded_gaussians": 150739.82716049382,
+          "visible_gaussians": 66939.29629629629,
+          "peak_loaded_gaussians": 153949.0
+        }
+      }
+    },
+    "off_path_views": {
+      "_meta": {
+        "cameras": 40,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 32.889328613980425,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 56002.725,
+          "ssim": 0.9509632410552789,
+          "worst_view_psnr": 23.323131097744184,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 97919.3
+        },
+        "lodge": {
+          "psnr": 30.925446179865993,
+          "loaded_gaussians": 139861.675,
+          "visible_gaussians": 29408.0,
+          "ssim": 0.9377261940195961,
+          "worst_view_psnr": 18.528039551219663,
+          "peak_loaded_gaussians": 153949.0,
+          "tile_pairs": 56450.175
+        }
+      }
+    }
+  }
+}
