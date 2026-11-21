@@ -336,7 +336,7 @@ def stage_cases(ctx: Ctx) -> None:
     summary = {}
     for name, spec in cases.items():
         dest = results_dir / name
-        if (dest / "scores_test.json").exists():
+        if (dest / "summary.json").exists():
             summary[name] = json.loads((dest / "summary.json").read_text())
             continue
         if any(not Path(p).exists() for k, p in spec.items() if not k.startswith("_")):
