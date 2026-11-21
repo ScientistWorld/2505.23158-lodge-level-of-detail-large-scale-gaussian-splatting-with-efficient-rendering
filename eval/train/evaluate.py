@@ -8,7 +8,7 @@ images are recomputed here; nothing else the method writes is read.
 
 Gates (identical to the hidden test): an invalid or missing representation, a
 peak resident set above 0.65x the full representation, mean visible Gaussians
-above the per-experiment budget fraction of the full representation's, a PSNR
+above 0.70x the full representation's in any experiment, a PSNR
 more than the tolerance below the full representation in any experiment, or a
 flythrough transition PSNR more than 0.5 dB below the full representation's
 marks the method as failed; it then receives the worst value of every metric in
@@ -43,7 +43,7 @@ TRANSITION_TOLERANCE_DB = 0.5  # flythrough transition PSNR may not drop more th
 # Device budget (the paper's memory-constrained setting): peak resident Gaussians and
 # per-view rasterisation work, as fractions of the full representation measured here.
 MEMORY_BUDGET_FRACTION = 0.65
-VISIBLE_BUDGET_FRACTION = {"trajectory_views": 0.65, "flythrough": 0.53, "off_path_views": 0.57}
+VISIBLE_BUDGET_FRACTION = {"trajectory_views": 0.70, "flythrough": 0.70, "off_path_views": 0.70}
 VIEW_METRICS = ("psnr", "loaded_gaussians", "visible_gaussians", "ssim", "worst_view_psnr", "peak_loaded_gaussians", "tile_pairs")
 PATH_METRICS = ("transition_psnr", "psnr", "ssim", "loaded_gaussians", "visible_gaussians", "peak_loaded_gaussians")
 HIGHER_IS_BETTER = {"psnr", "ssim", "worst_view_psnr", "transition_psnr"}

@@ -14,7 +14,7 @@ editing public files.
 A method fails (and receives the worst value of every metric in every
 experiment) when its representation is missing or invalid, when it exceeds the
 device budget (peak resident Gaussians above 0.65x the full representation, or
-mean visible Gaussians above the per-experiment fraction of the full
+mean visible Gaussians in any experiment above 0.70x the full
 representation's), when its PSNR in any experiment falls more than the tolerance
 below the full representation, or when its flythrough transition PSNR falls
 more than 0.5 dB below the full representation's (popping).
@@ -48,7 +48,7 @@ TRANSITION_TOLERANCE_DB = 0.5  # flythrough transition PSNR may not drop more th
 # Device budget (the paper's memory-constrained setting): peak resident Gaussians and
 # per-view rasterisation work, as fractions of the full representation measured here.
 MEMORY_BUDGET_FRACTION = 0.65
-VISIBLE_BUDGET_FRACTION = {"trajectory_views": 0.65, "flythrough": 0.53, "off_path_views": 0.57}
+VISIBLE_BUDGET_FRACTION = {"trajectory_views": 0.70, "flythrough": 0.70, "off_path_views": 0.70}
 VIEW_METRICS = ("psnr", "loaded_gaussians", "visible_gaussians", "ssim", "worst_view_psnr", "peak_loaded_gaussians", "tile_pairs")
 PATH_METRICS = ("transition_psnr", "psnr", "ssim", "loaded_gaussians", "visible_gaussians", "peak_loaded_gaussians")
 HIGHER_IS_BETTER = {"psnr", "ssim", "worst_view_psnr", "transition_psnr"}

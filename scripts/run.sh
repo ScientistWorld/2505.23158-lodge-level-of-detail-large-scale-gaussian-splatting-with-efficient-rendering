@@ -1,8 +1,6 @@
 #!/bin/bash
-# Hardening: re-render comparable validation/test view sets (base model and
-# training data unchanged), then score every saved case through the final
-# hidden test (budget + transition gates) and write the final scores.
+# Hardening: score every saved case through the final hidden test (final gates
+# and coefficients), then write the final scores from the reference (seed 0).
 set -e
 cd /home/user
-python -m eval.test.world --rerender-eval-sets
 python notes/hardening/audit.py --stages cases,final

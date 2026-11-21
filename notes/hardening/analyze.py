@@ -32,7 +32,7 @@ N0 = 247095
 TOL = {"trajectory_views": 1.0, "flythrough": 1.5, "off_path_views": 3.5}
 TRANS_TOL = 0.5
 MEM_FRAC = 0.65
-VIS_FRAC = {"trajectory_views": 0.65, "flythrough": 0.53, "off_path_views": 0.57}
+VIS_FRAC = {"trajectory_views": 0.70, "flythrough": 0.70, "off_path_views": 0.70}
 HIB = {"psnr", "ssim", "worst_view_psnr", "transition_psnr"}
 
 

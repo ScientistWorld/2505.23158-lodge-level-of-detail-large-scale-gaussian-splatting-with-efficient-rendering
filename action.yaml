@@ -3,4 +3,4 @@ action: submit
 gpus: 1
 test: false
 milestone: secondary_claims
-notes: "Re-render comparable val/test view sets (stratified off-path, matched flythrough), rescore all saved cases with final budget/transition gates, final scores."
+notes: "Final evidence run: all saved cases through the final hidden test (memory 0.65 N0 / visible 0.70 budgets, quality+transition gates), final scores from reference seed 0."
