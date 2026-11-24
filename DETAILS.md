@@ -3,17 +3,33 @@
 - **Paper ID:** 2505.23158
 - **Title:** LODGE: Level-of-Detail Large-Scale Gaussian Splatting with Efficient Rendering
 - **Domain:** Computer Vision / Neural Rendering
-- **TL;DR:** LODGE makes large 3D Gaussian Splatting scenes faster and lighter by building smoothed/pruned LOD levels and precomputed chunk-local active Gaussian sets.
+- **TL;DR:** LODGE makes large 3D Gaussian Splatting scenes faster and lighter by building smoothed, pruned and fine-tuned LOD levels and precomputed chunk-local active Gaussian sets, rendered with two-chunk opacity blending.
 
 ## Short Summary
 
-The paper addresses the cost of rendering large Gaussian-splatting scenes where distant fine detail consumes memory and rasterization time. It builds lower-detail Gaussian levels using depth-aware smoothing, importance pruning, and fine-tuning, then clusters camera space into chunks with fixed active Gaussian sets. During rendering it blends the two nearest chunks to avoid visible chunk-boundary transitions. The reported results show similar or better quality than large-scene baselines with substantially fewer loaded Gaussians and higher rendering speed.
+Distant fine detail in large 3DGS scenes consumes memory and rasterisation time. LODGE builds lower-detail levels with depth-aware smoothing, importance pruning and fine-tuning. It clusters camera space into chunks with fixed active sets and blends the two nearest chunks to avoid popping.
+
+This gym substitutes a synthetic street canyon for the paper's scenes. The trained full model is public; target images are supersampled renders of a hidden, denser true scene. The evaluator renders submissions itself, under a device budget for memory and rasterisation work.
 
 ## Key Results
 
-- On SmallCity, the paper reports 26.57 PSNR while reducing loaded Gaussians from 2.639M in the full representation to 877K in the final chunked/blended representation.
-- In the SmallCity ablation, final opacity blending uses 268K visible Gaussians versus 925K for the full representation.
-- On Hierarchical 3DGS and Zip-NeRF scenes, the method reports real-time FPS while keeping quality competitive with or better than other real-time Gaussian-splatting baselines.
+**Paper, Table 3 (SmallCity):**
+
+| Representation | PSNR (dB) | Loaded | Visible |
+|---|---:|---:|---:|
+| Full representation | 26.62 | 2639K | 925K |
+| LODGE | 26.57 | 877K | 268K |
+
+**This gym, hidden test, reference seed 0:**
+
+| Views | Full representation | LODGE | Loaded vs full | Visible vs full |
+|---|---:|---:|---:|---:|
+| Trajectory | 41.18 dB | 40.83 dB | −44% | −39% |
+| Flythrough | 37.50 dB | 36.92 dB | — | — |
+| Off-path | 33.57 dB | 31.33 dB | — | — |
+
+- Transition PSNR is 33.23 dB for LODGE and 33.25 dB for the full representation.
+- Off-path views are where the reference falls short and where the gym has headroom.
 
 ---
 
@@ -21,51 +37,123 @@ The paper addresses the cost of rendering large Gaussian-splatting scenes where 
 
 ## Research Question
 
-How can a large 3D Gaussian Splatting scene be rendered from novel viewpoints with high image quality while reducing the number of Gaussian primitives that must be processed and resident in memory?
+Given a trained, very large 3D Gaussian Splatting reconstruction of a scene, how can it be stored and rendered so that any camera position needs only a small resident subset of Gaussians and a small amount of rasterisation work, while novel views stay as close to the real images as the full model's renders?
 
 ## Why It Matters
 
-Large scenes require many fine primitives. Rendering all of them for every camera wastes computation on distant detail and can exceed the memory budget of mobile or low-power devices.
+Large scenes need many fine Gaussians. Rendering every one for every frame wastes work on distant, sub-pixel detail and needs more memory than mobile or low-power devices have. A good solution has to cut both memory (what is resident) and work (what the rasteriser processes per frame), keep quality close to the full model near and far from where the scene was captured, and avoid visible popping when the camera moves through the scene.
+
+## The Benchmark Scene
+
+A long synthetic street canyon (about 130 m of facades, road, sidewalks, cars, posts and trees). The public data in `data/lodge_city/` contains:
+
+- `base_gaussians.npz`: the trained full reconstruction (about 247K anisotropic Gaussians with RGB colour). It was optimised on the training images and plays the role of the paper's full 3DGS model.
+- `cameras.json`: intrinsics plus the camera sets `train` (209 capture views), `val_on_path`, `val_flythrough` and `val_off_path`.
+- `images.npz`: target images for every public camera set.
+
+The hidden test uses held-out cameras of the same three kinds and never-released target images.
+
+## What a Solution Produces
+
+A file `checkpoints/<method>/representation.npz` in the format documented at the top of `data/gsrender.py`:
+
+- a pool of Gaussians;
+- precomputed resident sets ("chunks") anchored at 3D positions;
+- an optional per-Gaussian camera-distance band;
+- a flag that selects one of the two built-in transition rules between neighbouring chunks.
+
+The evaluator decides which Gaussians are resident and drawn for each camera, renders them with its own renderer, and measures everything. The scored entry is `checkpoints/lodge/`. Other directories are scored too, except names starting with `_`.
 
 ## Success Criteria
 
-A successful system should render held-out views close to the reference images and substantially reduce both visible and loaded Gaussian counts relative to a full-scene renderer. These counts are the benchmark's hardware-independent efficiency constraints.
+- Stay within the device budget:
+  - peak resident Gaussians at most 0.65× the full model;
+  - mean visible Gaussians at most 0.70× the full model's, per experiment.
+- Keep PSNR within the stated tolerance of the full model in every experiment.
+- Do not introduce popping along a dense camera path.
+- Within those constraints, maximise image quality and minimise resident and visible Gaussians.
 
 ---
 
-# Paper's Method
+# Paper's Method (LODGE) and This Reproduction
 
 ## Key Contribution
 
-LODGE introduces a level-of-detail representation for 3D Gaussian Splatting that reduces rendering work and resident memory for large scenes. It differs from prior LOD splatting methods by precomputing fixed active Gaussian sets for spatial chunks, avoiding per-frame selection overhead and enabling deployment on memory-constrained devices.
+LODGE is a level-of-detail representation for 3D Gaussian Splatting. It reduces rendering work and resident memory for large scenes by precomputing fixed active Gaussian sets for spatial chunks. This avoids per-frame selection and keeps only two chunks in memory.
 
-## Approach
+## Approach (as implemented in `method/lodge.py`)
 
-The method starts from a trained full 3DGS representation. It builds lower-detail Gaussian levels by copying the full representation, applying a depth-aware 3D smoothing filter inspired by Mip-Splatting, pruning low-importance Gaussians using RadSplat-style maximum alpha-compositing contribution, and fine-tuning the surviving Gaussians. Depth thresholds are selected greedily by estimating average Gaussians per 16x16 rasterization tile on training views.
+1. **Threshold selection.** Depth thresholds d_l are chosen greedily (d_1 first, then d_2 > d_1, …). Each step minimises the average number of Gaussians per 16×16 tile, measured by LOD-rendering a subset of training views (candidates 4–64 m).
+2. **LOD levels.** Each level G_l is built from G0:
+   - The Mip-Splatting 3D smoothing filter (Eq. 3) is added to every Gaussian. Its variance is s·(d_l/f)², and opacity is scaled by sqrt(det Σ / det(Σ + εI)).
+   - Three rounds of RadSplat importance pruning follow, at thresholds 0.2γ, 0.6γ and γ. Importance is the maximum blending weight over training pixels.
+   - Each pruning round is followed by 1000 fine-tuning steps:
+     - loss: 0.8·L1 + 0.2·D-SSIM;
+     - rendering: LOD rendering over levels ≤ l, with d_l drawn from U(0.7 d_l, 1.3 d_l);
+     - gradients flow only into G_l.
+3. **Chunks.** K-means on training camera positions (best of 10, fixed seed) gives N = 4/d_1 · max‖c − c̄‖ chunks (Eq. 5). Each chunk stores the Eq. (2) active set at its centre, with thresholds increased by the chunk radius (distance to the nearest other centre). Visibility filtering then keeps Gaussians whose importance, rendered from the chunk's training positions with their original and at least 32 random orientations, is at least 0.02.
+4. **Rendering.** The two nearest chunks are blended with the opacity interpolation of Eq. (4). Ablation exports from the same build are the nearest chunk only and per-frame dynamic LOD.
 
-For rendering, active Gaussians are selected by camera distance: nearby regions use finer levels and distant regions use coarser levels. To reduce memory, training camera positions are clustered into chunks. Each chunk stores a precomputed active set with thresholds offset by chunk radius, then visibility filtering removes Gaussians with low per-chunk contribution. At render time, the two nearest chunks are rendered with opacity interpolation to avoid sharp transitions at chunk boundaries.
+The free hyperparameters were chosen on the public validation views (`notes/hardening/tuning.json`): γ = 0.03, s = 0.2, two levels; the search selected thresholds [27, 36] m. The result is 9 chunks with a pool of 277K Gaussians.
 
 ## Main Claims
 
-The central claim is that a chunked LOD Gaussian representation preserves visual quality while reducing visible Gaussians, loaded Gaussians, and render cost. Secondary claims are that automatic threshold selection improves the quality-speed trade-off over manual thresholds, visibility filtering further reduces memory and cost, and two-chunk opacity blending removes chunk-boundary artifacts.
+- **Core:** a chunked LOD representation keeps quality near the full model while greatly reducing visible and loaded Gaussians.
+- **Secondary:**
+  - per-frame dynamic LOD reduces work but keeps all levels resident (memory above the full model);
+  - chunking with visibility filtering reduces memory;
+  - opacity blending removes chunk-boundary popping at a moderate memory cost;
+  - automatic thresholds beat manual ones on the quality/efficiency trade-off;
+  - fine-tuning after pruning is required for quality.
 
 ---
 
 # Evaluation
 
-## Metrics
+## Protocol
 
-The compact benchmark scores PSNR on held-out rendered RGB images after rounding predictions and references to uint8, matching the paper's metric protocol. Higher PSNR is better.
+The evaluator loads `representation.npz` for every method directory under `checkpoints/`. For each camera it:
 
-Efficiency is measured by the average number of loaded Gaussians and average number of visible Gaussians over test views. Lower values are better. These are machine-independent proxies for memory use and rasterization work, replacing wall-clock FPS in the reusable benchmark.
+1. finds the resident set (nearest chunk, or the union of the two nearest with the format's opacity interpolation; distance bands applied);
+2. renders it with a fixed tile-based 3DGS rasteriser (EWA projection, Mip-Splatting 2D filter, 16×16 tiles, alpha in [1/255, 0.99], early termination);
+3. quantises the render to uint8 and compares it with the uint8 target.
 
-## Baselines and Targets
+Nothing the method writes besides the representation is read. The full-representation baseline is rendered by the evaluator from its own copy of the base model.
 
-The baseline is the full Gaussian representation rendered without any memory- or detail-reduction scheme. The target is to preserve image quality while reducing loaded and visible Gaussians by a large factor. `scoring/reference.json` includes the paper's SmallCity Table 3 values for context and the compact experiment structure used by this environment.
+## Experiments
 
-## Evaluation Protocol
+| Experiment | Cameras | Scored metrics (coefficient) | Weight |
+|---|---|---|---|
+| `trajectory_views` | held-out views interleaved along the capture path (every 8th frame) | psnr (1.0), loaded_gaussians (0.35), visible_gaussians (0.35) | 0.45 |
+| `flythrough` | a dense forward-moving path through the street | psnr (1.0), transition_psnr (0.25) | 0.20 |
+| `off_path_views` | views off the capture path: lateral offsets, heights from 1.2 to 4.5 m, any heading | psnr (1.0), loaded_gaussians (0.35), visible_gaussians (0.35) | 0.35 |
 
-Run `bash scripts/reproduce.sh` to generate deterministic test renders for the full baseline and proposed method, then compute scores with `bash scripts/evaluate.sh`. The evaluator reads only output artifacts under `checkpoints/` and writes `scoring/scores.json`; it does not import or rerun `method/`.
+### Metric definitions
+
+- **psnr**: mean PSNR in dB over views, uint8 protocol.
+- **loaded_gaussians**: mean size of the resident set per view (memory).
+- **visible_gaussians**: mean number of resident Gaussians that the rasteriser processes per view. These are in front of the near plane, have a 3σ footprint overlapping the image, and have opacity × weight ≥ 1/255.
+- **transition_psnr**: temporal PSNR of the 5 worst frame-to-frame changes along the path. It compares the rendered change with the target change, so popping lowers it.
+- **Diagnostics** (coefficient 0): ssim, worst_view_psnr, peak_loaded_gaussians, tile_pairs.
+
+## Gates
+
+If any gate fails, the method gets the worst value of every metric in every experiment (PSNR 0, counts 4× the full model).
+
+- **Validity:** the representation must be readable and valid:
+  - all values finite;
+  - scales in (1e-7, 100] m;
+  - opacities and colours in [0, 1];
+  - CSR chunk lists with in-range, duplicate-free indices;
+  - pool at most 4× the full model.
+- **Memory budget:** peak resident Gaussians over all hidden views at most 0.65× the full model.
+- **Work budget:** mean visible Gaussians at most 0.70× the full representation's, in every experiment.
+- **Quality floor:** PSNR at least the full representation's minus 1.0 dB (trajectory), 1.5 dB (flythrough) and 3.5 dB (off-path).
+- **Transitions:** flythrough transition_psnr at least the full representation's minus 0.5 dB.
+
+## Slices
+
+`scripts/evaluate_train.sh` (and `scripts/evaluate.sh`) score the public validation cameras in `data/lodge_city`, using the same protocol and gates. `scripts/evaluate_test.sh` (no arguments) scores the hidden cameras and writes `scoring/scores_test.json`.
 
 ---
 
@@ -359,6 +447,75 @@ Run `bash scripts/reproduce.sh` to generate deterministic test renders for the f
 
 <details>
 <summary>Progress Log</summary>
+
+### [2026-05-31 15:08] - secondary_claims
+- Final verifier rechecked structure, method/problem separation, scoring, train/test artifacts, and portability.
+- `python validate.py --compare --post-design` passes, including artifact-based evaluation, no `shared/` references, import separation, and train/test consistency.
+- Restored `secondary_claims`: the patched implementation preserves the actual LOD/chunking computation and the existing verified scores support both the core quality/efficiency claim and the secondary chunk/blending ablation on the compact benchmark.
+
+### [2026-05-31 14:42] - method_runs
+- Audited the existing scaffold against the paper and found `secondary_claims` was overstated.
+- Patched the method toward the paper-specific computation: LOD-stack fine-tuning with randomized current threshold, nearest-center chunk radius, random-orientation visibility filtering, and Eq. (4)-style opacity blending.
+- Submitting a clean CPU reproduction job to regenerate scores before claiming `core_claim` again.
+
+### [2026-05-31 14:36] - secondary_claims
+- Final verification completed.
+- Expanded `scripts/evaluate.sh` metrics to match the full scoring contract and updated `scoring/scores.json`.
+- Cleaned method-agnostic experiment documentation and removed tracked generated job/trajectory artifacts.
+- `python validate.py --compare --post-design` passes.
+
+### [2026-05-31 14:34] - secondary_claims
+- Re-audited the current workspace as the reproducer handoff state.
+- `python validate.py --compare --post-design` passes, including reference/scores validation, import separation, train/test independence, artifact-based evaluation, and split-score differentiation.
+- Leaving milestone at `secondary_claims`: the packaged compact benchmark reproduces the core LODGE quality/efficiency trade-off and chunk-blending ablation.
+
+### [2026-05-31 14:14] - secondary_claims
+- CPU job `f840ed37-d90` completed successfully with the current autograd fine-tuning implementation.
+- `python validate.py --compare` passed in the packaged container, including import-separation and artifact-based evaluation checks.
+- Restored `secondary_claims`: the main quality/efficiency claim and the chunk-caching/blending ablation are both reproduced on the compact deterministic scene.
+
+### [2026-05-31 13:56] - core_claim_plus
+- Audited the available job logs and found they predate the stricter autograd fine-tuning implementation and current scoring contract.
+- Updated `scripts/run.sh` to clear generated checkpoints, synthetic data, and stale scores before rerunning the full reproduction.
+- Resubmitting a CPU reproduction job to verify the current implementation in the packaged environment.
+
+### [2026-05-31 13:52] - core_claim_plus
+- Replaced the compact LOD fine-tuning approximation with a real autograd optimization stage using the paper's L1+DSSIM loss family.
+- Removed non-Table-3 SSIM values from `reference.json` and the scoring contract so reference metrics are paper-reported.
+- Submitting a CPU reproduction job to regenerate baseline, LODGE, and chunk-ablation artifacts with the updated implementation.
+
+</details>
+
+### Iteration 11: claude-opus-5-5 (hardener)
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 1.1h | **GPU**: 3.9h
+- **Jobs**: 17 total (9 completed, 2 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-11-24] - secondary_claims (hardening, iteration 11)
+- Rebuilt the gym. The world is a large synthetic street canyon: a hidden true scene and targets, and a public base 3DGS model with 247K Gaussians trained on the 209 training views. The evaluator renders submitted LOD/chunk representations itself and counts loaded and visible Gaussians.
+- Restored the paper's method:
+  - the Mip-Splatting 3D filter (Eq. 3);
+  - 1000 fine-tuning steps per pruning round, updating all parameters of the current level;
+  - the greedy tile-cost threshold search;
+  - Eq. 5 chunks with the depth offset increased by the chunk radius;
+  - visibility filtering with full orientation coverage;
+  - Eq. 4 two-chunk blending.
+- Hidden test, seed 0, LODGE vs the full model:
+
+  | Views | LODGE | Full | Loaded | Visible |
+  |---|---:|---:|---:|---:|
+  | Trajectory | 40.83 dB | 41.18 dB | −44% | −39% |
+  | Off-path | 31.33 dB | 33.57 dB | — | — |
+
+  On the flythrough, transition PSNR matches the full model.
+- Ablations (hidden test):
+  - dynamic LOD: 1.21× the full model's memory, 0.50× its work;
+  - nearest chunk: −1.1 dB transition PSNR (popping), 18% less memory;
+  - no fine-tuning: −3.3 dB on trajectory views.
+- Kept `secondary_claims`: the core claim and the dynamic-LOD, chunking, blending and fine-tuning ablations reproduce in the paper's direction. The manual-threshold ablation reproduces only partly. See HARDENING.md.
 
 ### [2026-05-31 15:08] - secondary_claims
 - Final verifier rechecked structure, method/problem separation, scoring, train/test artifacts, and portability.
