@@ -1,21 +1,16 @@
-# Verification Report
+# Verification (iteration 11)
 
-## Initial Assessment
-The workspace entered final verification with prior `secondary_claims` results, but the action and milestone files still reflected a later conservative audit at `method_runs`. I treated that as a bookkeeping conflict and rechecked the actual gym artifacts. The claimed `secondary_claims` milestone is justified: the paper-specific implementation is present, the compact benchmark scores support the core quality/efficiency trade-off and the secondary ablation-style experiment, and the validation script passes all structural checks.
+- **`python validate.py --compare --post-design`:** all checks pass. The one heuristic warning is on `eval/test/world.py`, the hidden world generator; it is not an evaluator.
+- **Rasteriser:** a self-check against a per-tile loop gives a maximum difference of 2.4e-7. It runs at the start of every audit job.
+- **Hidden test:** every case was scored with the unchanged `scripts/evaluate_test.sh` in a fresh process. Per-case outputs are in `notes/hardening/cases/`.
+- **Seed spread** of the reference (3 seeds), hidden test:
 
-## Issues Found
-- **Minor:** `MILESTONES.md`, `PROGRESS.md`, and `action.yaml` were left in an intermediate `method_runs` state even though final verification starts from the previously reached `secondary_claims` milestone and the existing validated scores still support it.
-- **Minor:** `bash scripts/evaluate.sh` could not be run directly on the login-node Python because `numpy` is absent there. This is not a container issue: `environment/setup.sh` installs `numpy` and `torch` into the system Python used by jobs.
+  | Metric | Spread |
+  |---|---:|
+  | Trajectory PSNR | 0.010 dB |
+  | Flythrough PSNR | 0.083 dB |
+  | Off-path PSNR | 0.006 dB |
+  | Loaded Gaussians | 134 |
+  | Visible Gaussians | 43 |
 
-## Fixes Applied
-- Rechecked root cleanliness, absence of `shared/` references, `data/downloads/` symlinks, method-agnostic documentation, scoring coefficients, and train/test evaluator wiring.
-- Re-ran `python validate.py --compare --post-design`; all checks passed.
-- Updated `MILESTONES.md`, `PROGRESS.md`, and `action.yaml` so they consistently report `secondary_claims`.
-
-## Final Judgment
-The workspace is ready to serve as a compact research gym. Improve-mode agents can run and modify the existing LODGE implementation, while from-scratch agents can use the method-agnostic problem, data, and evaluation files without importing from `method/`. The scoring includes both PSNR and machine-independent Gaussian-count constraints, and the train/test split artifacts are complete, differentiated, and validated.
-
-- Milestone: secondary_claims
-- Ready for gym use: yes
-- Confidence: medium
-- Key limitation: compact synthetic scene only, not the full paper-scale large-scene benchmark
+- **Train/test separation:** `eval/train` and `eval/test` share no code. `eval/` never imports `method/`. The hidden test reads only `checkpoints/*/representation.npz` and files inside `eval/test/`.

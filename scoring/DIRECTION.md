@@ -1,16 +1,24 @@
 # Research Direction
 
 ## Research Problem
-This benchmark is about efficient rendering of large Gaussian-splatting scenes. The goal is to preserve novel-view image quality while reducing the amount of Gaussian data processed and loaded for each viewpoint.
+Efficient rendering of large Gaussian-splatting scenes under a memory and per-frame work budget. A good solution keeps novel-view quality close to the full trained model, including away from the capture trajectory, while only a fraction of the Gaussians is resident and processed for any camera.
 
 ## Core Contribution
-The paper's contribution is a level-of-detail and spatial caching strategy for 3D Gaussian primitives. Future improvements should work on how Gaussian primitives are smoothed, selected, pruned, grouped, cached, or blended for efficient rendering.
+The paper's contribution is level-of-detail construction plus spatially cached resident sets for 3D Gaussian primitives. Improvements should change:
+- how reduced-detail Gaussians are derived, optimised and pruned;
+- how resident sets are chosen and assigned to regions of space;
+- how transitions between resident sets are handled.
 
 ## Approach Scope
-Work should remain within Gaussian-splatting representation management. A scientist may change detail-level construction, threshold selection, importance scoring, chunk assignment, visibility filtering, or blending, provided the output remains a rendered view from Gaussian primitives and the method reports the same cost constraints.
+- **In scope:** any procedure that produces a Gaussian pool plus resident sets in the representation format. Examples:
+  - better smoothing, merging or pruning;
+  - better fine-tuning (objectives, viewpoints, distillation from the full model);
+  - more or differently placed levels;
+  - better chunk placement or per-Gaussian distance bands;
+  - smarter visibility filtering.
+- **Trade-offs:** methods may trade memory against quality only within the budget. Quality gains bought by exceeding the budget fail.
 
 ## Out of Bounds
-- Replacing the task with a neural image synthesizer that directly maps camera poses to pixels.
-- Using a mesh, voxel, NeRF, or image-warping renderer instead of Gaussian splatting.
-- Improving scores by changing the scene, camera split, image resolution, or metric implementation.
-- Optimizing wall-clock runtime without reducing loaded/visible Gaussian counts or tile work.
+- Replacing Gaussian splatting with another renderer (neural image synthesis, meshes, image warping).
+- Using the validation or hidden cameras to fit the representation, or editing the evaluators, renderer copy, scene, cameras or targets.
+- Reporting wall-clock speed instead of reducing loaded/visible Gaussians.

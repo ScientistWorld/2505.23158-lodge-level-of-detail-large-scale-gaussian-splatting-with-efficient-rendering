@@ -1,6 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 action: submit
-gpus: 1
+gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Final evidence run: all saved cases through the final hidden test (memory 0.65 N0 / visible 0.70 budgets, quality+transition gates), final scores from reference seed 0."
+notes: "CPU-only run of the hidden test: runtime and agreement with stored GPU scores."

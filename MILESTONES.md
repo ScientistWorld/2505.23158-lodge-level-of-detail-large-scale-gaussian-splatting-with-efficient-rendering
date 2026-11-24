@@ -4,6 +4,29 @@
 
 ## Progress Log
 
+### [2026-11-24] - secondary_claims (hardening, iteration 11)
+- Rebuilt the gym. The world is a large synthetic street canyon: a hidden true scene and targets, and a public base 3DGS model with 247K Gaussians trained on the 209 training views. The evaluator renders submitted LOD/chunk representations itself and counts loaded and visible Gaussians.
+- Restored the paper's method:
+  - the Mip-Splatting 3D filter (Eq. 3);
+  - 1000 fine-tuning steps per pruning round, updating all parameters of the current level;
+  - the greedy tile-cost threshold search;
+  - Eq. 5 chunks with the depth offset increased by the chunk radius;
+  - visibility filtering with full orientation coverage;
+  - Eq. 4 two-chunk blending.
+- Hidden test, seed 0, LODGE vs the full model:
+
+  | Views | LODGE | Full | Loaded | Visible |
+  |---|---:|---:|---:|---:|
+  | Trajectory | 40.83 dB | 41.18 dB | −44% | −39% |
+  | Off-path | 31.33 dB | 33.57 dB | — | — |
+
+  On the flythrough, transition PSNR matches the full model.
+- Ablations (hidden test):
+  - dynamic LOD: 1.21× the full model's memory, 0.50× its work;
+  - nearest chunk: −1.1 dB transition PSNR (popping), 18% less memory;
+  - no fine-tuning: −3.3 dB on trajectory views.
+- Kept `secondary_claims`: the core claim and the dynamic-LOD, chunking, blending and fine-tuning ablations reproduce in the paper's direction. The manual-threshold ablation reproduces only partly. See HARDENING.md.
+
 ### [2026-05-31 15:08] - secondary_claims
 - Final verifier rechecked structure, method/problem separation, scoring, train/test artifacts, and portability.
 - `python validate.py --compare --post-design` passes, including artifact-based evaluation, no `shared/` references, import separation, and train/test consistency.

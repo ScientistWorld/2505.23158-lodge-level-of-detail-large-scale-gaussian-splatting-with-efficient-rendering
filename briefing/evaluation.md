@@ -1,15 +1,46 @@
 # Evaluation
 
-## Metrics
+## Protocol
 
-The compact benchmark scores PSNR on held-out rendered RGB images after rounding predictions and references to uint8, matching the paper's metric protocol. Higher PSNR is better.
+The evaluator loads `representation.npz` for every method directory under `checkpoints/`. For each camera it:
 
-Efficiency is measured by the average number of loaded Gaussians and average number of visible Gaussians over test views. Lower values are better. These are machine-independent proxies for memory use and rasterization work, replacing wall-clock FPS in the reusable benchmark.
+1. finds the resident set (nearest chunk, or the union of the two nearest with the format's opacity interpolation; distance bands applied);
+2. renders it with a fixed tile-based 3DGS rasteriser (EWA projection, Mip-Splatting 2D filter, 16×16 tiles, alpha in [1/255, 0.99], early termination);
+3. quantises the render to uint8 and compares it with the uint8 target.
 
-## Baselines and Targets
+Nothing the method writes besides the representation is read. The full-representation baseline is rendered by the evaluator from its own copy of the base model.
 
-The baseline is the full Gaussian representation rendered without any memory- or detail-reduction scheme. The target is to preserve image quality while reducing loaded and visible Gaussians by a large factor. `scoring/reference.json` includes the paper's SmallCity Table 3 values for context and the compact experiment structure used by this environment.
+## Experiments
 
-## Evaluation Protocol
+| Experiment | Cameras | Scored metrics (coefficient) | Weight |
+|---|---|---|---|
+| `trajectory_views` | held-out views interleaved along the capture path (every 8th frame) | psnr (1.0), loaded_gaussians (0.35), visible_gaussians (0.35) | 0.45 |
+| `flythrough` | a dense forward-moving path through the street | psnr (1.0), transition_psnr (0.25) | 0.20 |
+| `off_path_views` | views off the capture path: lateral offsets, heights from 1.2 to 4.5 m, any heading | psnr (1.0), loaded_gaussians (0.35), visible_gaussians (0.35) | 0.35 |
 
-Run `bash scripts/reproduce.sh` to generate deterministic test renders for the full baseline and proposed method, then compute scores with `bash scripts/evaluate.sh`. The evaluator reads only output artifacts under `checkpoints/` and writes `scoring/scores.json`; it does not import or rerun `method/`.
+### Metric definitions
+
+- **psnr**: mean PSNR in dB over views, uint8 protocol.
+- **loaded_gaussians**: mean size of the resident set per view (memory).
+- **visible_gaussians**: mean number of resident Gaussians that the rasteriser processes per view. These are in front of the near plane, have a 3σ footprint overlapping the image, and have opacity × weight ≥ 1/255.
+- **transition_psnr**: temporal PSNR of the 5 worst frame-to-frame changes along the path. It compares the rendered change with the target change, so popping lowers it.
+- **Diagnostics** (coefficient 0): ssim, worst_view_psnr, peak_loaded_gaussians, tile_pairs.
+
+## Gates
+
+If any gate fails, the method gets the worst value of every metric in every experiment (PSNR 0, counts 4× the full model).
+
+- **Validity:** the representation must be readable and valid:
+  - all values finite;
+  - scales in (1e-7, 100] m;
+  - opacities and colours in [0, 1];
+  - CSR chunk lists with in-range, duplicate-free indices;
+  - pool at most 4× the full model.
+- **Memory budget:** peak resident Gaussians over all hidden views at most 0.65× the full model.
+- **Work budget:** mean visible Gaussians at most 0.70× the full representation's, in every experiment.
+- **Quality floor:** PSNR at least the full representation's minus 1.0 dB (trajectory), 1.5 dB (flythrough) and 3.5 dB (off-path).
+- **Transitions:** flythrough transition_psnr at least the full representation's minus 0.5 dB.
+
+## Slices
+
+`scripts/evaluate_train.sh` (and `scripts/evaluate.sh`) score the public validation cameras in `data/lodge_city`, using the same protocol and gates. `scripts/evaluate_test.sh` (no arguments) scores the hidden cameras and writes `scoring/scores_test.json`.
