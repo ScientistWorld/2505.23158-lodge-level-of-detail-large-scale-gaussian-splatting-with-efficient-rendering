@@ -14,3 +14,4 @@
   | Visible Gaussians | 43 |
 
 - **Train/test separation:** `eval/train` and `eval/test` share no code. `eval/` never imports `method/`. The hidden test reads only `checkpoints/*/representation.npz` and files inside `eval/test/`.
+- **CPU-only hidden test:** 318 s. It matches the stored GPU scores: counts are identical, and PSNR differs by at most 4.6e-5 dB (`notes/hardening/cpu_check.json`).

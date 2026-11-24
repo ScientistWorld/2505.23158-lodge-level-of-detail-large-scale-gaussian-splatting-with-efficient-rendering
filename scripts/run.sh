@@ -1,11 +1,10 @@
 #!/bin/bash
-# CPU-only check of the hidden test: runtime and agreement with the stored GPU scores.
+# Reproduce the reference end to end: check data, build the LODGE reference
+# (seed 0) into checkpoints/lodge, then score the visible and hidden slices.
 set -e
 cd /home/user
-mkdir -p tmp/cpu_check
-python -c "import torch; print('cuda available:', torch.cuda.is_available(), 'threads:', torch.get_num_threads())"
-start=$(date +%s)
-python -m eval.test.evaluate --checkpoints-dir checkpoints --scores tmp/cpu_check/scores_test.json
-end=$(date +%s)
-echo "CPU hidden test seconds: $((end-start))" | tee notes/hardening/cpu_check_time.txt
-python notes/hardening/cpu_check.py tmp/cpu_check/scores_test.json
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
+bash scripts/download.sh
+bash scripts/method.sh
+bash scripts/evaluate_train.sh
+bash scripts/evaluate_test.sh

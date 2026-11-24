@@ -103,7 +103,7 @@ Major shortcuts found in this iteration:
 - **Distillation from the public base model at arbitrary poses** (the pseudo-view variant) is the main lever on `off_path_views`. It is allowed, as a legitimate improvement.
 - **Fixed transition rules.** The protocol only offers nearest or two-nearest-blend transitions. Methods that want another rule must express it with more chunks or per-Gaussian distance bands.
 - **Hidden-file trust.** `eval/test/hidden_set.npz` is tracked in the repository; the infrastructure must hide `eval/test/` from future agents.
-- **Hardware.** The hidden test was run on a GPU. A CPU-only container runs the same code; I have not measured its runtime.
+- **Hardware.** No longer open: a CPU-only container runs the hidden test in 318 s and matches the GPU scores, with counts identical and PSNR within 5e-5 dB (`notes/hardening/cpu_check.json`).
 
 ## 4. Reference score, before and after
 
@@ -167,4 +167,4 @@ The old experiments were replaced.
 - **Hyperparameters.** The paper does not give γ, s or the visibility threshold for its LOD levels. γ = 0.03 and s = 0.2 were chosen on the public validation views (`notes/hardening/tuning.json`), before those views were made comparable to the test views.
 - **Smaller effect than the paper's.** Reductions are −44% memory and −39% work, against the paper's −67% and −71%, at a slightly larger quality cost.
 - **Metrics not reproduced.** FPS, mobile-device runs and LPIPS are not part of the gym. Costs are hardware-independent counts.
-- **Unmeasured CPU runtime.** The hidden test's runtime on a CPU-only node is unknown; on one GPU it takes about 1 minute per method.
+- **Hidden-test runtime.** The hidden test takes about 1 minute per method on a GPU, and 318 s for the baseline plus `lodge` on a CPU-only node.

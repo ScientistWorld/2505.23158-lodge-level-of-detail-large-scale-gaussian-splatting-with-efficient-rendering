@@ -1,6 +1,4 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: secondary_claims
-notes: "CPU-only run of the hidden test: runtime and agreement with stored GPU scores."
+notes: "Gym rebuilt and hardened: hidden street world + trained base model, evaluator renders submitted LOD/chunk representations (budget, quality, transition gates), paper-faithful LODGE (Eq.3 filter, 1000-step fine-tuning, +radius chunk offsets), better variants beat reference beyond seed noise, all shortcuts fail; see HARDENING.md."
