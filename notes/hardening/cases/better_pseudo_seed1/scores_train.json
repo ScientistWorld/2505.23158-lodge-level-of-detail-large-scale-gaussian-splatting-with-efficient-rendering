@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "slice": "train",
+    "full_representation_gaussians": 247095,
+    "quality_tolerance_db": {
+      "trajectory_views": 1.0,
+      "flythrough": 1.5,
+      "off_path_views": 3.5
+    },
+    "transition_tolerance_db": 0.5,
+    "memory_budget_fraction": 0.65,
+    "visible_budget_fraction": {
+      "trajectory_views": 0.7,
+      "flythrough": 0.7,
+      "off_path_views": 0.7
+    },
+    "status": {
+      "lodge": {
+        "passed": true,
+        "reason": "ok",
+        "measured": {
+          "trajectory_views": {
+            "psnr": 40.92067520490493,
+            "ssim": 0.9919388105750554,
+            "worst_view_psnr": 34.278788049887346,
+            "loaded_gaussians": 137104.91428571427,
+            "visible_gaussians": 30132.342857142856,
+            "peak_loaded_gaussians": 153951.0,
+            "tile_pairs": 58463.857142857145
+          },
+          "flythrough": {
+            "psnr": 38.3789394274947,
+            "ssim": 0.989287150363349,
+            "worst_view_psnr": 34.594484270216164,
+            "loaded_gaussians": 151040.64197530865,
+            "visible_gaussians": 67309.70370370371,
+            "peak_loaded_gaussians": 153951.0,
+            "tile_pairs": 122860.71604938271,
+            "transition_psnr": 34.75479425793352
+          },
+          "off_path_views": {
+            "psnr": 31.16928406254806,
+            "ssim": 0.938582656571656,
+            "worst_view_psnr": 18.528039551219663,
+            "loaded_gaussians": 140013.6,
+            "visible_gaussians": 29474.55,
+            "peak_loaded_gaussians": 153951.0,
+            "tile_pairs": 56606.6
+          }
+        }
+      }
+    }
+  },
+  "experiments": {
+    "trajectory_views": {
+      "_meta": {
+        "cameras": 35,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 41.05514308194488,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 47477.91428571429,
+          "ssim": 0.9921842199810771,
+          "worst_view_psnr": 33.71732018802717,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 82588.37142857142
+        },
+        "lodge": {
+          "psnr": 40.92067520490493,
+          "loaded_gaussians": 137104.91428571427,
+          "visible_gaussians": 30132.342857142856,
+          "ssim": 0.9919388105750554,
+          "worst_view_psnr": 34.278788049887346,
+          "peak_loaded_gaussians": 153951.0,
+          "tile_pairs": 58463.857142857145
+        }
+      }
+    },
+    "flythrough": {
+      "_meta": {
+        "cameras": 81,
+        "kind": "path"
+      },
+      "results": {
+        "full_representation": {
+          "transition_psnr": 34.81652888593479,
+          "psnr": 38.69267373043905,
+          "ssim": 0.9898939232038421,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 126557.86419753087,
+          "peak_loaded_gaussians": 247095.0
+        },
+        "lodge": {
+          "transition_psnr": 34.75479425793352,
+          "psnr": 38.3789394274947,
+          "ssim": 0.989287150363349,
+          "loaded_gaussians": 151040.64197530865,
+          "visible_gaussians": 67309.70370370371,
+          "peak_loaded_gaussians": 153951.0
+        }
+      }
+    },
+    "off_path_views": {
+      "_meta": {
+        "cameras": 40,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 32.889330056243224,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 56002.725,
+          "ssim": 0.9509632886773624,
+          "worst_view_psnr": 23.323131097744184,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 97919.3
+        },
+        "lodge": {
+          "psnr": 31.16928406254806,
+          "loaded_gaussians": 140013.6,
+          "visible_gaussians": 29474.55,
+          "ssim": 0.938582656571656,
+          "worst_view_psnr": 18.528039551219663,
+          "peak_loaded_gaussians": 153951.0,
+          "tile_pairs": 56606.6
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "slice": "test",
+    "full_representation_gaussians": 247095,
+    "quality_tolerance_db": {
+      "trajectory_views": 1.0,
+      "flythrough": 1.5,
+      "off_path_views": 3.5
+    },
+    "transition_tolerance_db": 0.5,
+    "memory_budget_fraction": 0.65,
+    "visible_budget_fraction": {
+      "trajectory_views": 0.7,
+      "flythrough": 0.7,
+      "off_path_views": 0.7
+    },
+    "status": {
+      "lodge": {
+        "passed": true,
+        "reason": "ok",
+        "measured": {
+          "trajectory_views": {
+            "psnr": 40.82014922023266,
+            "ssim": 0.991920793572346,
+            "worst_view_psnr": 36.07490245324303,
+            "loaded_gaussians": 137749.77142857143,
+            "visible_gaussians": 31281.457142857143,
+            "peak_loaded_gaussians": 154037.0,
+            "tile_pairs": 60556.62857142857
+          },
+          "flythrough": {
+            "psnr": 37.03397209763649,
+            "ssim": 0.9874731761674937,
+            "worst_view_psnr": 30.368612435508116,
+            "loaded_gaussians": 149371.23456790124,
+            "visible_gaussians": 66961.45679012345,
+            "peak_loaded_gaussians": 154037.0,
+            "tile_pairs": 122171.4074074074,
+            "transition_psnr": 33.22045739288527
+          },
+          "off_path_views": {
+            "psnr": 31.688265827785436,
+            "ssim": 0.9457841707557989,
+            "worst_view_psnr": 20.794273561431858,
+            "loaded_gaussians": 140184.175,
+            "visible_gaussians": 29126.975,
+            "peak_loaded_gaussians": 154037.0,
+            "tile_pairs": 56463.85
+          }
+        }
+      }
+    }
+  },
+  "experiments": {
+    "trajectory_views": {
+      "_meta": {
+        "cameras": 35,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 41.18096050864479,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 50817.171428571426,
+          "ssim": 0.9923005190362293,
+          "worst_view_psnr": 36.36963969756905,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 87596.94285714286
+        },
+        "lodge": {
+          "psnr": 40.82014922023266,
+          "loaded_gaussians": 137749.77142857143,
+          "visible_gaussians": 31281.457142857143,
+          "ssim": 0.991920793572346,
+          "worst_view_psnr": 36.07490245324303,
+          "peak_loaded_gaussians": 154037.0,
+          "tile_pairs": 60556.62857142857
+        }
+      }
+    },
+    "flythrough": {
+      "_meta": {
+        "cameras": 81,
+        "kind": "path"
+      },
+      "results": {
+        "full_representation": {
+          "transition_psnr": 33.24501248515554,
+          "psnr": 37.498437451548156,
+          "ssim": 0.9880731325825147,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 135381.22222222222,
+          "peak_loaded_gaussians": 247095.0
+        },
+        "lodge": {
+          "transition_psnr": 33.22045739288527,
+          "psnr": 37.03397209763649,
+          "ssim": 0.9874731761674937,
+          "loaded_gaussians": 149371.23456790124,
+          "visible_gaussians": 66961.45679012345,
+          "peak_loaded_gaussians": 154037.0
+        }
+      }
+    },
+    "off_path_views": {
+      "_meta": {
+        "cameras": 40,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 33.56701465023811,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 46366.35,
+          "ssim": 0.9554359878830752,
+          "worst_view_psnr": 27.983993386001874,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 82820.9
+        },
+        "lodge": {
+          "psnr": 31.688265827785436,
+          "loaded_gaussians": 140184.175,
+          "visible_gaussians": 29126.975,
+          "ssim": 0.9457841707557989,
+          "worst_view_psnr": 20.794273561431858,
+          "peak_loaded_gaussians": 154037.0,
+          "tile_pairs": 56463.85
+        }
+      }
+    }
+  }
+}

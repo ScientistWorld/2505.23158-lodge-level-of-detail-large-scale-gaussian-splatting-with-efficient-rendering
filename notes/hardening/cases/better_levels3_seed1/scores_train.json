@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "slice": "train",
+    "full_representation_gaussians": 247095,
+    "quality_tolerance_db": {
+      "trajectory_views": 1.0,
+      "flythrough": 1.5,
+      "off_path_views": 3.5
+    },
+    "transition_tolerance_db": 0.5,
+    "memory_budget_fraction": 0.65,
+    "visible_budget_fraction": {
+      "trajectory_views": 0.7,
+      "flythrough": 0.7,
+      "off_path_views": 0.7
+    },
+    "status": {
+      "lodge": {
+        "passed": true,
+        "reason": "ok",
+        "measured": {
+          "trajectory_views": {
+            "psnr": 40.99765711359688,
+            "ssim": 0.9919942493151648,
+            "worst_view_psnr": 34.27871429000795,
+            "loaded_gaussians": 136455.8,
+            "visible_gaussians": 29864.628571428573,
+            "peak_loaded_gaussians": 155008.0,
+            "tile_pairs": 57931.28571428572
+          },
+          "flythrough": {
+            "psnr": 38.34680177526393,
+            "ssim": 0.9892763884310506,
+            "worst_view_psnr": 34.556434944940555,
+            "loaded_gaussians": 150116.46913580247,
+            "visible_gaussians": 66284.12345679013,
+            "peak_loaded_gaussians": 155008.0,
+            "tile_pairs": 120825.92592592593,
+            "transition_psnr": 34.757740898355536
+          },
+          "off_path_views": {
+            "psnr": 31.006621080082937,
+            "ssim": 0.937870805538795,
+            "worst_view_psnr": 18.528039551219663,
+            "loaded_gaussians": 139324.45,
+            "visible_gaussians": 29190.6,
+            "peak_loaded_gaussians": 155008.0,
+            "tile_pairs": 56043.775
+          }
+        }
+      }
+    }
+  },
+  "experiments": {
+    "trajectory_views": {
+      "_meta": {
+        "cameras": 35,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 41.05514212080114,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 47477.91428571429,
+          "ssim": 0.9921842276214317,
+          "worst_view_psnr": 33.71732018802717,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 82588.37142857142
+        },
+        "lodge": {
+          "psnr": 40.99765711359688,
+          "loaded_gaussians": 136455.8,
+          "visible_gaussians": 29864.628571428573,
+          "ssim": 0.9919942493151648,
+          "worst_view_psnr": 34.27871429000795,
+          "peak_loaded_gaussians": 155008.0,
+          "tile_pairs": 57931.28571428572
+        }
+      }
+    },
+    "flythrough": {
+      "_meta": {
+        "cameras": 81,
+        "kind": "path"
+      },
+      "results": {
+        "full_representation": {
+          "transition_psnr": 34.81652888593479,
+          "psnr": 38.69267034203414,
+          "ssim": 0.9898939113102462,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 126557.86419753087,
+          "peak_loaded_gaussians": 247095.0
+        },
+        "lodge": {
+          "transition_psnr": 34.757740898355536,
+          "psnr": 38.34680177526393,
+          "ssim": 0.9892763884310506,
+          "loaded_gaussians": 150116.46913580247,
+          "visible_gaussians": 66284.12345679013,
+          "peak_loaded_gaussians": 155008.0
+        }
+      }
+    },
+    "off_path_views": {
+      "_meta": {
+        "cameras": 40,
+        "kind": "views"
+      },
+      "results": {
+        "full_representation": {
+          "psnr": 32.88932765745739,
+          "loaded_gaussians": 247095.0,
+          "visible_gaussians": 56002.725,
+          "ssim": 0.9509632483469659,
+          "worst_view_psnr": 23.323131097744184,
+          "peak_loaded_gaussians": 247095.0,
+          "tile_pairs": 97919.3
+        },
+        "lodge": {
+          "psnr": 31.006621080082937,
+          "loaded_gaussians": 139324.45,
+          "visible_gaussians": 29190.6,
+          "ssim": 0.937870805538795,
+          "worst_view_psnr": 18.528039551219663,
+          "peak_loaded_gaussians": 155008.0,
+          "tile_pairs": 56043.775
+        }
+      }
+    }
+  }
+}
